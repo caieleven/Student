@@ -1,16 +1,11 @@
 package com.run.student.service;
 
-import com.run.student.entity.Student;
-import com.baomidou.mybatisplus.extension.service.IService;
+import com.run.student.vo.StudentVo;
 
-/**
- * <p>
- *  服务类
- * </p>
- *
- * @author baorun chen
- * @since 2022-05-15
- */
-public interface StudentService extends IService<Student> {
+import java.util.List;
 
+public interface StudentService{
+    public List<StudentVo> list();
+    public List<StudentVo> selectPage(Integer pageNum, Integer pageSize);
+    public Integer getTotalNum();
 }

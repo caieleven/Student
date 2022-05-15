@@ -11,4 +11,5 @@ import java.util.List;
 public interface StudentVoMapper {
     StudentVo getStudentById(String sid);
     List<StudentVo> getAllStudents();
+    List<StudentVo> selectPage(Integer pageNum, Integer pageSize);
 }

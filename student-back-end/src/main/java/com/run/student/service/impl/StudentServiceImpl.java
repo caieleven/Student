@@ -2,19 +2,37 @@ package com.run.student.service.impl;
 
 import com.run.student.entity.Student;
 import com.run.student.mapper.StudentMapper;
+import com.run.student.mapper.StudentVoMapper;
 import com.run.student.service.StudentService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.run.student.vo.StudentVo;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-/**
- * <p>
- *  服务实现类
- * </p>
- *
- * @author baorun chen
- * @since 2022-05-15
- */
-@Service
-public class StudentServiceImpl extends ServiceImpl<StudentMapper, Student> implements StudentService {
+import javax.annotation.Resource;
+import java.util.List;
 
+
+@Service
+public class StudentServiceImpl implements StudentService {
+    @Autowired
+    StudentVoMapper studentVoMapper;
+
+    @Autowired
+    @Resource
+    StudentMapper studentMapper;
+
+    @Override
+    public List<StudentVo> list() {
+        return studentVoMapper.getAllStudents();
+    }
+
+    @Override
+    public List<StudentVo> selectPage(Integer pageNum, Integer pageSize) {
+        return studentVoMapper.selectPage(pageNum, pageSize);
+    }
+
+    @Override
+    public Integer getTotalNum() {
+        return studentMapper.selectCount(null);
+    }
 }

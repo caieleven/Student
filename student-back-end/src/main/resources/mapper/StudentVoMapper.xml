@@ -41,7 +41,7 @@
     </select>
 
     <!--List<StudentVo> getAllStudents();-->
-    <select id="getAllStrudents()" resultType="com.run.student.vo.StudentVo">
+    <select id="getAllStudents" resultType="com.run.student.vo.StudentVo">
         select sid,
                name,
                class_name,
@@ -72,6 +72,41 @@
                      inner join department on major.department_id = department.did
                      inner join `user` on class.counsellor_id = `user`.uid
         ) cmdu on s.class_id = cmdu.cid;
+    </select>
+
+    <!--List<StudentVo> selectPage(Integer pageNum, Integer pageSize);-->
+    <select id="selectPage" resultType="com.run.student.vo.StudentVo">
+        select sid,
+               name,
+               class_name,
+               major,
+               department,
+               counsellor,
+               sex,
+               tel,
+               email,
+               origin,
+               status,
+               nation,
+               dormitory,
+               bedroom,
+               bed,
+               admission_date,
+               birth,
+               `from`
+        from student as s
+                 inner join(
+            select cid,
+                   class.name      as class_name,
+                   major.name      as major,
+                   department.name as department,
+                   `user`.username as counsellor
+            from class
+                     inner join major on class.major_id = major.mid
+                     inner join department on major.department_id = department.did
+                     inner join `user` on class.counsellor_id = `user`.uid
+        ) cmdu on s.class_id = cmdu.cid
+        limit #{pageNum}, #{pageSize};
     </select>
 
 </mapper>

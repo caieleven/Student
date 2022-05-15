@@ -32,4 +32,9 @@ class StudentApplicationTests {
         System.out.print("success");
     }
 
+    @Test
+    void testGetAll(){
+        studentVoMapper.getAllStudents();
+    }
+
 }
