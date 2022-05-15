@@ -2,8 +2,76 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.run.student.mapper.StudentVoMapper">
 
+    <!--StudentVo getStudentById(String sid);-->
     <select id="getStudentById" resultType="com.run.student.vo.StudentVo">
-        select sid, class.name class_name, student.name name from student left join class on student.class_id = class.cid where sid=#{sid}
+        select sid,
+               name,
+               class_name,
+               major,
+               department,
+               counsellor,
+               sex,
+               tel,
+               email,
+               origin,
+               status,
+               nation,
+               dormitory,
+               bedroom,
+               bed,
+               admission_date,
+               birth,
+               `from`
+        from (
+                 select *
+                 from student
+                 where sid = #{sid}
+             ) s
+                 inner join(
+            select cid,
+                   class.name      as class_name,
+                   major.name      as major,
+                   department.name as department,
+                   `user`.username as counsellor
+            from class
+                     inner join major on class.major_id = major.mid
+                     inner join department on major.department_id = department.did
+                     inner join `user` on class.counsellor_id = `user`.uid
+        ) cmdu on s.class_id = cmdu.cid;
+    </select>
+
+    <!--List<StudentVo> getAllStudents();-->
+    <select id="getAllStrudents()" resultType="com.run.student.vo.StudentVo">
+        select sid,
+               name,
+               class_name,
+               major,
+               department,
+               counsellor,
+               sex,
+               tel,
+               email,
+               origin,
+               status,
+               nation,
+               dormitory,
+               bedroom,
+               bed,
+               admission_date,
+               birth,
+               `from`
+        from student as s
+                 inner join(
+            select cid,
+                   class.name      as class_name,
+                   major.name      as major,
+                   department.name as department,
+                   `user`.username as counsellor
+            from class
+                     inner join major on class.major_id = major.mid
+                     inner join department on major.department_id = department.did
+                     inner join `user` on class.counsellor_id = `user`.uid
+        ) cmdu on s.class_id = cmdu.cid;
     </select>
 
 </mapper>

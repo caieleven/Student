@@ -28,7 +28,8 @@ class StudentApplicationTests {
     @Test
     void testMapper(){
         StudentVo studentVo = studentVoMapper.getStudentById("19122206");
-        System.out.print(studentVo.toString());
+        System.out.print(studentVo.getName());
+        System.out.print("success");
     }
 
 }
