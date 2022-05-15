@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.run.student.mapper.StudentVoMapper">
+
+    <select id="getStudentById" resultType="com.run.student.vo.StudentVo">
+        select sid, class.name class_name, student.name name from student left join class on student.class_id = class.cid where sid=#{sid}
+    </select>
+
+</mapper>

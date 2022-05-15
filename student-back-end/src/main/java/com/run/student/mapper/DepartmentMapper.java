@@ -1,6 +1,6 @@
 package com.run.student.mapper;
 
-import com.run.student.entity.User;
+import com.run.student.entity.Department;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**
@@ -11,6 +11,6 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @author baorun chen
  * @since 2022-05-15
  */
-public interface UserMapper extends BaseMapper<User> {
+public interface DepartmentMapper extends BaseMapper<Department> {
 
 }

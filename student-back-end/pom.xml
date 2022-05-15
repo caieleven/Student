@@ -30,12 +30,12 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
-<!--        已经导入mybatis-plus，放出出现版本冲突，注释该部分-->
-<!--        <dependency>-->
-<!--            <groupId>org.mybatis.spring.boot</groupId>-->
-<!--            <artifactId>mybatis-spring-boot-starter</artifactId>-->
-<!--            <version>2.2.2</version>-->
-<!--        </dependency>-->
+        <!--        已经导入mybatis-plus，放出出现版本冲突，注释该部分-->
+        <!--        <dependency>-->
+        <!--            <groupId>org.mybatis.spring.boot</groupId>-->
+        <!--            <artifactId>mybatis-spring-boot-starter</artifactId>-->
+        <!--            <version>2.2.2</version>-->
+        <!--        </dependency>-->
 
         <dependency>
             <groupId>mysql</groupId>
@@ -64,6 +64,22 @@
             <artifactId>mybatis-plus-boot-starter</artifactId>
             <version>3.5.1</version>
         </dependency>
+
+
+        <!--注意下面两个引擎的版本号，有可能会导致错误，原因未知-->
+        <!--代码生成器-->
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-generator</artifactId>
+            <version>3.4.0</version>
+        </dependency>
+        <!--模板引擎-->
+        <dependency>
+            <groupId>org.apache.velocity</groupId>
+            <artifactId>velocity-engine-core</artifactId>
+            <version>2.0</version>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -81,6 +97,25 @@
                 </configuration>
             </plugin>
         </plugins>
+        <!--配置文件路径-->
+        <!--<resources>-->
+        <!--    <resource>-->
+        <!--        <directory>src/main/java</directory>-->
+        <!--        <includes>-->
+        <!--            <include>**/*.properties</include>-->
+        <!--            <include>**/*.xml</include>-->
+        <!--        </includes>-->
+        <!--        <filtering>false</filtering>-->
+        <!--    </resource>-->
+        <!--    <resource>-->
+        <!--        <directory>src/main/resources</directory>-->
+        <!--        <includes>-->
+        <!--            <include>**/*.yml</include>-->
+        <!--            <include>**/*.xml</include>-->
+        <!--        </includes>-->
+        <!--        <filtering>false</filtering>-->
+        <!--    </resource>-->
+        <!--</resources>-->
     </build>
 
 </project>
