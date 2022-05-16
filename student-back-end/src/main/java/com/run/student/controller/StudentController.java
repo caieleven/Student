@@ -5,6 +5,7 @@ import com.run.student.entity.Student;
 import com.run.student.service.StudentService;
 import com.run.student.vo.StudentVo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.config.EnableReactiveMongoAuditing;
 import org.springframework.web.bind.annotation.*;
 
 import org.springframework.stereotype.Controller;
@@ -34,7 +35,9 @@ public class StudentController {
      * @return  List数据和总数
      */
     @GetMapping("page")
-    public Map<String, Object> getPage(@RequestParam Integer pageNum, @RequestParam Integer pageSize){
+    public Map<String, Object> getPage(@RequestParam Integer pageNum,
+                                       @RequestParam Integer pageSize,
+                                       @RequestParam(defaultValue = "") String userName){
         pageNum = (pageNum - 1)* pageSize;
         List<StudentVo> data = studentService.selectPage(pageNum, pageSize);
         Integer total = studentService.getTotalNum();
