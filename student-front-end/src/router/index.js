@@ -1,5 +1,6 @@
 import {createRouter, createWebHistory} from 'vue-router'
 import HomeView from '../views/HomeView.vue'
+import LoginView from "@/views/LoginView";
 import StudentView from "@/views/StudentView"
 
 const routes = [
@@ -19,6 +20,10 @@ const routes = [
     {
         path: '/studentinfo',
         component: StudentView
+    },
+    {
+        path: '/login',
+        component: LoginView
     }
 ]
 
