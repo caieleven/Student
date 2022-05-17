@@ -81,7 +81,19 @@
 
       <el-main>
         <div style="padding: 10px 0">
-          <el-input class="w-50 m-2" placeholder="请输入关键词" style="width: 200px" suffix-icon="Search"><el-icon><Search /></el-icon></el-input><el-button class="ml-5">搜索</el-button>
+          <el-input class="w-50 m-2" placeholder="请输入关键词" style="width: 200px" suffix-icon="Search" v-model="username"><el-icon><Search /></el-icon></el-input>
+          <el-button class="ml-5" type="primary" round>搜索</el-button>
+          <el-button class="ml-5" type="info" @click="reset" round>重置</el-button>
+        </div>
+        <div class="pd-10">
+          <el-select v-model="className" filterable placeholder="选择班级">
+            <el-option
+                v-for="item in classes"
+                :key="item.cid"
+                :label="item.name"
+                :value="item.cid"
+            />
+          </el-select>
         </div>
         <div style="margin: 10px 0">
           <el-button type="primary">新增<el-icon><Plus /></el-icon></el-button>
@@ -159,20 +171,23 @@ export default {
       totalNum: 0,
       pageSize: 10,
       pageNum: 1,
+      username: "",
+      className: [],
+      classes: {},
     }
   },
   created() {
-    this.load()
+    this.loadStudents();
+    this.loadClasses();
   },
   methods:{
-    load(){
-      request.get('http://localhost:8181/student/page',{
+    loadStudents(){
+      request.get('student/page',{
         params:{
           pageNum:this.pageNum,
           pageSize:this.pageSize
         }
       }).then(res => {
-        console.log(res)
         this.tableData = res.data;
         this.totalNum = res.total;
       })
@@ -201,6 +216,15 @@ export default {
         console.log(res)
         this.tableData = res.data;
         this.totalNum = res.total;
+      })
+    },
+    reset(){
+      this.username="";
+    },
+    loadClasses(){
+      request.get('class/allCidAndName').then(res =>{
+        console.log(res);
+        this.classes=res;
       })
     }
   }

@@ -23,5 +23,7 @@ public class UserController {
     public List<User> getUser() {
         return userService.list();
     }
+
+
 }
 
