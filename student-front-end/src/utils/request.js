@@ -1,5 +1,6 @@
 import axios from 'axios'
 
+
 const request = axios.create({
     baseURL: 'http://localhost:8181/',  // 注意！！ 这里是全局统一加上了 后端接口前缀 前缀，后端必须进行跨域配置！
     timeout: 5000
@@ -16,6 +17,8 @@ request.interceptors.request.use(config => {
 }, error => {
     return Promise.reject(error)
 });
+
+// axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 
 // response 拦截器
 // 可以在接口响应后统一处理结果

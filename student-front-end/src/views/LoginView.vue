@@ -2,27 +2,40 @@
   <div class="loginbody">
     <div class="mylogin">
       <div style="margin: 20px 0; text-align: center; font-size: 24px"><b>登 录</b></div>
-      <el-input size="medium" style="margin: 10px 0" prefix-icon="UserFilled" v-model="user.username"><el-icon><UserFilled /></el-icon></el-input>
-      <el-input size="medium" style="margin: 10px 0" prefix-icon="Key" show-password v-model="user.password"><el-icon><Key /></el-icon></el-input>
+      <el-input size="default" style="margin: 10px 0" prefix-icon="UserFilled" v-model="uid"><el-icon><UserFilled /></el-icon></el-input>
+      <el-input size="default" style="margin: 10px 0" prefix-icon="Key" show-password v-model="password"><el-icon><Key /></el-icon></el-input>
 
       <div style="margin: 50px 0; text-align: center">
-          <el-button color="#792EE6" size="large" :dark="isDark" round @click="login">登录</el-button>
+          <el-button color="#792EE6" size="large" round @click="login">登录</el-button>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import request from "@/utils/request";
 export default {
   name: "LoginView",
   data(){
     return {
-      user: {}
+      uid:"",
+      password:"",
     }
   },
   methods:{
     login(){
-
+      request.post("/user/login",{
+        uid:this.uid,
+        password:this.password
+      }).then(res=>{
+        if(res.code != 0){
+          this.$message.error(res.message);
+        }
+        else {
+          this.$router.push("/studentinfo")
+        }
+        console.log(res)
+      })
     }
   }
 }

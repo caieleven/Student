@@ -2,6 +2,7 @@ package com.run.student.controller;
 
 
 import com.run.student.service.StudentService;
+import com.run.student.utils.Result;
 import com.run.student.vo.StudentVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,8 +23,10 @@ public class StudentController {
 
 
     @GetMapping("/all")
-    public List<StudentVo> getAllStudent(){
-        return studentService.list();
+    public Result getAllStudent(){
+        Result<Object> result = Result.success();
+        result.setData(studentService.list());
+        return result;
     }
 
 
@@ -34,16 +37,16 @@ public class StudentController {
      * @return  List数据和总数
      */
     @GetMapping("page")
-    public Map<String, Object> getPage(@RequestParam Integer pageNum,
+    public Result<Object> getPage(@RequestParam Integer pageNum,
                                        @RequestParam Integer pageSize,
                                        @RequestParam(defaultValue = "") String userName){
         pageNum = (pageNum - 1)* pageSize;
         List<StudentVo> data = studentService.selectPage(pageNum, pageSize);
         Integer total = studentService.getTotalNum();
-        Map<String, Object> res = new HashMap<>();
-        res.put("data", data);
-        res.put("total", total);
-        return res;
+        Result<Object> result = new Result<>();
+        result.setData(data);
+        result.setCount(total);
+        return result;
     }
 
 }

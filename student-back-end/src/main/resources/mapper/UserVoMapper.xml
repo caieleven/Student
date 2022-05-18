@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.run.student.mapper.UserVoMapper">
+
+    <!--public List<UserVo> getAllUser();-->
+    <select id="getAllUser" resultType="com.run.student.vo.UserVo">
+        select user.uid, user.username, u.group_name, user.permission
+        from user
+                 left join user_group u on user.group_id = u.gid;
+    </select>
+
+    <!--public UserVo getUserById(Integer uid);-->
+    <select id="getUserById" resultType="com.run.student.vo.UserVo">
+        select user.uid, user.username, u.group_name, user.permission
+        from (
+                 select *
+                 from user
+                 where user.uid = #{uid}
+             ) user
+                 left join user_group u on user.group_id = u.gid;
+    </select>
+
+    <!--public UserVo checkLogin(Integer uid, String password);-->
+    <select id="checkLogin" resultType="com.run.student.vo.UserVo">
+        select user.uid, user.username, u.group_name, user.permission
+        from (
+                 select *
+                 from user
+                 where user.uid = #{uid} and user.password = #{password}) user
+                 left join user_group u on user.group_id = u.gid;
+    </select>
+</mapper>

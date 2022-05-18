@@ -189,7 +189,7 @@ export default {
         }
       }).then(res => {
         this.tableData = res.data;
-        this.totalNum = res.total;
+        this.totalNum = res.count;
       })
     },
     handleSizeChange(pageSize){
@@ -202,7 +202,7 @@ export default {
       }).then(res => {
         console.log(res)
         this.tableData = res.data;
-        this.totalNum = res.total;
+        this.totalNum = res.count;
       })
     },
     handleCurrentChange(pageNum){
@@ -215,7 +215,7 @@ export default {
       }).then(res => {
         console.log(res)
         this.tableData = res.data;
-        this.totalNum = res.total;
+        this.totalNum = res.count;
       })
     },
     reset(){

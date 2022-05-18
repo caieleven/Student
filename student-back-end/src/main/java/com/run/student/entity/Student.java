@@ -1,6 +1,8 @@
 package com.run.student.entity;
 
 import java.time.LocalDate;
+
+import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 
 @Data
@@ -8,6 +10,7 @@ public class Student{
     /**
      * 学号
      */
+    @TableId(value = "sid")
       private Long sid;
 
     /**
