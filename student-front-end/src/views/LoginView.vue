@@ -32,6 +32,7 @@ export default {
           this.$message.error(res.message);
         }
         else {
+          localStorage.setItem("user", JSON.stringify(res.data));
           this.$router.push("/studentinfo")
         }
         console.log(res)
