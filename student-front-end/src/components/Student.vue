@@ -36,7 +36,8 @@
           </div>
           <el-scrollbar>
             <!--          固定首行和首列-->
-            <el-table :data="tableData" style="width: 100%" border stripe>
+            <el-table :data="tableData" ref="multipleTable" style="width: 100%" border stripe :row-key="getRowKeys" @selection-change="handleSelectionChange">
+              <el-table-column type="selection" :reserve-selection=true ></el-table-column>
               <el-table-column fixed prop="name" label="姓名" width="120"/>
               <el-table-column prop="sid" label="学号" width="120"/>
               <el-table-column prop="sex" label="性别" width="50"/>
@@ -81,6 +82,7 @@ import request from "@/utils/request";
 import Aside from "@/components/Aside";
 import Header from "@/components/Header";
 
+const changeList = [];
 export default {
   name: "Student",
   components: {
@@ -90,15 +92,35 @@ export default {
   data() {
     return {
       tableData: [],
-      totalNum: 0,
+      arr: [], //sid
+      totalNum: 0,  //数据总数
       pageSize: 10,
       pageNum: 1,
-      username: "",
+      username: "", //学生姓名
       className: [],
       classes: {},
-      user: {}
+      user: {}, //当前登录的用户
+      multipleSelection: [] //选择的数据
     }
   },
+//利用计算属性计算changList
+//   computed: {
+//     changeList() {
+//       const { multipleSelection } = this
+//       //比对组件得到的选中数据与changList
+//       //changList中不存在则push进去
+//       multipleSelection.map((item) => {
+//         const { sid } = item
+//         const exit = changeList.findIndex(item => item.sid === sid) >= 0
+//
+//         if (!exit) {
+//           changeList.push({ sid, state: true })
+//         }
+//       })
+//       return changeList
+//     }
+//   },
+
   created() {
     this.loadStudents();
     this.loadClasses();
@@ -139,6 +161,19 @@ export default {
         console.log(res)
         this.tableData = res.data;
         this.totalNum = res.count;
+        // this.$nextTick(() => {
+        //   this.tableData.forEach(item => {
+        //     const { sid } = item
+        //     const exit = changeList.findIndex(items => items.sid === sid)
+        //     if (exit >= 0) {
+        //       item.state=true
+        //       this.$refs.multipleTable.toggleRowSelection(item, changeList[exit].state)
+        //     } else {
+        //       item.state=false
+        //       this.$refs.multipleTable.toggleRowSelection(item, item.state)
+        //     }
+        //   })
+        // })
       })
     },
     reset() {
@@ -146,12 +181,53 @@ export default {
     },
     loadClasses() {
       request.get('class/allCidAndName').then(res => {
-        console.log(res);
         this.classes = res;
       })
-    }
+    },
+    getRowKeys(row){
+      // console.log(row.sid);
+      return row.sid;
+    },
+    handleSelectionChange(val) {
+      const _this = this;
+      val.forEach(function (item){
+        _this.multipleSelection.push(item.sid);
+      })
+      for (let i in val){
+        this.multipleSelection.push(val[i].sid);
+      }
+      // this.multipleSelection = val;
+      // console.log(val)
+      console.log(this.multipleSelection)
+    },
+    //行选则时的处理逻辑
+    // handleRowClick(val) {
+    //   const { multipleSelection } = this
+    //   const { sid } = val
+    //   const state = multipleSelection.findIndex(item => item.sid=== sid) >= 0
+    //
+    //   this.checkChooseState(sid)
+    //   this.$refs.multipleTable.toggleRowSelection(val, !state)
+    // },
+    // //此处关键，由于直接点击checkbox无法直接获取当前行的数据
+    // //于是我禁用checkbox选择，采用点击checkbox所在行来获取当前行数据
+    // checkSelectable() {
+    //   return false
+    // },
+    // //此处关键 判断变化的选项是否存在于changList中
+    // //存在则修改状态为false
+    // //无需在这里添加，我们有计算属性帮我们处理
+    // checkChooseState(id) {
+    //   changeList.map((item) => {
+    //     const { sid } = item
+    //     if (id === sid) {
+    //       item.state = false
+    //     }
+    //   })
+    // }
   }
 }
+
 </script>
 
 <style scoped>
@@ -181,4 +257,14 @@ export default {
   height: 100%;
   right: 20px;
 }
+/deep/ .el-table--enable-row-transition .el-table__body td {
+  cursor: pointer;
+}
+/deep/ .el-checkbox__input.is-disabled.is-checked .el-checkbox__inner:after{
+  border-color: #fff;
+}
+/deep/ .el-checkbox__input.is-disabled.is-checked .el-checkbox__inner{
+  background-color: #409eff;
+}
+
 </style>

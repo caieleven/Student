@@ -1,6 +1,6 @@
 <template>
-  <div style="text-align: right; font-size: 12px" class="layout-container-demo">
-    <div style="margin-top: 0">
+  <div style="text-align: right; font-size: 12px; height: 100%" class="layout-container-demo">
+    <div style="margin-top: 0; height: 100%">
       <el-dropdown>
         <el-icon style="margin-right: 8px; margin-top: 20px"><setting/></el-icon>
         <template #dropdown>

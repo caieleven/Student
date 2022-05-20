@@ -1,7 +1,7 @@
 <template>
-  <div>
+  <div style="height: 100%">
     <el-container class="layout-container-demo" style="height: 100%">
-      <el-aside width="200px">
+      <el-aside width="200px" style="margin-top: 0; height: 100%">
         <Aside></Aside>
       </el-aside>
       <el-container>

@@ -1,5 +1,6 @@
 <template>
-  <el-scrollbar>
+  <el-affix>
+  <el-scrollbar style="margin-top: 0; height: 100%">
     <el-menu :default-openeds="['1', '3']" style="height: 100%" class="layout-container-demo">
       <el-sub-menu index="1">
         <template #title>
@@ -54,6 +55,7 @@
       </el-sub-menu>
     </el-menu>
   </el-scrollbar>
+  </el-affix>
 </template>
 
 <script>
