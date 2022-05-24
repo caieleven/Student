@@ -35,4 +35,24 @@ public class StudentServiceImpl implements StudentService {
     public Integer getTotalNum() {
         return studentMapper.selectCount(null);
     }
+
+    @Override
+    public int insert(Student student) {
+        return studentMapper.insert(student);
+    }
+
+    @Override
+    public int updateById(Student student) {
+        return studentMapper.updateById(student);
+    }
+
+    @Override
+    public int deleteById(int id) {
+        return studentMapper.deleteById(id);
+    }
+
+    @Override
+    public Student isExist(int id) {
+        return studentMapper.selectById(id);
+    }
 }

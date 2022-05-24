@@ -6,6 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 //扫描mapper文件
 @MapperScan("com.run.student.mapper")
+//标明入口
 @SpringBootApplication
 public class StudentApplication {
 

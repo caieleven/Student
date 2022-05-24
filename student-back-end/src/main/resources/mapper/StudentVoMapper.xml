@@ -21,7 +21,7 @@
                bed,
                admission_date,
                birth,
-               `from`
+               background
         from (
                  select *
                  from student
@@ -59,7 +59,7 @@
                bed,
                admission_date,
                birth,
-               `from`
+               background
         from student as s
                  inner join(
             select cid,
@@ -93,7 +93,7 @@
                bed,
                admission_date,
                birth,
-               `from`
+               background
         from student as s
                  inner join(
             select cid,
