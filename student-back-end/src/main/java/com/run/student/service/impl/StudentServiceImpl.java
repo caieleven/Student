@@ -1,5 +1,7 @@
 package com.run.student.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.run.student.entity.Student;
 import com.run.student.mapper.StudentMapper;
 import com.run.student.mapper.StudentVoMapper;
@@ -32,6 +34,16 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
+    public Page<Student> searchPage(Page<Student> page, QueryWrapper<Student> queryWrapper) {
+        return studentMapper.selectPage(page, queryWrapper);
+    }
+
+    @Override
+    public int selectCount(QueryWrapper<Student> queryWrapper) {
+        return studentMapper.selectCount(queryWrapper);
+    }
+
+    @Override
     public Integer getTotalNum() {
         return studentMapper.selectCount(null);
     }
@@ -55,4 +67,24 @@ public class StudentServiceImpl implements StudentService {
     public Student isExist(int id) {
         return studentMapper.selectById(id);
     }
+
+    @Override
+    public List<StudentVo> getSpecialStudent(String sid, String studentName){
+        return studentVoMapper.getSpecialStudent(sid, studentName);
+    }
+
+//    @Override
+//    public Integer getTotalSpecialStudent(String sid, String studentName) {
+//        return studentVoMapper.getTotalSpecialStudent(sid, studentName);
+//    }
+
+    @Override
+    public List<StudentVo> getStudentByClass(Integer cid, Integer pageNum, Integer pageSize) {
+        return studentVoMapper.getStudentByClass(cid, pageNum, pageSize);
+    }
+
+//    @Override
+//    public Integer getTotalStudentByClass(Integer cid) {
+//        return studentVoMapper.getTotalStudentByClass(cid);
+//    }
 }
