@@ -7,6 +7,15 @@ spring:
     password: QWEasd123
     url: jdbc:mysql://localhost:3306/students?useUnicode=true&characterEncoding=utf-8&useSSL=true&serverTimezone=GMT%2B8&zeroDateTimeBehavior=convertToNull
     driver-class-name: com.mysql.cj.jdbc.Driver
+  data:
+    mongodb:
+      host: 139.224.62.56
+      port: 27017
+      username: admin
+      password: QWEasd123
+      authentication-database: admin
+      database: students
+#      uri: mongodb://admin:QWEasd123@139.224.62.56/students?authSource=admin
 
 
 mybatis-plus:
