@@ -1,14 +1,13 @@
 package com.run.student.controller;
 
 
+import com.run.student.entity.Student;
 import com.run.student.service.StudentService;
 import com.run.student.utils.Result;
 import com.run.student.vo.StudentVo;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -18,6 +17,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/student")
 public class StudentController {
+
     @Autowired
     StudentService studentService;
 
@@ -48,6 +48,28 @@ public class StudentController {
         result.setCount(total);
         return result;
     }
+
+    //  新增
+    @PostMapping
+    public int insert(@RequestBody Student student) {
+        return studentService.insert(student);
+    }
+
+    //  编辑
+    @PutMapping
+    public int update(@RequestBody Student student) {
+        return studentService.updateById(student);
+    }
+
+    //删除
+    @DeleteMapping("/{id}")
+    public int delete(@PathVariable int id) {
+        return studentService.deleteById(id);
+    }
+
+    // 检查当前学号是否存在
+    @PostMapping("/exist/{id}")
+    public Student exist(@PathVariable int id) { return  studentService.isExist(id); }
 
 }
 

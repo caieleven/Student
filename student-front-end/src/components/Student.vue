@@ -23,7 +23,7 @@
           </div>
 <!--          新增 删除-->
           <div style="margin: 10px 0">
-            <el-button type="primary">新增
+            <el-button type="primary" @click="handleAdd">新增
               <el-icon>
                 <Plus/>
               </el-icon>
@@ -45,19 +45,24 @@
               <el-table-column prop="major" label="专业" width="200"/>
               <el-table-column prop="tel" label="电话号码" width="200"/>
               <el-table-column prop="email" label="邮箱" width="200"/>
-              <el-table-column label="操作" width="200">
-                <div>
-                  <el-button type="info">编辑
+              <el-table-column label="操作" width="200" align="center">
+                <template v-slot="scope">
+                  <el-button type="info" @click="handleEdit(scope.row)">编辑
                     <el-icon>
                       <EditPen/>
                     </el-icon>
                   </el-button>
-                  <el-button type="danger">删除
-                    <el-icon>
-                      <Delete/>
-                    </el-icon>
-                  </el-button>
-                </div>
+                  <el-popconfirm
+                      confirm-button-text='确定'
+                      cancel-button-text='取消'
+                      icon="el-icon-info"
+                      icon-color="red"
+                      title="您确定删除吗？"
+                      @confirm="del(scope.row.id)"
+                  >
+                    <el-button type="danger" slot="reference">删除<el-icon><Delete/></el-icon></el-button>
+                  </el-popconfirm>
+                </template>
               </el-table-column>
             </el-table>
             <div class="pd-10">
@@ -73,6 +78,121 @@
               />
             </div>
           </el-scrollbar>
+
+          <el-dialog title="用户信息" v-model="dialogAddFormVisible" width="20%">
+            <el-form label-width="80px" style="text-align: center">
+              <el-form-item label="姓名">
+                <el-input v-model="form.name" autocomplete="off" style="width: auto"></el-input>
+              </el-form-item>
+              <el-form-item label="学号">
+                <el-input v-model="form.sid" autocomplete="off" style="width: auto"></el-input>
+              </el-form-item>
+              <el-form-item label="班级">
+                <el-input v-model="form.classId" autocomplete="off" style="width: auto"></el-input>
+              </el-form-item>
+              <el-form-item label="性别">
+                <el-radio-group v-model="form.sex">
+                  <el-radio label="男" />
+                  <el-radio label="女" />
+                </el-radio-group>
+              </el-form-item>
+              <el-form-item label="手机号码">
+                <el-input v-model="form.tel" autocomplete="off" style="width: auto"></el-input>
+              </el-form-item>
+              <el-form-item label="邮箱">
+                <el-input v-model="form.email" autocomplete="off" style="width: auto"></el-input>
+              </el-form-item>
+<!--              <el-form-item label="生源地">-->
+<!--                <el-input v-model="form.name" autocomplete="off"></el-input>-->
+<!--              </el-form-item>-->
+<!--              <el-form-item label="政治面貌">-->
+<!--                <el-input v-model="form.sid" autocomplete="off"></el-input>-->
+<!--              </el-form-item>-->
+<!--              <el-form-item label="民族">-->
+<!--                <el-input v-model="form.sid" autocomplete="off"></el-input>-->
+<!--              </el-form-item>-->
+<!--              <el-form-item label="宿舍楼号">-->
+<!--                <el-input v-model="form.name" autocomplete="off"></el-input>-->
+<!--              </el-form-item>-->
+<!--              <el-form-item label="室号">-->
+<!--                <el-input v-model="form.name" autocomplete="off"></el-input>-->
+<!--              </el-form-item>-->
+<!--              <el-form-item label="床号">-->
+<!--                <el-input v-model="form.name" autocomplete="off"></el-input>-->
+<!--              </el-form-item>-->
+<!--              <el-form-item label="入学日期">-->
+<!--                <el-input v-model="form.name" autocomplete="off"></el-input>-->
+<!--              </el-form-item>-->
+<!--              <el-form-item label="出生日期">-->
+<!--                <el-input v-model="form.name" autocomplete="off"></el-input>-->
+<!--              </el-form-item>-->
+              <el-form-item label="来源">
+                <el-input v-model="form.background" autocomplete="off" style="width: auto"></el-input>
+              </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer" style="text-align: center">
+              <el-button @click="dialogAddFormVisible = false">取 消</el-button>
+              <el-button type="primary" @click="add">确 定</el-button>
+            </div>
+          </el-dialog>
+
+          <el-dialog title="用户信息" v-model="dialogEditFormVisible" width="20%">
+            <el-form label-width="80px" style="text-align: center">
+              <el-form-item label="姓名">
+                <el-input v-model="form.name" autocomplete="off" style="width: auto"></el-input>
+              </el-form-item>
+              <el-form-item label="学号">
+                <el-input v-model="form.sid" autocomplete="off" style="width: auto"></el-input>
+              </el-form-item>
+              <el-form-item label="班级">
+                <el-input v-model="form.classId" autocomplete="off" style="width: auto"></el-input>
+              </el-form-item>
+              <el-form-item label="性别">
+                <el-radio-group v-model="form.sex">
+                  <el-radio label="男" />
+                  <el-radio label="女" />
+                </el-radio-group>
+              </el-form-item>
+              <el-form-item label="手机号码">
+                <el-input v-model="form.tel" autocomplete="off" style="width: auto"></el-input>
+              </el-form-item>
+              <el-form-item label="邮箱">
+                <el-input v-model="form.email" autocomplete="off" style="width: auto"></el-input>
+              </el-form-item>
+              <!--              <el-form-item label="生源地">-->
+              <!--                <el-input v-model="form.name" autocomplete="off"></el-input>-->
+              <!--              </el-form-item>-->
+              <!--              <el-form-item label="政治面貌">-->
+              <!--                <el-input v-model="form.sid" autocomplete="off"></el-input>-->
+              <!--              </el-form-item>-->
+              <!--              <el-form-item label="民族">-->
+              <!--                <el-input v-model="form.sid" autocomplete="off"></el-input>-->
+              <!--              </el-form-item>-->
+              <!--              <el-form-item label="宿舍楼号">-->
+              <!--                <el-input v-model="form.name" autocomplete="off"></el-input>-->
+              <!--              </el-form-item>-->
+              <!--              <el-form-item label="室号">-->
+              <!--                <el-input v-model="form.name" autocomplete="off"></el-input>-->
+              <!--              </el-form-item>-->
+              <!--              <el-form-item label="床号">-->
+              <!--                <el-input v-model="form.name" autocomplete="off"></el-input>-->
+              <!--              </el-form-item>-->
+              <!--              <el-form-item label="入学日期">-->
+              <!--                <el-input v-model="form.name" autocomplete="off"></el-input>-->
+              <!--              </el-form-item>-->
+              <!--              <el-form-item label="出生日期">-->
+              <!--                <el-input v-model="form.name" autocomplete="off"></el-input>-->
+              <!--              </el-form-item>-->
+              <el-form-item label="来源">
+                <el-input v-model="form.background" autocomplete="off" style="width: auto"></el-input>
+              </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer" style="text-align: center">
+              <el-button @click="dialogEditFormVisible = false">取 消</el-button>
+              <el-button type="primary" @click="edit">确 定</el-button>
+            </div>
+          </el-dialog>
+
         </el-main>
   </div>
 </template>
@@ -100,7 +220,10 @@ export default {
       className: [],
       classes: {},
       user: {}, //当前登录的用户
-      multipleSelection: [] //选择的数据
+      multipleSelection: [], //选择的数据
+      dialogAddFormVisible: false, //新增对话框显示
+      dialogEditFormVisible: false, //编辑对话框显示
+      form: {} //新增表单
     }
   },
 //利用计算属性计算changList
@@ -178,6 +301,78 @@ export default {
     },
     reset() {
       this.username = "";
+      this.loadStudents();
+    },
+    // save() {
+    //   request.post("student/exist/" + this.form.sid).then(res => {
+    //     if (res) {
+    //       request.put("student", this.form).then(res => {
+    //         if (res) {
+    //           this.$message.success("更新成功");
+    //           this.dialogFormVisible = false;
+    //           this.loadStudents();
+    //         } else {
+    //           this.$message.error("更新失败");
+    //         }
+    //         this.dialogFormVisible = false;
+    //       })
+    //     } else {
+    //       request.post("student", this.form).then(res => {
+    //         if (res) {
+    //           this.$message.success("新增成功");
+    //           this.dialogFormVisible = false;
+    //           this.loadStudents();
+    //         } else {
+    //           this.$message.error("新增失败");
+    //         }
+    //         this.dialogFormVisible = false;
+    //       })
+    //     }
+    //   })
+    // },
+    add() {
+      request.post("student", this.form).then(res => {
+        if (res) {
+          this.$message.success("新增成功");
+          this.dialogFormVisible = false;
+          this.loadStudents();
+        } else {
+          this.$message.error("新增失败");
+        }
+        this.dialogAddFormVisible = false;
+      })
+    },
+    edit() {
+      request.put("student", this.form).then(res => {
+        if (res) {
+          this.$message.success("更新成功");
+          this.dialogFormVisible = false;
+          this.loadStudents();
+        } else {
+          this.$message.error("更新失败");
+        }
+        this.dialogEditFormVisible = false;
+      })
+    },
+    handleAdd() {
+      this.dialogAddFormVisible = true;
+      this.form = {};
+    },
+    handleEdit(row) {
+      this.form = JSON.parse(JSON.stringify(row));
+      this.dialogEditFormVisible = true;
+    },
+    del(id) {
+      request.delete("student/" + id).then(res => {
+        if (res) {
+          this.$message.success("删除成功");
+          this.dialogFormVisible = false;
+          this.loadStudents();
+        } else {
+          this.$message.error("删除失败");
+        }
+        this.dialogFormVisible = false;
+      })
     },
     loadClasses() {
       request.get('class/allCidAndName').then(res => {
