@@ -16,12 +16,12 @@
       <el-menu style="height: 100%" class="layout-container-demo" router>
         <template v-for="(item, index) in $router.options.routes">
           <el-menu-item v-if="item.children==null && item.meta.show" :index="item.path">{{item.name}}</el-menu-item>
-          <el-sub-menu v-else-if="item.meta.roles.indexOf('admin') > -1" :index="item.path">
+          <el-sub-menu v-else-if="item.meta.roles.indexOf(role) > -1" :index="item.path">
 <!--            <template slot="title">{{item.name}}</template>-->
             <template #title><span>{{item.name}}</span></template>
             <template v-if="item.children">
             <template v-for="(subitem, subindex) in item.children">
-              <el-menu-item v-if="subitem.meta.roles.indexOf('admin') > -1" :index="subitem.path">
+              <el-menu-item v-if="subitem.meta.roles.indexOf(role) > -1" :index="subitem.path">
                 {{subitem.name}}
               </el-menu-item>
             </template>
@@ -36,7 +36,15 @@
 <script>
 
 export default {
-  name: "Aside"
+  name: "Aside",
+  data(){
+    return {
+      role: ""
+    }
+  },
+  created() {
+    this.role = JSON.parse(localStorage.getItem("user")).groupName;
+  }
 }
 </script>
 

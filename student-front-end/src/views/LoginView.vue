@@ -33,7 +33,7 @@ export default {
         }
         else {
           localStorage.setItem("user", JSON.stringify(res.data));
-          this.$router.push("/studentinfo")
+          this.$router.push("/main")
         }
         console.log(res)
       })

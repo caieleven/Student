@@ -36,5 +36,10 @@ public class User{
      */
     private Integer permission;
 
+    /**
+     * 父id
+     */
+    private Integer fid;
+
 
 }
