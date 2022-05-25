@@ -223,7 +223,7 @@ export default {
       multipleSelection: [], //选择的数据
       dialogAddFormVisible: false, //新增对话框显示
       dialogEditFormVisible: false, //编辑对话框显示
-      form: {} //新增表单
+      form: {}, //新增表单
     }
   },
 //利用计算属性计算changList

@@ -15,8 +15,11 @@ const app = createApp(App);
 // app.prototype.request=request
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 // app.prototype.$axios=axios;
-app.use(store).use(router).use(ElementPlus).mount('#app')
-for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
-    app.component(key, component)
+for(let iconName in ElementPlusIconsVue){
+    app.component(iconName,ElementPlusIconsVue[iconName])
 }
+
+app.use(store).use(router).use(ElementPlus).mount('#app')
+
+
 

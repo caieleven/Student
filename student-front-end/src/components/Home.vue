@@ -1,12 +1,15 @@
 <template>
-  <div>
-    <router-view></router-view>
-  </div>
+ <div>
+   <p>主页</p>
+ </div>
 </template>
 
 <script>
-
+export default {
+  name: "Home"
+}
 </script>
 
 <style scoped>
+
 </style>

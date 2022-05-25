@@ -9,7 +9,8 @@
           <Header></Header>
         </el-header>
         <el-main>
-          <Student></Student>
+<!--          <Student></Student>-->
+          <router-view />
         </el-main>
       </el-container>
     </el-container>
