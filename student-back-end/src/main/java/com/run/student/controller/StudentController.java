@@ -5,13 +5,10 @@ import com.run.student.entity.Student;
 import com.run.student.service.StudentService;
 import com.run.student.utils.Result;
 import com.run.student.vo.StudentVo;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 
 @RestController

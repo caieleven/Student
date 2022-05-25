@@ -52,16 +52,16 @@
                       <EditPen/>
                     </el-icon>
                   </el-button>
-                  <el-popconfirm
-                      confirm-button-text='确定'
-                      cancel-button-text='取消'
-                      icon="el-icon-info"
-                      icon-color="red"
-                      title="您确定删除吗？"
-                      @confirm="del(scope.row.id)"
-                  >
-                    <el-button type="danger" slot="reference">删除<el-icon><Delete/></el-icon></el-button>
-                  </el-popconfirm>
+<!--                  <el-popconfirm-->
+<!--                      confirm-button-text='确定'-->
+<!--                      cancel-button-text='取消'-->
+<!--                      icon="el-icon-info"-->
+<!--                      icon-color="red"-->
+<!--                      title="您确定删除吗？"-->
+<!--                      @confirm="del(scope.row.id)"-->
+<!--                  >-->
+<!--                    <el-button type="danger" slot="reference">删除<el-icon><Delete/></el-icon></el-button>-->
+<!--                  </el-popconfirm>-->
                 </template>
               </el-table-column>
             </el-table>

@@ -2,8 +2,10 @@ package com.run.student.vo;
 
 
 import lombok.Data;
+import org.bson.Document;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Data
 public class StudentVo {
@@ -24,5 +26,6 @@ public class StudentVo {
     private Integer bed;    //床号
     private LocalDate admissionDate;    //入学日期
     private LocalDate birth;    //出生日期
-    private String from;    //来源
+    private String background;    //来源
+    private List<Document> addition;    //附加表中的信息
 }
