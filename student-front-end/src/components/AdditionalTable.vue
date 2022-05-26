@@ -9,9 +9,9 @@
       </el-button>
     </div>
     <div>
-      <el-dialog title="新增表" v-model="dialogAddFormVisible" width="20%" style="text-align: center">
+      <el-dialog title="新增表" v-model="dialogAddFormVisible" width="50%" center>
           <el-form :model="newForm" label-width="120px">
-            <div style="text-align: center">
+            <div>
             <el-form-item label="表名">
               <el-input v-model="newForm.name" autocomplete="off"></el-input>
             </el-form-item>
@@ -22,6 +22,21 @@
                   {{baseprobs[item]}}
                 </el-checkbox>
               </el-checkbox-group>
+            </el-form-item>
+            <div>
+              <el-form-item v-for="(column, index) in newForm.additionColumns"
+                            :key="column.name"
+                            :label="'新字段'">
+                <el-input v-model="column.name"></el-input>
+                <el-button class="mt-2" @click.prevent="removeColumn(column)" type="danger">删除字段</el-button>
+              </el-form-item>
+            </div>
+            <el-form-item style="text-align: left">
+              <el-button @click="addColumn" type="success">新添字段</el-button>
+              <el-button @click="submitForm" type="primary">提交</el-button>
+            </el-form-item>
+            <el-form-item style="text-align: center">
+
             </el-form-item>
           </el-form>
 
@@ -40,9 +55,16 @@ export default {
   name: "AdditionalTable",
   data(){
     return {
-      newForm: {}, //新增表单
-      dialogAddFormVisible: false, //新增对话框显示
-      checkList: []
+      newForm: {
+        checkList: ['sid', 'name'],
+        additionColumns: [
+          {
+            name: "zhiwu"
+          }
+        ]
+      }, //新增表单
+      dialogAddFormVisible: false, //新增对话框显示,
+
     }
   },
   setup(){
@@ -59,10 +81,22 @@ export default {
   methods: {
     handleAdd() {
       this.dialogAddFormVisible = true;
-      this.newForm = {};
     },
-    handleCheckChange(value){
-      // console.log(this.checkList)
+    handleCheckChange(){
+    },
+    removeColumn(column){
+      const index = this.newForm.additionColumns.indexOf(column);
+      if (index != -1){
+        this.newForm.additionColumns.splice(index, 1)
+      }
+    },
+    addColumn(){
+      this.newForm.additionColumns.push({
+        name: ""
+      });
+    },
+    submitForm(){
+      console.log(this.newForm)
     }
   }
 }
