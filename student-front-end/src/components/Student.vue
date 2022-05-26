@@ -30,11 +30,18 @@
                 <Plus/>
               </el-icon>
             </el-button>
-            <el-button type="danger">删除
-              <el-icon>
-                <Minus/>
-              </el-icon>
-            </el-button>
+            <el-popconfirm
+                confirm-button-text="是的"
+                cancel-button-text="取消"
+                icon="InfoFilled"
+                icon-color="#626AEF"
+                title="确定要删除选中的对象吗?"
+                @confirm="delBatch"
+            >
+              <template #reference>
+                <el-button type="danger">删除<el-icon><Minus/></el-icon></el-button>
+              </template>
+            </el-popconfirm>
           </div>
           <el-scrollbar>
             <!--          固定首行和首列-->
@@ -341,13 +348,26 @@ export default {
       request.delete("student/" + id).then(res => {
         if (res) {
           this.$message.success("删除成功");
-          this.dialogFormVisible = false;
           this.loadStudents();
         } else {
           this.$message.error("删除失败");
         }
-        this.dialogFormVisible = false;
       })
+    },
+    delBatch() {
+      if (!this.multipleSelection.length) {
+        this.$message.warning("请选择数据！");
+        return
+      } else {
+        request.post("student/deleteBatch", this.multipleSelection).then(res => {
+          if (res) {
+            this.$message.success("批量删除成功");
+            this.loadStudents();
+          } else {
+            this.$message.error("批量删除失败");
+          }
+        })
+      }
     },
     loadClasses() {
       request.get('class/allCidAndName').then(res => {
@@ -359,16 +379,17 @@ export default {
       return row.sid;
     },
     handleSelectionChange(val) {
-      const _this = this;
-      val.forEach(function (item){
-        _this.multipleSelection.push(item.sid);
-      })
-      for (let i in val){
-        this.multipleSelection.push(val[i].sid);
-      }
-      // this.multipleSelection = val;
-      // console.log(val)
-      console.log(this.multipleSelection)
+      this.multipleSelection = val.map(v => v.sid)  //对象数组转换为sid数组
+      // const _this = this;
+      // val.forEach(function (item){
+      //   _this.multipleSelection.push(item.sid);
+      // })
+      // for (let i in val){
+      //   this.multipleSelection.push(val[i].sid);
+      // }
+      // // this.multipleSelection = val;
+      // // console.log(val)
+      // console.log(this.multipleSelection)
     },
     //行选则时的处理逻辑
     // handleRowClick(val) {

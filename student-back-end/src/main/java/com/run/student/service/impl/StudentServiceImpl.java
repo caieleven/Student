@@ -64,6 +64,11 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
+    public int deleteBatch(List<Integer> sids) {
+        return studentMapper.deleteBatchIds(sids);
+    }
+
+    @Override
     public Student isExist(int id) {
         return studentMapper.selectById(id);
     }

@@ -87,6 +87,12 @@ public class StudentController {
         return studentService.deleteById(id);
     }
 
+    // 批量删除
+    @PostMapping("/deleteBatch")
+    public int deleteBatch(@RequestBody List<Integer> sids) {
+        return studentService.deleteBatch(sids);
+    }
+
     // 检查当前学号是否存在
     @PostMapping("/exist/{id}")
     public Student exist(@PathVariable int id) { return  studentService.isExist(id); }

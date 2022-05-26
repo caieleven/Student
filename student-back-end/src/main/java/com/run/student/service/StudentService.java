@@ -26,4 +26,5 @@ public interface StudentService{
 
     public List<StudentVo> getSpecialStudent(String sid, String studentName, String cid,String status);
 
+    public int deleteBatch(List<Integer> sids);
 }

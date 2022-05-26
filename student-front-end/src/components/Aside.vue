@@ -17,7 +17,6 @@
         <template v-for="(item, index) in $router.options.routes">
           <el-menu-item v-if="item.children==null && item.meta.show" :index="item.path">{{item.name}}</el-menu-item>
           <el-sub-menu v-else-if="item.meta.roles.indexOf(role) > -1" :index="item.path">
-<!--            <template slot="title">{{item.name}}</template>-->
             <template #title><span>{{item.name}}</span></template>
             <template v-if="item.children">
             <template v-for="(subitem, subindex) in item.children">
