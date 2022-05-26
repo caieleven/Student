@@ -1,10 +1,15 @@
 package com.run.student.controller;
 
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.run.student.entity.Student;
 import com.run.student.service.StudentService;
 import com.run.student.utils.Result;
 import com.run.student.vo.StudentVo;
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,11 +40,29 @@ public class StudentController {
      */
     @GetMapping("page")
     public Result<Object> getPage(@RequestParam Integer pageNum,
-                                       @RequestParam Integer pageSize,
-                                       @RequestParam(defaultValue = "") String userName){
+                                  @RequestParam Integer pageSize,
+                                  @RequestParam(defaultValue = "") String userName){
         pageNum = (pageNum - 1)* pageSize;
         List<StudentVo> data = studentService.selectPage(pageNum, pageSize);
         Integer total = studentService.getTotalNum();
+        Result<Object> result = new Result<>();
+        result.setData(data);
+        result.setCount(total);
+        return result;
+    }
+
+    // 根据姓名和学号模糊查询
+    @GetMapping("specialStudent")
+    public Result<Object> getSpecialStudent(@RequestParam Integer pageNum,
+                                            @RequestParam Integer pageSize,
+                                            @RequestParam(defaultValue = "") String studentName,
+                                            @RequestParam(defaultValue = "") String sid,
+                                            @RequestParam(defaultValue = "") String cid,
+                                            @RequestParam(defaultValue = "") String status) {
+        PageHelper.startPage(pageNum, pageSize);
+        List<StudentVo> data = studentService.getSpecialStudent(sid, studentName, cid, status);
+        PageInfo<StudentVo> studentVoPageInfo = new PageInfo<>(data);
+        Integer total = (int) studentVoPageInfo.getTotal();
         Result<Object> result = new Result<>();
         result.setData(data);
         result.setCount(total);

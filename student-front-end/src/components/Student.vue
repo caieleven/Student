@@ -2,22 +2,24 @@
   <div>
         <el-main>
           <div style="padding: 10px 0">
-            <el-input class="w-50 m-2" placeholder="请输入关键词" style="width: 200px" suffix-icon="Search"
-                      v-model="username">
-              <el-icon>
-                <Search/>
-              </el-icon>
-            </el-input>
-            <el-button class="ml-5" type="primary" round>搜索</el-button>
-            <el-button class="ml-5" type="info" @click="reset" round>重置</el-button>
+            <el-input style="width: 200px" placeholder="请输入姓名" v-model="studentName"></el-input>
+            <el-input style="width: 200px" placeholder="请输入学号" class="ml-5" v-model="sid"></el-input>
+            <el-button class="ml-5" type="primary" @click="search" round>搜索</el-button>
+            <el-button class="ml-5" type="warning" @click="reset" round>重置</el-button>
           </div>
           <div class="pd-10">
-            <el-select v-model="className" filterable placeholder="选择班级">
+            <el-select v-model="cid" filterable placeholder="选择班级" style="width: 200px" @change="search">
               <el-option
                   v-for="item in classes"
-                  :key="item.cid"
                   :label="item.name"
                   :value="item.cid"
+              />
+            </el-select>
+            <el-select v-model="status" filterable placeholder="选择政治面貌" class="ml-5" style="width: 200px" @change="search">
+              <el-option
+                  v-for="item in statuses"
+                  :label="item"
+                  :value="item"
               />
             </el-select>
           </div>
@@ -47,21 +49,19 @@
               <el-table-column prop="email" label="邮箱" width="200"/>
               <el-table-column label="操作" width="200" align="center">
                 <template v-slot="scope">
-                  <el-button type="info" @click="handleEdit(scope.row)">编辑
-                    <el-icon>
-                      <EditPen/>
-                    </el-icon>
-                  </el-button>
-<!--                  <el-popconfirm-->
-<!--                      confirm-button-text='确定'-->
-<!--                      cancel-button-text='取消'-->
-<!--                      icon="el-icon-info"-->
-<!--                      icon-color="red"-->
-<!--                      title="您确定删除吗？"-->
-<!--                      @confirm="del(scope.row.id)"-->
-<!--                  >-->
-<!--                    <el-button type="danger" slot="reference">删除<el-icon><Delete/></el-icon></el-button>-->
-<!--                  </el-popconfirm>-->
+                  <el-button type="info" @click="handleEdit(scope.row)">编辑<el-icon><EditPen/></el-icon></el-button>
+                  <el-popconfirm
+                      confirm-button-text="是的"
+                      cancel-button-text="取消"
+                      icon="InfoFilled"
+                      icon-color="#626AEF"
+                      title="确定要删除吗?"
+                      @confirm="del(scope.row.sid)"
+                  >
+                    <template #reference>
+                      <el-button type="danger" slot="reference">删除<el-icon><Delete/></el-icon></el-button>
+                    </template>
+                  </el-popconfirm>
                 </template>
               </el-table-column>
             </el-table>
@@ -79,6 +79,7 @@
             </div>
           </el-scrollbar>
 
+<!--          新增对话框-->
           <el-dialog title="用户信息" v-model="dialogAddFormVisible" width="20%">
             <el-form label-width="80px" style="text-align: center">
               <el-form-item label="姓名">
@@ -136,6 +137,7 @@
             </div>
           </el-dialog>
 
+<!--          编辑对话框-->
           <el-dialog title="用户信息" v-model="dialogEditFormVisible" width="20%">
             <el-form label-width="80px" style="text-align: center">
               <el-form-item label="姓名">
@@ -201,13 +203,15 @@
 import request from "@/utils/request";
 import Aside from "@/components/Aside";
 import Header from "@/components/Header";
+import { InfoFilled } from '@element-plus/icons-vue';
 
 const changeList = [];
 export default {
   name: "Student",
   components: {
     Aside,
-    Header
+    Header,
+    InfoFilled
   },
   data() {
     return {
@@ -216,9 +220,13 @@ export default {
       totalNum: 0,  //数据总数
       pageSize: 10,
       pageNum: 1,
-      username: "", //学生姓名
+      studentName: "", //学生姓名
+      sid: "", //学号
       className: [],
+      cid: "", //班号
       classes: {},
+      status: "",
+      statuses: ["党员", "共青团员", "群众"],
       user: {}, //当前登录的用户
       multipleSelection: [], //选择的数据
       dialogAddFormVisible: false, //新增对话框显示
@@ -253,7 +261,7 @@ export default {
       request.get('student/page', {
         params: {
           pageNum: this.pageNum,
-          pageSize: this.pageSize
+          pageSize: this.pageSize,
         }
       }).then(res => {
         this.tableData = res.data;
@@ -262,74 +270,41 @@ export default {
     },
     handleSizeChange(pageSize) {
       this.pageSize = pageSize;
-      request.get('http://localhost:8181/student/page', {
-        params: {
-          pageNum: this.pageNum,
-          pageSize: this.pageSize
-        }
-      }).then(res => {
-        console.log(res)
-        this.tableData = res.data;
-        this.totalNum = res.count;
-      })
+      if (!this.studentName || !this.sid || !this.cid || !this.status) {
+        this.search();
+      } else {
+        this.loadStudents();
+      }
     },
     handleCurrentChange(pageNum) {
       this.pageNum = pageNum;
-      request.get('http://localhost:8181/student/page', {
+      if (!this.studentName || !this.sid || !this.cid || !this.status) {
+        this.search();
+      } else {
+        this.loadStudents();
+      }
+    },
+    search() {
+      request.get('student/specialStudent', {
         params: {
           pageNum: this.pageNum,
-          pageSize: this.pageSize
+          pageSize: this.pageSize,
+          studentName: this.studentName,
+          sid: this.sid,
+          cid: this.cid,
+          status: this.status
         }
       }).then(res => {
-        console.log(res)
         this.tableData = res.data;
         this.totalNum = res.count;
-        // this.$nextTick(() => {
-        //   this.tableData.forEach(item => {
-        //     const { sid } = item
-        //     const exit = changeList.findIndex(items => items.sid === sid)
-        //     if (exit >= 0) {
-        //       item.state=true
-        //       this.$refs.multipleTable.toggleRowSelection(item, changeList[exit].state)
-        //     } else {
-        //       item.state=false
-        //       this.$refs.multipleTable.toggleRowSelection(item, item.state)
-        //     }
-        //   })
-        // })
       })
+
     },
     reset() {
-      this.username = "";
+      this.studentName = "";
+      this.sid = "";
       this.loadStudents();
     },
-    // save() {
-    //   request.post("student/exist/" + this.form.sid).then(res => {
-    //     if (res) {
-    //       request.put("student", this.form).then(res => {
-    //         if (res) {
-    //           this.$message.success("更新成功");
-    //           this.dialogFormVisible = false;
-    //           this.loadStudents();
-    //         } else {
-    //           this.$message.error("更新失败");
-    //         }
-    //         this.dialogFormVisible = false;
-    //       })
-    //     } else {
-    //       request.post("student", this.form).then(res => {
-    //         if (res) {
-    //           this.$message.success("新增成功");
-    //           this.dialogFormVisible = false;
-    //           this.loadStudents();
-    //         } else {
-    //           this.$message.error("新增失败");
-    //         }
-    //         this.dialogFormVisible = false;
-    //       })
-    //     }
-    //   })
-    // },
     add() {
       request.post("student", this.form).then(res => {
         if (res) {
