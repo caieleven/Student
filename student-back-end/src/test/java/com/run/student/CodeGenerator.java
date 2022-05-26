@@ -46,7 +46,7 @@ public class CodeGenerator {
 
         /*4. 策略配置*/
         StrategyConfig strategyConfig = new StrategyConfig();
-        strategyConfig.setInclude("user_group", "student", "major", "class","department","user");
+        strategyConfig.setInclude("additional_table");
         strategyConfig.setNaming(NamingStrategy.underline_to_camel);
         strategyConfig.setColumnNaming(NamingStrategy.underline_to_camel);
         strategyConfig.setEntityLombokModel(true);

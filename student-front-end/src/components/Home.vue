@@ -9,8 +9,7 @@
           <Header></Header>
         </el-header>
         <el-main>
-<!--          <Student></Student>-->
-          <router-view />
+          <p>主页</p>
         </el-main>
       </el-container>
     </el-container>
@@ -23,7 +22,7 @@ import Student from "@/components/Student";
 import Header from "@/components/Header";
 
 export default {
-  name: "Main",
+  name: "Home",
   components: {
     Aside,
     Header,

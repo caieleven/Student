@@ -1,67 +1,50 @@
+<!--<template>-->
+<!--  <el-affix>-->
+<!--  <el-scrollbar style="margin-top: 0; height: 100%">-->
+<!--    <el-menu style="height: 100%" class="layout-container-demo" router>-->
+<!--      <el-sub-menu v-for="(item, index) in $router.options.routes" :index="index+''">-->
+<!--        <template slot="title">{{item.name}}</template>-->
+<!--        <el-menu-item v-for="(subitem, subindex) in item.children" :index="subindex+''">{{subitem.name}}</el-menu-item>-->
+<!--      </el-sub-menu>-->
+<!--    </el-menu>-->
+<!--  </el-scrollbar>-->
+<!--  </el-affix>-->
+<!--</template>-->
 <template>
   <el-affix>
-  <el-scrollbar style="margin-top: 0; height: 100%">
-    <el-menu :default-openeds="['1', '3']" style="height: 100%" class="layout-container-demo">
-      <el-sub-menu index="1">
-        <template #title>
-          <el-icon><message /></el-icon>Navigator One
+    <el-scrollbar style="margin-top: 0; height: 100%">
+      <el-menu style="height: 100%" class="layout-container-demo" router>
+        <template v-for="(item, index) in $router.options.routes">
+          <el-menu-item v-if="item.children==null && item.meta.show" :index="item.path">{{item.name}}</el-menu-item>
+          <el-sub-menu v-else-if="item.meta.roles.indexOf(role) > -1" :index="item.path">
+<!--            <template slot="title">{{item.name}}</template>-->
+            <template #title><span>{{item.name}}</span></template>
+            <template v-if="item.children">
+            <template v-for="(subitem, subindex) in item.children">
+              <el-menu-item v-if="subitem.meta.roles.indexOf(role) > -1" :index="subitem.path">
+                {{subitem.name}}
+              </el-menu-item>
+            </template>
+            </template>
+          </el-sub-menu>
         </template>
-        <el-menu-item-group>
-          <template #title>Group 1</template>
-          <el-menu-item index="1-1">Option 1</el-menu-item>
-          <el-menu-item index="1-2">Option 2</el-menu-item>
-        </el-menu-item-group>
-        <el-menu-item-group title="Group 2">
-          <el-menu-item index="1-3">Option 3</el-menu-item>
-        </el-menu-item-group>
-        <el-sub-menu index="1-4">
-          <template #title>Option4</template>
-          <el-menu-item index="1-4-1">Option 4-1</el-menu-item>
-        </el-sub-menu>
-      </el-sub-menu>
-      <el-sub-menu index="2">
-        <template #title>
-          <el-icon><Menu /></el-icon>Navigator Two
-        </template>
-        <el-menu-item-group>
-          <template #title>Group 1</template>
-          <el-menu-item index="2-1">Option 1</el-menu-item>
-          <el-menu-item index="2-2">Option 2</el-menu-item>
-        </el-menu-item-group>
-        <el-menu-item-group title="Group 2">
-          <el-menu-item index="2-3">Option 3</el-menu-item>
-        </el-menu-item-group>
-        <el-sub-menu index="2-4">
-          <template #title>Option 4</template>
-          <el-menu-item index="2-4-1">Option 4-1</el-menu-item>
-        </el-sub-menu>
-      </el-sub-menu>
-      <el-sub-menu index="3">
-        <template #title>
-          <el-icon><setting /></el-icon>Navigator Three
-        </template>
-        <el-menu-item-group>
-          <template #title>Group 1</template>
-          <el-menu-item index="3-1">Option 1</el-menu-item>
-          <el-menu-item index="3-2">Option 2</el-menu-item>
-        </el-menu-item-group>
-        <el-menu-item-group title="Group 2">
-          <el-menu-item index="3-3">Option 3</el-menu-item>
-        </el-menu-item-group>
-        <el-sub-menu index="3-4">
-          <template #title>Option 4</template>
-          <el-menu-item index="3-4-1">Option 4-1</el-menu-item>
-        </el-sub-menu>
-      </el-sub-menu>
-    </el-menu>
-  </el-scrollbar>
+      </el-menu>
+    </el-scrollbar>
   </el-affix>
 </template>
 
 <script>
 
 export default {
-  name: "Aside"
+  name: "Aside",
+  data(){
+    return {
+      role: ""
+    }
+  },
+  created() {
+    this.role = JSON.parse(localStorage.getItem("user")).groupName;
+  }
 }
 </script>
 

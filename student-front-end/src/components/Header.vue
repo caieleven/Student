@@ -1,13 +1,13 @@
 <template>
   <div style="text-align: right; font-size: 12px; height: 100%" class="layout-container-demo">
     <div style="margin-top: 0; height: 100%">
-      <el-dropdown>
+      <el-dropdown @command="handleCommand">
         <el-icon style="margin-right: 8px; margin-top: 20px"><setting/></el-icon>
         <template #dropdown>
           <el-dropdown-menu>
-            <el-dropdown-item>View</el-dropdown-item>
-            <el-dropdown-item>Add</el-dropdown-item>
-            <el-dropdown-item>Delete</el-dropdown-item>
+<!--            <el-dropdown-item>View</el-dropdown-item>-->
+<!--            <el-dropdown-item>Add</el-dropdown-item>-->
+            <el-dropdown-item>Log Out</el-dropdown-item>
           </el-dropdown-menu>
         </template>
       </el-dropdown>
@@ -26,6 +26,12 @@ export default {
   },
   created() {
     this.user = localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")) : {}
+  },
+  methods: {
+    handleCommand(command){
+      localStorage.removeItem("user");
+      this.$router.push("/");
+    }
   }
 }
 </script>
