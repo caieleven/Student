@@ -8,12 +8,18 @@
             <el-button class="ml-5" type="warning" @click="reset" round>重置</el-button>
           </div>
           <div class="pd-10">
-            <el-select v-model="cid" filterable placeholder="选择班级" style="width: 200px" @change="selectByClass">
+            <el-select v-model="cid" filterable placeholder="选择班级" style="width: 200px" @change="search">
               <el-option
                   v-for="item in classes"
-                  :key="item.cid"
                   :label="item.name"
                   :value="item.cid"
+              />
+            </el-select>
+            <el-select v-model="status" filterable placeholder="选择政治面貌" class="ml-5" style="width: 200px" @change="search">
+              <el-option
+                  v-for="item in statuses"
+                  :label="item"
+                  :value="item"
               />
             </el-select>
           </div>
@@ -219,6 +225,8 @@ export default {
       className: [],
       cid: "", //班号
       classes: {},
+      status: "",
+      statuses: ["党员", "共青团员", "群众"],
       user: {}, //当前登录的用户
       multipleSelection: [], //选择的数据
       dialogAddFormVisible: false, //新增对话框显示
@@ -261,22 +269,17 @@ export default {
       })
     },
     handleSizeChange(pageSize) {
-      console.log(this.studentName)
       this.pageSize = pageSize;
-      if (!this.studentName || !this.sid) {
+      if (!this.studentName || !this.sid || !this.cid || !this.status) {
         this.search();
-      } else if (!this.cid) {
-        this.selectByClass();
       } else {
         this.loadStudents();
       }
     },
     handleCurrentChange(pageNum) {
       this.pageNum = pageNum;
-      if (!this.studentName || !this.sid) {
+      if (!this.studentName || !this.sid || !this.cid || !this.status) {
         this.search();
-      } else if (!this.cid) {
-        this.selectByClass();
       } else {
         this.loadStudents();
       }
@@ -287,10 +290,11 @@ export default {
           pageNum: this.pageNum,
           pageSize: this.pageSize,
           studentName: this.studentName,
-          sid: this.sid
+          sid: this.sid,
+          cid: this.cid,
+          status: this.status
         }
       }).then(res => {
-        console.log(res);
         this.tableData = res.data;
         this.totalNum = res.count;
       })
@@ -301,46 +305,6 @@ export default {
       this.sid = "";
       this.loadStudents();
     },
-    selectByClass() {
-      console.log(this.cid)
-      request.get("student/selectByClass", {
-        params: {
-          pageNum: this.pageNum,
-          pageSize: this.pageSize,
-          cid: this.cid,
-        }
-      }).then(res => {
-        this.tableData = res.data;
-        this.totalNum = res.count;
-      })
-    },
-    // save() {
-    //   request.post("student/exist/" + this.form.sid).then(res => {
-    //     if (res) {
-    //       request.put("student", this.form).then(res => {
-    //         if (res) {
-    //           this.$message.success("更新成功");
-    //           this.dialogFormVisible = false;
-    //           this.loadStudents();
-    //         } else {
-    //           this.$message.error("更新失败");
-    //         }
-    //         this.dialogFormVisible = false;
-    //       })
-    //     } else {
-    //       request.post("student", this.form).then(res => {
-    //         if (res) {
-    //           this.$message.success("新增成功");
-    //           this.dialogFormVisible = false;
-    //           this.loadStudents();
-    //         } else {
-    //           this.$message.error("新增失败");
-    //         }
-    //         this.dialogFormVisible = false;
-    //       })
-    //     }
-    //   })
-    // },
     add() {
       request.post("student", this.form).then(res => {
         if (res) {

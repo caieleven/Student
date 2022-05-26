@@ -56,24 +56,11 @@ public class StudentController {
     public Result<Object> getSpecialStudent(@RequestParam Integer pageNum,
                                             @RequestParam Integer pageSize,
                                             @RequestParam(defaultValue = "") String studentName,
-                                            @RequestParam(defaultValue = "") String sid) {
+                                            @RequestParam(defaultValue = "") String sid,
+                                            @RequestParam(defaultValue = "") String cid,
+                                            @RequestParam(defaultValue = "") String status) {
         PageHelper.startPage(pageNum, pageSize);
-        List<StudentVo> data = studentService.getSpecialStudent(sid, studentName);
-        PageInfo<StudentVo> studentVoPageInfo = new PageInfo<>(data);
-        Integer total = (int) studentVoPageInfo.getTotal();
-        Result<Object> result = new Result<>();
-        result.setData(data);
-        result.setCount(total);
-        return result;
-    }
-
-    // 根据班级查询
-    @GetMapping("selectByClass")
-    public Result<Object> getStudentByClass(@RequestParam Integer pageNum,
-                                            @RequestParam Integer pageSize,
-                                            @RequestParam(defaultValue = "") Integer cid) {
-        PageHelper.startPage(pageNum, pageSize);
-        List<StudentVo> data = studentService.getStudentByClass(cid, pageNum, pageSize);
+        List<StudentVo> data = studentService.getSpecialStudent(sid, studentName, cid, status);
         PageInfo<StudentVo> studentVoPageInfo = new PageInfo<>(data);
         Integer total = (int) studentVoPageInfo.getTotal();
         Result<Object> result = new Result<>();

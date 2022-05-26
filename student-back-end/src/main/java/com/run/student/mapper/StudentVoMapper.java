@@ -15,9 +15,5 @@ public interface StudentVoMapper {
     List<StudentVo> getAllStudents();
     List<StudentVo> selectPage(Integer pageNum, Integer pageSize);
 
-    List<StudentVo> getSpecialStudent(String sid, String studentName);
-    Integer getTotalSpecialStudent(String sid, String studentName);
-
-    List<StudentVo> getStudentByClass(Integer cid, Integer pageNum, Integer pageSize);
-    Integer getTotalStudentByClass(Integer cid);
+    List<StudentVo> getSpecialStudent(String sid, String studentName, String cid, String status);
 }

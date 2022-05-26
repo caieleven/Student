@@ -69,22 +69,8 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public List<StudentVo> getSpecialStudent(String sid, String studentName){
-        return studentVoMapper.getSpecialStudent(sid, studentName);
+    public List<StudentVo> getSpecialStudent(String sid, String studentName, String cid, String status){
+        return studentVoMapper.getSpecialStudent(sid, studentName, cid, status);
     }
 
-//    @Override
-//    public Integer getTotalSpecialStudent(String sid, String studentName) {
-//        return studentVoMapper.getTotalSpecialStudent(sid, studentName);
-//    }
-
-    @Override
-    public List<StudentVo> getStudentByClass(Integer cid, Integer pageNum, Integer pageSize) {
-        return studentVoMapper.getStudentByClass(cid, pageNum, pageSize);
-    }
-
-//    @Override
-//    public Integer getTotalStudentByClass(Integer cid) {
-//        return studentVoMapper.getTotalStudentByClass(cid);
-//    }
 }

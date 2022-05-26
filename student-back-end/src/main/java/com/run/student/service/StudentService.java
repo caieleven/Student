@@ -24,11 +24,6 @@ public interface StudentService{
 
     public Student isExist(int id);
 
-    public List<StudentVo> getSpecialStudent(String sid, String studentName);
+    public List<StudentVo> getSpecialStudent(String sid, String studentName, String cid,String status);
 
-//    public Integer getTotalSpecialStudent(String sid, String studentName);
-
-    public List<StudentVo> getStudentByClass(Integer cid, Integer pageNum, Integer pageSize);
-
-//    public Integer getTotalStudentByClass(Integer cid);
 }
