@@ -62,9 +62,10 @@
               <el-table-column prop="major" label="专业" width="200"/>
               <el-table-column prop="tel" label="电话号码" width="200"/>
               <el-table-column prop="email" label="邮箱" width="200"/>
-              <el-table-column label="操作" width="200" align="center">
+              <el-table-column v-if="user.groupName != 'assistant'" label="操作" width="200" align="center">
+<!--                操作权限，辅导员可编辑，助手无操作权限-->
                 <template v-slot="scope">
-                  <el-button type="info" @click="handleEdit(scope.row)">编辑<el-icon><EditPen/></el-icon></el-button>
+                  <el-button v-if="['admin', 'counsellor'].indexOf(user.groupName) > -1 " type="info" @click="handleEdit(scope.row)">编辑<el-icon><EditPen/></el-icon></el-button>
                   <el-popconfirm
                       confirm-button-text="是的"
                       cancel-button-text="取消"
@@ -74,7 +75,7 @@
                       @confirm="del(scope.row.sid)"
                   >
                     <template #reference>
-                      <el-button type="danger" slot="reference">删除<el-icon><Delete/></el-icon></el-button>
+                      <el-button v-if="user.groupName=='admin'" type="danger" slot="reference">删除<el-icon><Delete/></el-icon></el-button>
                     </template>
                   </el-popconfirm>
                 </template>
@@ -276,6 +277,7 @@ export default {
   created() {
     this.loadStudents();
     this.loadClasses();
+    this.user=JSON.parse(localStorage.getItem("user"));
   },
   methods: {
     loadStudents() {
