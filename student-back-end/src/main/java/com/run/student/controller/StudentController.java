@@ -8,11 +8,13 @@ import com.github.pagehelper.PageInfo;
 import com.run.student.entity.Student;
 import com.run.student.service.StudentService;
 import com.run.student.utils.Result;
+import com.run.student.utils.StudentQuery;
 import com.run.student.vo.StudentVo;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.websocket.server.PathParam;
 import java.util.List;
 
 
@@ -25,7 +27,7 @@ public class StudentController {
 
 
     @GetMapping("/all")
-    public Result getAllStudent(){
+    public Result getAllStudent() {
         Result<Object> result = Result.success();
         result.setData(studentService.list());
         return result;
@@ -34,22 +36,23 @@ public class StudentController {
 
     /**
      * 分页查询
-     * @param pageNum   第几页
-     * @param pageSize  页的大小
-     * @return  List数据和总数
+     *
+     * @param pageNum  第几页
+     * @param pageSize 页的大小
+     * @return List数据和总数
      */
-    @GetMapping("page")
-    public Result<Object> getPage(@RequestParam Integer pageNum,
-                                  @RequestParam Integer pageSize,
-                                  @RequestParam(defaultValue = "") String userName){
-        pageNum = (pageNum - 1)* pageSize;
-        List<StudentVo> data = studentService.selectPage(pageNum, pageSize);
-        Integer total = studentService.getTotalNum();
-        Result<Object> result = new Result<>();
-        result.setData(data);
-        result.setCount(total);
-        return result;
-    }
+//    @GetMapping("page")
+//    public Result<Object> getPage(@RequestParam Integer pageNum,
+//                                  @RequestParam Integer pageSize,
+//                                  @RequestParam(defaultValue = "") String userName) {
+//        pageNum = (pageNum - 1) * pageSize;
+//        List<StudentVo> data = studentService.selectPage(pageNum, pageSize);
+//        Integer total = studentService.getTotalNum();
+//        Result<Object> result = new Result<>();
+//        result.setData(data);
+//        result.setCount(total);
+//        return result;
+//    }
 
     // 根据姓名和学号模糊查询
     @GetMapping("specialStudent")
@@ -62,7 +65,7 @@ public class StudentController {
         PageHelper.startPage(pageNum, pageSize);
         List<StudentVo> data = studentService.getSpecialStudent(sid, studentName, cid, status);
         PageInfo<StudentVo> studentVoPageInfo = new PageInfo<>(data);
-        Integer total = (int) studentVoPageInfo.getTotal();
+        Long total = studentVoPageInfo.getTotal();
         Result<Object> result = new Result<>();
         result.setData(data);
         result.setCount(total);
@@ -95,7 +98,22 @@ public class StudentController {
 
     // 检查当前学号是否存在
     @PostMapping("/exist/{id}")
-    public Student exist(@PathVariable int id) { return  studentService.isExist(id); }
+    public Student exist(@PathVariable int id) {
+        return studentService.isExist(id);
+    }
+
+    @PostMapping("/queryPage/{pageNum}/{pageSize}")
+    public Result<Object> pageQuery(@PathVariable("pageNum") Integer pageNum,
+                                    @PathVariable("pageSize") Integer pageSize,
+                                    @RequestBody StudentQuery studentQuery) {
+        PageHelper.startPage(pageNum, pageSize);
+        List<StudentVo> data = studentService.queryPage(studentQuery);
+        PageInfo<StudentVo> pageInfo = new PageInfo<>(data);
+        Result<Object> result = new Result<>();
+        result.setData(data);
+        result.setCount(pageInfo.getTotal());
+        return result;
+    }
 
 }
 

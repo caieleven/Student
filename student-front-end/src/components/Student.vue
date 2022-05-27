@@ -1,26 +1,34 @@
 <template>
   <div>
         <el-main>
+<!--          搜索功能-->
           <div style="padding: 10px 0">
             <el-input style="width: 200px" placeholder="请输入姓名" v-model="studentName"></el-input>
-            <el-input style="width: 200px" placeholder="请输入学号" class="ml-5" v-model="sid"></el-input>
+            <el-input style="width: 200px" placeholder="请输入学生来源" class="ml-5" v-model="background"></el-input>
+            <el-input style="width: 200px" placeholder="请输入生源地" v-model="originPlace"></el-input>
+            <el-input style="width: 200px" placeholder="请输入宿舍楼" v-model="dormitory"></el-input>
             <el-button class="ml-5" type="primary" @click="search" round>搜索</el-button>
             <el-button class="ml-5" type="warning" @click="reset" round>重置</el-button>
           </div>
+<!--          选择器-->
           <div class="pd-10">
-            <el-select v-model="cid" filterable placeholder="选择班级" style="width: 200px" @change="search">
+            <el-select v-model="cid" multiple clearable filterable placeholder="选择班级" style="width: 200px" @change="loadStudents">
               <el-option
                   v-for="item in classes"
                   :label="item.name"
                   :value="item.cid"
               />
             </el-select>
-            <el-select v-model="status" filterable placeholder="选择政治面貌" class="ml-5" style="width: 200px" @change="search">
+            <el-select v-model="status" multiple filterable placeholder="选择政治面貌" class="ml-5" style="width: 200px" @change="loadStudents">
               <el-option
                   v-for="item in statuses"
                   :label="item"
                   :value="item"
               />
+            </el-select>
+            <el-select v-model="sex" multiple placeholder="性别" style="width: 90px" @change="loadStudents">
+              <el-option :label="'男'" :value="'男'" />
+              <el-option :label="'女'" :value="'女'" />
             </el-select>
           </div>
 <!--          新增 删除-->
@@ -218,7 +226,7 @@ export default {
   components: {
     Aside,
     Header,
-    InfoFilled
+    InfoFilled,
   },
   data() {
     return {
@@ -227,18 +235,24 @@ export default {
       totalNum: 0,  //数据总数
       pageSize: 10,
       pageNum: 1,
-      studentName: "", //学生姓名
-      sid: "", //学号
       className: [],
-      cid: "", //班号
       classes: {},
-      status: "",
       statuses: ["党员", "共青团员", "群众"],
+
+
       user: {}, //当前登录的用户
       multipleSelection: [], //选择的数据
       dialogAddFormVisible: false, //新增对话框显示
       dialogEditFormVisible: false, //编辑对话框显示
       form: {}, //新增表单
+      //以下信息用以查询中的body
+      studentName: "", //学生姓名
+      background: "", //学生来源
+      originPlace: "", //生源地
+      dormitory: "", //宿舍楼
+      cid: [], //班号
+      sex: [], //性别
+      status: [], //政治面貌
     }
   },
 //利用计算属性计算changList
@@ -265,31 +279,37 @@ export default {
   },
   methods: {
     loadStudents() {
-      request.get('student/page', {
-        params: {
-          pageNum: this.pageNum,
-          pageSize: this.pageSize,
-        }
-      }).then(res => {
+      const  data = {
+          "sex": this.sex,
+          "name": this.studentName,
+          "status": this.status,
+          "cid":this.cid,
+          "background": this.background,
+          "origin": this.originPlace,
+          "dormitory":this.dormitory
+      }
+      request.post(`student/queryPage/${this.pageNum}/${this.pageSize}`, data).then(res=>{
         this.tableData = res.data;
         this.totalNum = res.count;
       })
     },
     handleSizeChange(pageSize) {
       this.pageSize = pageSize;
-      if (!this.studentName || !this.sid || !this.cid || !this.status) {
-        this.search();
-      } else {
-        this.loadStudents();
-      }
+      this.loadStudents();
+      // if (!this.studentName || !this.sid || !this.cid || !this.status) {
+      //   this.search();
+      // } else {
+      //   this.loadStudents();
+      // }
     },
     handleCurrentChange(pageNum) {
       this.pageNum = pageNum;
-      if (!this.studentName || !this.sid || !this.cid || !this.status) {
-        this.search();
-      } else {
-        this.loadStudents();
-      }
+      this.loadStudents();
+      // if (!this.studentName || !this.sid || !this.cid || !this.status) {
+      //   this.search();
+      // } else {
+      //   this.loadStudents();
+      // }
     },
     search() {
       request.get('student/specialStudent', {
@@ -309,7 +329,12 @@ export default {
     },
     reset() {
       this.studentName = "";
-      this.sid = "";
+      this.originPlace = "";
+      this.dormitory = "";
+      this.background = "";
+      this.sex = "";
+      this.status = [];
+      this.cid = []; //清空
       this.loadStudents();
     },
     add() {

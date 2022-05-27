@@ -1,13 +1,17 @@
 package com.run.student.vo;
 
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.bson.Document;
 
 import java.time.LocalDate;
 import java.util.List;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class StudentVo {
     private String sid;
     private String name;
@@ -27,5 +31,5 @@ public class StudentVo {
     private LocalDate admissionDate;    //入学日期
     private LocalDate birth;    //出生日期
     private String background;    //来源
-    private List<Document> addition;    //附加表中的信息
+//    private List<Document> addition;    //附加表中的信息
 }

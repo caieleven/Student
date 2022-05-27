@@ -12,7 +12,7 @@ public class Result<T> {
     private Integer code;   //返回码，0成功
     private String message; //返回描述
     private T data;     //返回数据
-    private Integer count;     //分页查询的总记录数
+    private Long count;     //分页查询的总记录数
 
     public static Result<Object> success() {
         return new Result<>(0, "success", null, null);

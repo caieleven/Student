@@ -3,17 +3,21 @@ package com.run.student.service;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.run.student.entity.Student;
+import com.run.student.utils.StudentQuery;
 import com.run.student.vo.StudentVo;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 
-public interface StudentService{
+public interface StudentService {
     public List<StudentVo> list();
 
     public List<StudentVo> selectPage(Integer pageNum, Integer pageSize);
+
     public Page<Student> searchPage(Page<Student> page, QueryWrapper<Student> queryWrapper);
+
     public int selectCount(QueryWrapper<Student> queryWrapper);
+
     public Integer getTotalNum();
 
     public int insert(Student student);
@@ -24,7 +28,16 @@ public interface StudentService{
 
     public Student isExist(int id);
 
-    public List<StudentVo> getSpecialStudent(String sid, String studentName, String cid,String status);
+    public List<StudentVo> getSpecialStudent(String sid, String studentName, String cid, String status);
 
     public int deleteBatch(List<Integer> sids);
+
+    /**
+     *
+     * @param page  page对象
+     * @param queryWrapper
+     * @return
+     */
+    public List<StudentVo> queryPage(StudentQuery studentQuery);
+
 }

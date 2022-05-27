@@ -6,7 +6,9 @@ import com.run.student.entity.Student;
 import com.run.student.mapper.StudentMapper;
 import com.run.student.mapper.StudentVoMapper;
 import com.run.student.service.StudentService;
+import com.run.student.utils.StudentQuery;
 import com.run.student.vo.StudentVo;
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -69,12 +71,43 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
+    public List<StudentVo> queryPage(StudentQuery studentQuery) {
+        QueryWrapper<StudentVo> wrapper = new QueryWrapper<>();
+        if(studentQuery == null){
+            return studentMapper.list(wrapper);
+        }
+        String name = studentQuery.getName();
+        List<String> sex = studentQuery.getSex();
+        List<Integer> cid = studentQuery.getCid(); //多选->班级id
+        List<String> status = studentQuery.getStatus(); // 多选->政治面貌
+        String dormitory = studentQuery.getDormitory(); // 宿舍楼关键词 如；新世纪、南区
+        String background = studentQuery.getBackground(); // 来源关键词 如：退伍、分流
+        String origin = studentQuery.getOrigin(); //   生源地关键词
+        if(!ObjectUtils.isEmpty(name))
+            wrapper.like("name", name);
+        if(!ObjectUtils.isEmpty(sex))
+            wrapper.in("sex", sex);
+        if(!ObjectUtils.isEmpty(cid))
+            wrapper.in("cid", cid);
+        if(!ObjectUtils.isEmpty(status))
+            wrapper.in("status", status);
+        if(!ObjectUtils.isEmpty(dormitory))
+            wrapper.like("dormitory", dormitory);
+        if(!ObjectUtils.isEmpty(background))
+            wrapper.like("background", background);
+        if(!ObjectUtils.isEmpty(origin))
+            wrapper.like("origin", origin);
+        return studentMapper.list(wrapper);
+    }
+
+
+    @Override
     public Student isExist(int id) {
         return studentMapper.selectById(id);
     }
 
     @Override
-    public List<StudentVo> getSpecialStudent(String sid, String studentName, String cid, String status){
+    public List<StudentVo> getSpecialStudent(String sid, String studentName, String cid, String status) {
         return studentVoMapper.getSpecialStudent(sid, studentName, cid, status);
     }
 
