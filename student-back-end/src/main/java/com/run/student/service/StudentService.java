@@ -33,11 +33,12 @@ public interface StudentService {
     public int deleteBatch(List<Integer> sids);
 
     /**
-     *
-     * @param page  page对象
-     * @param queryWrapper
+     * 自定义sql添加wrapper
+     * @param studentQuery 自定义query
      * @return
      */
     public List<StudentVo> queryPage(StudentQuery studentQuery);
+
+    public List<StudentVo> testMongo(StudentQuery studentQuery);
 
 }

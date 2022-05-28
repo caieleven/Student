@@ -2,13 +2,15 @@ package com.run.student.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
+
 import java.io.Serializable;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 /**
  * <p>
- * 
+ *
  * </p>
  *
  * @author baorun chen
@@ -23,7 +25,7 @@ public class AdditionalTable implements Serializable {
     /**
      * 表ID
      */
-      @TableId(value = "aid", type = IdType.AUTO)
+    @TableId(value = "aid", type = IdType.AUTO)
     private Integer aid;
 
     /**

@@ -1,7 +1,12 @@
 package com.run.student.service;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.run.student.entity.AdditionalTable;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.run.student.vo.AdditionalTableVo;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -12,5 +17,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @since 2022-05-26
  */
 public interface AdditionalTableService extends IService<AdditionalTable> {
-
+    public List<AdditionalTableVo> list(AdditionalTable additionalTable);
 }

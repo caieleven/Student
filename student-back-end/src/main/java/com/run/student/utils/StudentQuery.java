@@ -11,6 +11,7 @@ import java.util.List;
 @NoArgsConstructor
 public class StudentQuery {
     private String name;    //关键词
+    private List<Long> sid; //学号 用于附加表与基本表的拼接
     private List<String> sex;
     private List<Integer> cid; //多选->班级id
     private List<String> status; // 多选->政治面貌

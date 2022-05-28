@@ -10,6 +10,7 @@ import com.run.student.utils.StudentQuery;
 import com.run.student.vo.StudentVo;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -77,6 +78,7 @@ public class StudentServiceImpl implements StudentService {
             return studentMapper.list(wrapper);
         }
         String name = studentQuery.getName();
+        List<Long> sid = studentQuery.getSid();
         List<String> sex = studentQuery.getSex();
         List<Integer> cid = studentQuery.getCid(); //多选->班级id
         List<String> status = studentQuery.getStatus(); // 多选->政治面貌
@@ -97,7 +99,47 @@ public class StudentServiceImpl implements StudentService {
             wrapper.like("background", background);
         if(!ObjectUtils.isEmpty(origin))
             wrapper.like("origin", origin);
+        if(!ObjectUtils.isEmpty(sid))
+            wrapper.in("sid", sid);
         return studentMapper.list(wrapper);
+    }
+
+    @Autowired
+    MongoTemplate mongoTemplate;
+
+    @Override
+    public List<StudentVo> testMongo(StudentQuery studentQuery) {
+        QueryWrapper<StudentVo> wrapper = new QueryWrapper<>();
+        if(studentQuery == null){
+            return studentMapper.list(wrapper);
+        }
+        String name = studentQuery.getName();
+        List<Long> sid = studentQuery.getSid();
+        List<String> sex = studentQuery.getSex();
+        List<Integer> cid = studentQuery.getCid(); //多选->班级id
+        List<String> status = studentQuery.getStatus(); // 多选->政治面貌
+        String dormitory = studentQuery.getDormitory(); // 宿舍楼关键词 如；新世纪、南区
+        String background = studentQuery.getBackground(); // 来源关键词 如：退伍、分流
+        String origin = studentQuery.getOrigin(); //   生源地关键词
+        if(!ObjectUtils.isEmpty(name))
+            wrapper.like("name", name);
+        if(!ObjectUtils.isEmpty(sex))
+            wrapper.in("sex", sex);
+        if(!ObjectUtils.isEmpty(cid))
+            wrapper.in("cid", cid);
+        if(!ObjectUtils.isEmpty(status))
+            wrapper.in("status", status);
+        if(!ObjectUtils.isEmpty(dormitory))
+            wrapper.like("dormitory", dormitory);
+        if(!ObjectUtils.isEmpty(background))
+            wrapper.like("background", background);
+        if(!ObjectUtils.isEmpty(origin))
+            wrapper.like("origin", origin);
+        if(!ObjectUtils.isEmpty(sid))
+            wrapper.in("sid", sid);
+        List<StudentVo> list = studentMapper.list(wrapper);
+
+        return list;
     }
 
 

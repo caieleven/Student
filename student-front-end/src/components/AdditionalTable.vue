@@ -25,8 +25,9 @@
             </el-form-item>
             <div>
               <el-form-item v-for="(column, index) in newForm.additionColumns"
-                            :key="column.name"
-                            :label="'新字段'">
+                            :key="column.key"
+                            :prop="'additionColumns.' + index + 'name'"
+                            :label="'新字段'+(index+1)">
                 <el-input v-model="column.name"></el-input>
                 <el-button class="mt-2" @click.prevent="removeColumn(column)" type="danger">删除字段</el-button>
               </el-form-item>
@@ -58,10 +59,7 @@ export default {
       newForm: {
         checkList: ['sid', 'name'],
         additionColumns: [
-          {
-            name: "zhiwu"
-          }
-        ]
+        ] //为对象数组，包含两个字段，一个key，一个name，key为自动生成，name为新增字段名
       }, //新增表单
       dialogAddFormVisible: false, //新增对话框显示,
 
@@ -78,25 +76,44 @@ export default {
   created() {
     console.log(this.probsList);
   },
+  mounted() {
+    window.vue = this;
+  },
   methods: {
+    //新增表触发
     handleAdd() {
       this.dialogAddFormVisible = true;
     },
     handleCheckChange(){
     },
+    // 新增表中删除字段
     removeColumn(column){
       const index = this.newForm.additionColumns.indexOf(column);
       if (index != -1){
         this.newForm.additionColumns.splice(index, 1)
       }
     },
+    //新增表中增加字段
     addColumn(){
       this.newForm.additionColumns.push({
-        name: ""
+        name: "",
+        key: Date.now()
       });
     },
     submitForm(){
+      //请求后端
       console.log(this.newForm)
+      //表单初始化
+      this.resetForm();
+      this.dialogAddFormVisible = false;
+    },
+    // 表单复原操作
+    resetForm(){
+      this.newForm = {
+        checkList: ['sid', 'name'],
+            additionColumns: [
+        ]
+      }
     }
   }
 }

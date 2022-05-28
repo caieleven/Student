@@ -12,6 +12,7 @@ import com.run.student.mapper.StudentMapper;
 import com.run.student.mapper.StudentVoMapper;
 import com.run.student.mapper.UserMapper;
 import com.run.student.utils.Result;
+import com.run.student.utils.StudentQuery;
 import com.run.student.vo.StudentVo;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+
+import static java.util.stream.Collectors.toSet;
 
 @SpringBootTest
 class StudentApplicationTests {
@@ -75,15 +79,13 @@ class StudentApplicationTests {
 
     @Test
     void testListWrapper(){
-        QueryWrapper<StudentVo> wrapper = new QueryWrapper<>();
-        List<Integer> idList = new ArrayList<>();
-        idList.add(19122206);
-        idList.add(19122207);
-        wrapper.in("sid", idList);
-        final List<StudentVo> list = studentMapper.list(wrapper);
-        for (StudentVo s : list){
-            System.out.println(s.getName());
-        }
+        QueryWrapper<StudentVo> studentVoQueryWrapper = new QueryWrapper<>();
+        List<Integer> cid = new ArrayList<>();
+        cid.add(1000);
+        studentVoQueryWrapper.in("cid", cid);
+        final List<StudentVo> list = studentMapper.list(studentVoQueryWrapper);
+        Set<Long> sid = list.stream().map(StudentVo::getSid).collect(toSet());
+        sid.forEach(System.out::println);
     }
 
 }

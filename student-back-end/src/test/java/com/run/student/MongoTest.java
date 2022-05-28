@@ -21,6 +21,7 @@ public class MongoTest {
     @Autowired
     MongoTemplate mongoTemplate;
 
+
     @Test
     public void testCreateCollection(){
         final boolean ifExist = mongoTemplate.collectionExists("党员");
@@ -49,5 +50,10 @@ public class MongoTest {
             final Object name = item.get("姓名");
             System.out.print(name);
         }
+    }
+
+    @Test
+    public void testMysqlAndMongo(){
+
     }
 }

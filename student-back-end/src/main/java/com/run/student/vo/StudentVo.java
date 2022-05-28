@@ -13,7 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class StudentVo {
-    private String sid;
+    private Long sid;
     private String name;
     private String sex;
     private String tel; //手机号码
@@ -31,5 +31,5 @@ public class StudentVo {
     private LocalDate admissionDate;    //入学日期
     private LocalDate birth;    //出生日期
     private String background;    //来源
-//    private List<Document> addition;    //附加表中的信息
+    private Document addition;    //附加表中的信息
 }

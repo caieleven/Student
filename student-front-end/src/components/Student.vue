@@ -66,18 +66,19 @@
 <!--                操作权限，辅导员可编辑，助手无操作权限-->
                 <template v-slot="scope">
                   <el-button v-if="['admin', 'counsellor'].indexOf(user.groupName) > -1 " type="info" @click="handleEdit(scope.row)">编辑<el-icon><EditPen/></el-icon></el-button>
-                  <el-popconfirm
-                      confirm-button-text="是的"
-                      cancel-button-text="取消"
-                      icon="InfoFilled"
-                      icon-color="#626AEF"
-                      title="确定要删除吗?"
-                      @confirm="del(scope.row.sid)"
-                  >
-                    <template #reference>
-                      <el-button v-if="user.groupName=='admin'" type="danger" slot="reference">删除<el-icon><Delete/></el-icon></el-button>
-                    </template>
-                  </el-popconfirm>
+<!--                  有错误，待解决-->
+<!--                  <el-popconfirm-->
+<!--                      confirm-button-text="是的"-->
+<!--                      cancel-button-text="取消"-->
+<!--                      icon="InfoFilled"-->
+<!--                      icon-color="#626AEF"-->
+<!--                      title="确定要删除吗?"-->
+<!--                      @confirm="del(scope.row.sid)"-->
+<!--                  >-->
+<!--                    <template #reference>-->
+<!--                    </template>-->
+<!--                  </el-popconfirm>-->
+                  <el-button v-if="user.groupName=='admin'" type="danger" slot="reference">删除<el-icon><Delete/></el-icon></el-button>
                 </template>
               </el-table-column>
             </el-table>
