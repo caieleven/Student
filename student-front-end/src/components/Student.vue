@@ -53,9 +53,57 @@
           </div>
           <el-scrollbar>
             <!--          固定首行和首列-->
-            <el-table :data="tableData" ref="multipleTable" style="width: 100%" border stripe :row-key="getRowKeys" @selection-change="handleSelectionChange">
+            <el-table :data="tableData" ref="multipleTable" style="width: 100%" border stripe :row-key="getRowKeys" @selection-change="handleSelectionChange" @expand-change="showStudentDetail">
               <el-table-column type="selection" :reserve-selection=true ></el-table-column>
-              <el-table-column fixed prop="name" label="姓名" width="120"/>
+              <el-table-column type="expand">
+                <template v-slot="props">
+                  <el-form label-position="left" inline style="margin-left: 20px">
+                    <el-form-item label="姓名："  class="item">
+                      <span>{{ props.row.name }}</span>
+                    </el-form-item>
+                    <el-form-item label="学号：" class="item">
+                      <span>{{ props.row.sid }}</span>
+                    </el-form-item>
+                    <el-form-item label="性别：">
+                      <span>{{ props.row.sex }}</span>
+                    </el-form-item>
+                    <el-form-item label="班级：">
+                      <span>{{ props.row.className }}</span>
+                    </el-form-item>
+                    <br />
+                    <el-form-item label="政治面貌：">
+                      <span>{{ props.row.status }}</span>
+                    </el-form-item>
+                    <el-form-item label="电话号码：">
+                      <span>{{ props.row.tel }}</span>
+                    </el-form-item>
+                    <el-form-item label="邮箱：">
+                      <span>{{ props.row.email }}</span>
+                    </el-form-item>
+                    <br />
+                    <el-form-item label="宿舍楼号："  class="item">
+                      <span>{{ props.row.dormitory }}</span>
+                    </el-form-item>
+                    <el-form-item label="室号：">
+                      <span>{{ props.row.bedroom }}</span>
+                    </el-form-item>
+                    <el-form-item label="床号：">
+                      <span>{{ props.row.bed }}</span>
+                    </el-form-item>
+                    <br />
+                    <el-form-item label="入学日期：">
+                      <span>{{ props.row.admissionDate }}</span>
+                    </el-form-item>
+                    <el-form-item label="出生日期：">
+                      <span>{{ props.row.birth }}</span>
+                    </el-form-item>
+                    <el-form-item label="来源：">
+                      <span>{{ props.row.background }}</span>
+                    </el-form-item>
+                  </el-form>
+                </template>
+              </el-table-column>
+              <el-table-column prop="name" label="姓名" width="120"/>
               <el-table-column prop="sid" label="学号" width="120"/>
               <el-table-column prop="sex" label="性别" width="50"/>
               <el-table-column prop="className" label="班级" width="200"/>
@@ -419,6 +467,9 @@ export default {
       // // console.log(val)
       // console.log(this.multipleSelection)
     },
+    showStudentDetail() {
+
+    },
     //行选则时的处理逻辑
     // handleRowClick(val) {
     //   const { multipleSelection } = this
@@ -449,7 +500,7 @@ export default {
 
 </script>
 
-<style scoped>
+<style>
 .layout-container-demo .el-header {
   position: relative;
   background-color: var(--el-color-primary-light-7);
