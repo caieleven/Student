@@ -1,18 +1,14 @@
 package com.run.student.controller;
 
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.run.student.entity.User;
-import com.run.student.mapper.UserVoMapper;
+import com.run.student.service.AdditionalTableService;
 import com.run.student.service.UserService;
 import com.run.student.utils.Result;
 import com.run.student.vo.UserVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import org.springframework.stereotype.Controller;
-
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -22,39 +18,16 @@ public class UserController {
     @Autowired
     UserService userService;
 
-//    @PostMapping("/login")
-//    public Result<Object> login(@RequestParam String uid,
-//                                     @RequestParam String password){
-////        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
-//////        queryWrapper.select("uid", "password").eq(uid, password);
-////        queryWrapper.eq("password", password);
-////        queryWrapper.eq("uid",uid);
-////        queryWrapper.select("username", "group_id", "permission");
-////        User user = userService.getOne(queryWrapper);
-//
-//        UserVo user = userService.checkLogin(Integer.valueOf(uid), password);
-//        Result<Object> result = new Result<>();
-////        Map<String, Object> map = new HashMap<>();
-//        if(user != null){
-////            map.put("isSuccess",true);
-//            result.setCode(0);
-//            result.setMessage("success");
-//        }
-//        else {
-////            map.put("isSuccess", false);
-//            result.setCode(-1);
-//            result.setMessage("wrong uid or password");
-//        }
-//        result.setData(user);
-//        return result;
-////        map.put("userInfo", user);
-////        return map;
-////        return !(userService.list(queryWrapper).isEmpty());
-//    }
+    @Autowired
+    AdditionalTableService additionalTableService;
+
 
     @PostMapping("/login")
     public Result<Object> login(@RequestBody User tempUser){
         UserVo user = userService.checkLogin(Integer.valueOf(tempUser.getUid()), tempUser.getPassword());
+        if(user.getPermission() == 0){
+            return Result.fail("该账户已失效");
+        }
         Result<Object> result = new Result<>();
 //        Map<String, Object> map = new HashMap<>();
         if(user != null){
@@ -73,11 +46,32 @@ public class UserController {
     }
 
 
-
-    @GetMapping("/getAllUsers")
-    public Result<Object> getAll(){
+    /**
+     * 根据用户身份，返回用户信息，其中包括用户所管理的表
+     * @Param 请求用户的uid
+     * @return map，包含uid, userName, groupName, permission, tableNames([])
+     */
+    @GetMapping("/getAssistants")
+    public Result<Object> getAssistants(@RequestParam Integer uid){
+        final List<Map<String, Object>> assistant = userService.getAssistant(uid);
+        for (Map<String, Object> map : assistant){
+            final List<String> tableNames = additionalTableService.getTableNameByUid((Integer) map.get("uid"), (String) map.get("groupName"));
+            map.put("tableNames", tableNames);
+        }
         Result<Object> result = Result.success();
-        result.setData(userService.getAllUsers());
+        result.setData(assistant);
+        return result;
+    }
+
+    @GetMapping("/getCounselllor")
+    public Result<Object> getCounsellors(@RequestParam Integer uid){
+        final List<Map<String, Object>> counsellors = userService.getCounsellors(uid);
+        for (Map<String, Object> map : counsellors){
+            final List<String> tableNames = additionalTableService.getTableNameByUid((Integer) map.get("uid"), (String) map.get("groupName"));
+            map.put("tableNames", tableNames);
+        }
+        Result<Object> result = Result.success();
+        result.setData(counsellors);
         return result;
     }
 
@@ -94,6 +88,7 @@ public class UserController {
             return result;
         }
     }
+
 
     //需增添修改密码的方法
 

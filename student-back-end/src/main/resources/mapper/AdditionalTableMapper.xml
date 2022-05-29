@@ -11,5 +11,10 @@
             ${ew.customSqlSegment}
     </select>
 
+    <!--List<String> getTableName(@Param("ew") Wrapper<AdditionalTable> queryWrapper);-->
+    <select id="getTableName" resultType="java.lang.String">
+        select distinct table_name from students.additional_table
+                                   ${ew.customSqlSegment}
+    </select>
 
 </mapper>

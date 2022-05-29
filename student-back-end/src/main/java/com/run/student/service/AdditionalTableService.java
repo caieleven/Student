@@ -22,4 +22,6 @@ public interface AdditionalTableService extends IService<AdditionalTable> {
     //添加助手
     boolean addAsistantToTable(Map<String, Object> map);
     boolean save(Map<String, Object> map);
+
+    List<String> getTableNameByUid(Integer uid, String groupName);
 }

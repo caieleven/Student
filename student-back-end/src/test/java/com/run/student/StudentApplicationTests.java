@@ -1,18 +1,12 @@
 package com.run.student;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
-import com.run.student.entity.Student;
 import com.run.student.entity.User;
 import com.run.student.mapper.StudentMapper;
 import com.run.student.mapper.StudentVoMapper;
 import com.run.student.mapper.UserMapper;
-import com.run.student.utils.Result;
-import com.run.student.utils.StudentQuery;
+import com.run.student.service.UserService;
 import com.run.student.vo.StudentVo;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import static java.util.stream.Collectors.toSet;
@@ -35,6 +30,9 @@ class StudentApplicationTests {
 
     @Autowired
     private StudentMapper studentMapper;
+
+    @Autowired
+    UserService userService;
 
     @Test
     void contextLoads() {
@@ -86,6 +84,11 @@ class StudentApplicationTests {
         final List<StudentVo> list = studentMapper.list(studentVoQueryWrapper);
         Set<Long> sid = list.stream().map(StudentVo::getSid).collect(toSet());
         sid.forEach(System.out::println);
+    }
+
+    @Test
+    void testGetManagedUsers(){
+
     }
 
 }

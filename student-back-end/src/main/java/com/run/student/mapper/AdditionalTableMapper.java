@@ -18,4 +18,6 @@ import java.util.List;
  */
 public interface AdditionalTableMapper extends BaseMapper<AdditionalTable> {
     List<AdditionalTableVo> list(@Param("ew") Wrapper<AdditionalTable> queryWrapper);
+
+    List<String> getTableName(@Param("ew") Wrapper<AdditionalTable> queryWrapper);
 }

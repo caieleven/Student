@@ -30,8 +30,6 @@ import java.util.stream.Collectors;
 @Service
 public class AdditionalTableServiceImpl extends ServiceImpl<AdditionalTableMapper, AdditionalTable> implements AdditionalTableService {
 
-    @Autowired
-    MongoTemplate mongoTemplate;
 
     @Autowired
     MongoService mongoService;
@@ -104,6 +102,18 @@ public class AdditionalTableServiceImpl extends ServiceImpl<AdditionalTableMappe
         map.put("sid", new ArrayList<Long>());
         mongoService.insertOne("TableInfo", map);
         return true;
+    }
+
+    @Override
+    public List<String> getTableNameByUid(Integer uid, String groupName) {
+        QueryWrapper<AdditionalTable> queryWrapper = new QueryWrapper<>();
+        if(groupName.equals("counsellor")){
+            queryWrapper.eq("counsellor_id", uid);
+        }
+        else if(groupName.equals("assistant")){
+            queryWrapper.eq("assistant_id", uid);
+        }
+        return baseMapper.getTableName(queryWrapper);
     }
 
 }

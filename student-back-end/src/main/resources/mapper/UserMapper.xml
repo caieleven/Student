@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.run.student.mapper.UserMapper">
-
+    <!--List<UserVo> list(@Param("ew") Wrapper<User> queryWrapper);-->
+    <select id="list" resultType="com.run.student.vo.UserVo">
+        select X.uid, X.username, u.group_name, X.permission, Y.username as f_name from
+            `user` X left join user_group u on X.group_id = u.gid
+                    left join (select A.uid, A.username from `user` A) Y on X.fid = Y.uid
+            ${ew.customSqlSegment}
+    </select>
 </mapper>

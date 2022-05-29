@@ -11,4 +11,5 @@ public class UserVo {
     private String username;
     private String groupName;
     private Integer permission; //权限码
+    private String fName;   //管理者
 }

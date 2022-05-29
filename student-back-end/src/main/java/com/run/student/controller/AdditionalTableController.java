@@ -35,7 +35,7 @@ public class AdditionalTableController {
 
 
     /**
-     * @param table 其中必需包含表名，counsellor_id
+     * @param map 其中必需包含tableName:'',counsellorId, baseColumns:[], additionalColumns:[];
      * @return
      */
     @PostMapping("/addNewTable")
