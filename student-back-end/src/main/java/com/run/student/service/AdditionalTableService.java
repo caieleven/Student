@@ -17,5 +17,8 @@ import java.util.Map;
  * @since 2022-05-26
  */
 public interface AdditionalTableService extends IService<AdditionalTable> {
-    public List<AdditionalTableVo> list(AdditionalTable additionalTable);
+    //查询表
+    List<AdditionalTableVo> list(AdditionalTable additionalTable);
+    //添加助手
+    boolean addAsistantToTable(Map<String, Object> map);
 }

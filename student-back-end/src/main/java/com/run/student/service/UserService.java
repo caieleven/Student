@@ -8,7 +8,7 @@ import java.util.List;
 
 
 public interface UserService extends IService<User> {
-    public List<UserVo> getAllUsers();
-    public UserVo getUserById(Integer uid);
-    public UserVo checkLogin(Integer uid, String password);
+    List<UserVo> getAllUsers();
+    UserVo getUserById(Integer uid);
+    UserVo checkLogin(Integer uid, String password);
 }

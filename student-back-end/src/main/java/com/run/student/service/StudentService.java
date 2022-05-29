@@ -39,6 +39,6 @@ public interface StudentService {
      */
     public List<StudentVo> queryPage(StudentQuery studentQuery);
 
-    public List<StudentVo> testMongo(StudentQuery studentQuery);
+//    public List<StudentVo> testMongo(StudentQuery studentQuery);
 
 }
