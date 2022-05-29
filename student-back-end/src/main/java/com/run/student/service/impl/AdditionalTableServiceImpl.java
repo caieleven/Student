@@ -5,6 +5,7 @@ import com.run.student.entity.AdditionalTable;
 import com.run.student.mapper.AdditionalTableMapper;
 import com.run.student.service.AdditionalTableService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.run.student.service.MongoService;
 import com.run.student.vo.AdditionalTableVo;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +21,7 @@ import java.util.stream.Collectors;
 
 /**
  * <p>
- *  服务实现类
+ * 服务实现类
  * </p>
  *
  * @author baorun chen
@@ -32,15 +33,18 @@ public class AdditionalTableServiceImpl extends ServiceImpl<AdditionalTableMappe
     @Autowired
     MongoTemplate mongoTemplate;
 
+    @Autowired
+    MongoService mongoService;
+
     @Override
     public List<AdditionalTableVo> list(AdditionalTable additionalTable) {
         QueryWrapper<AdditionalTable> wrapper = new QueryWrapper<>();
         final Integer assistantId = additionalTable.getAssistantId();
         final Integer counsellorId = additionalTable.getCounsellorId();
-        if(!ObjectUtils.isEmpty(assistantId)){
+        if (!ObjectUtils.isEmpty(assistantId)) {
             wrapper.eq("assistant_id", assistantId);
         }
-        if(!ObjectUtils.isEmpty(counsellorId)){
+        if (!ObjectUtils.isEmpty(counsellorId)) {
             wrapper.eq("counsellor_id", counsellorId);
         }
         final List<AdditionalTableVo> list = baseMapper.list(wrapper);
@@ -66,7 +70,7 @@ public class AdditionalTableServiceImpl extends ServiceImpl<AdditionalTableMappe
         AdditionalTable table = new AdditionalTable();
         table.setCounsellorId(counsellorId);
         table.setTableName(tableName);
-        for(Integer id : assistantsId){
+        for (Integer id : assistantsId) {
             table.setAssistantId(id);
             baseMapper.insert(table);
         }
@@ -74,19 +78,32 @@ public class AdditionalTableServiceImpl extends ServiceImpl<AdditionalTableMappe
     }
 
     @Override
-    public boolean save(AdditionalTable entity) {
+    public boolean save(Map<String, Object> map) {
+        String tableName = (String)map.get("tableName");
+        Integer counsellorId = (Integer) map.get("counsellorId");
+        map.remove("counsellorId");
+        AdditionalTable entity = new AdditionalTable();
+        entity.setTableName(tableName);
+        entity.setCounsellorId(counsellorId);
         QueryWrapper<AdditionalTable> wrapper = new QueryWrapper<>();
-        wrapper.eq("colusellor_id", entity.getAssistantId());
-        wrapper.eq("counsello_id", entity.getTableName());
+        wrapper.eq("counsellor_id", entity.getAssistantId());
+        wrapper.eq("table_name", entity.getTableName());
         //命名重复
-        if(count(wrapper) > 1){
+        if (count(wrapper) > 0) {
             return false;
         }
         //基本表中插入关系
         baseMapper.insert(entity);
         //附加表中插入集合
         //考虑到不同用户创建的表名可能相同，所以，在mongo中附加表（集合）名为表名+counsellor_id
-        mongoTemplate.createCollection(entity.getTableName()+entity.getCounsellorId());
+        mongoService.createCollection(tableName+counsellorId);
+        //在map中也需要更改
+        map.replace("tableName", tableName+counsellorId);
+        //此时map中剩下tableName, baseColumns, additionalColumns;
+        //添加sid字段
+        map.put("sid", new ArrayList<Long>());
+        mongoService.insertOne("TableInfo", map);
         return true;
     }
+
 }

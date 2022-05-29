@@ -13,18 +13,18 @@
           <el-form :model="newForm" label-width="120px">
             <div>
             <el-form-item label="表名">
-              <el-input v-model="newForm.name" autocomplete="off"></el-input>
+              <el-input v-model="newForm.tableName" autocomplete="off"></el-input>
             </el-form-item>
             </div>
             <el-form-item label="基本表字段">
-              <el-checkbox-group v-model="newForm.checkList" @change="handleCheckChange" label="基本表">
+              <el-checkbox-group v-model="newForm.baseColumns" @change="handleCheckChange" label="基本表">
                 <el-checkbox v-for="item in probsList" :label="item">
                   {{baseprobs[item]}}
                 </el-checkbox>
               </el-checkbox-group>
             </el-form-item>
             <div>
-              <el-form-item v-for="(column, index) in newForm.additionColumns"
+              <el-form-item v-for="(column, index) in newForm.additionalColumns"
                             :key="column.key"
                             :prop="'additionColumns.' + index + 'name'"
                             :label="'新字段'+(index+1)">
@@ -51,14 +51,17 @@
 
 <script>
 import {getCurrentInstance} from "vue";
+import request from "@/utils/request";
 
 export default {
   name: "AdditionalTable",
   data(){
+    // this.user = JSON.parse(localStorage.getItem("user"));
     return {
       newForm: {
-        checkList: ['sid', 'name'],
-        additionColumns: [
+        tableName: '',
+        baseColumns: ['sid', 'name'],
+        additionalColumns: [
         ] //为对象数组，包含两个字段，一个key，一个name，key为自动生成，name为新增字段名
       }, //新增表单
       dialogAddFormVisible: false, //新增对话框显示,
@@ -74,7 +77,7 @@ export default {
     }
   },
   created() {
-    console.log(this.probsList);
+    this.user = JSON.parse(localStorage.getItem("user"));
   },
   mounted() {
     window.vue = this;
@@ -88,30 +91,55 @@ export default {
     },
     // 新增表中删除字段
     removeColumn(column){
-      const index = this.newForm.additionColumns.indexOf(column);
+      const index = this.newForm.additionalColumns.indexOf(column);
       if (index != -1){
-        this.newForm.additionColumns.splice(index, 1)
+        this.newForm.additionalColumns.splice(index, 1)
       }
     },
     //新增表中增加字段
     addColumn(){
-      this.newForm.additionColumns.push({
+      this.newForm.additionalColumns.push({
         name: "",
         key: Date.now()
       });
     },
     submitForm(){
+      //先对newForm处理
+      this.newForm.counsellorId = this.user.uid;
+      //先存储副本，如果省略该部，新增失败之后，无法还原表单
+      let tempAdditionalColumns = this.newForm.additionalColumns;
+      this.newForm.additionalColumns = this.newForm.additionalColumns.map(
+          obj => {return obj.name}
+      );
       //请求后端
+      request.post("additionalTable/addNewTable", this.newForm).then(res=>{
+        if(res){
+          if(res.code == 0){
+            this.$message.success(res.message);
+            //成功之后，初始化表单
+            this.resetForm();
+            this.dialogAddFormVisible = false;
+          }
+          else{
+            this.$message.error(res.message);
+            //还原表单
+            this.newForm.additionalColumns = tempAdditionalColumns;
+          }
+        }
+        else{
+          this.$message.error("新增失败，原因未知");
+          this.newForm.additionalColumns = tempAdditionalColumns;
+        }
+
+      })
       console.log(this.newForm)
-      //表单初始化
-      this.resetForm();
-      this.dialogAddFormVisible = false;
     },
     // 表单复原操作
     resetForm(){
       this.newForm = {
-        checkList: ['sid', 'name'],
-            additionColumns: [
+        tableName: '',
+        baseColumns: ['sid', 'name'],
+        additionalColumns: [
         ]
       }
     }

@@ -39,16 +39,19 @@ public class AdditionalTableController {
      * @return
      */
     @PostMapping("/addNewTable")
-    public Result<Object> addNewTable(@RequestBody AdditionalTable table){
-//     添加新表，表中存储的为表和辅导员/助手的关系，添加新表也是增添关系
-        if(ObjectUtils.isEmpty(table.getTableName())){
+    public Result<Object> addNewTable(@RequestBody Map<String, Object> map){
+        // 添加新表，表中存储的为表和辅导员/助手的关系，添加新表也是增添关系
+        // 先进行简单判断
+        String tableName = (String)map.get("tableName");
+        Integer counsellorId = (Integer) map.get("counsellorId");
+        if(ObjectUtils.isEmpty(tableName)){
             return Result.fail("表名为空，添加失败");
         }
         //此处判断可以删除
-        if(ObjectUtils.isEmpty(table.getCounsellorId())){
+        if(ObjectUtils.isEmpty(counsellorId)){
             return Result.fail("没有添加用户ID， 添加失败");
         }
-        boolean save = additionalTableService.save(table);
+        boolean save = additionalTableService.save(map);
         if(save){
             return Result.success();
         }

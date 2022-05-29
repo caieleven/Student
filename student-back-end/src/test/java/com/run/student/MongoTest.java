@@ -3,16 +3,22 @@ package com.run.student;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import com.mongodb.client.MongoCollection;
+import org.apache.commons.lang3.ObjectUtils;
 import org.bson.Document;
 import org.junit.jupiter.api.Test;
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Query;
 import reactor.core.publisher.Mono;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
+
+import static com.fasterxml.jackson.databind.type.LogicalType.Map;
 
 
 @SpringBootTest
@@ -53,7 +59,12 @@ public class MongoTest {
     }
 
     @Test
-    public void testMysqlAndMongo(){
-
+    public void testInsert(){
+        HashMap<String, Object> map = new HashMap<>();
+        List<String> baseList = new ArrayList<>();
+        baseList.add("sid");
+        map.put("tableName", "测试");
+        map.put("baseColumns", baseList);
+        mongoTemplate.insert(map, "新建表103");
     }
 }

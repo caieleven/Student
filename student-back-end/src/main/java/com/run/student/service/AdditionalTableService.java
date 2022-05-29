@@ -21,4 +21,5 @@ public interface AdditionalTableService extends IService<AdditionalTable> {
     List<AdditionalTableVo> list(AdditionalTable additionalTable);
     //添加助手
     boolean addAsistantToTable(Map<String, Object> map);
+    boolean save(Map<String, Object> map);
 }
