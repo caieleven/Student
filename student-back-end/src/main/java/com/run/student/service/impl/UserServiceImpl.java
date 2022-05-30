@@ -30,11 +30,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     UserVoMapper userVoMapper;
 
     @Override
-    public List<UserVo> getCounsellors() {
-        return userVoMapper.getAllUser();
-    }
-
-    @Override
     public List<Map<String, Object>> getCounsellors(Integer uid) {
         User currentUser = baseMapper.selectById(uid);
         //判断身份是否为admin，此处逻辑较为矛盾，和权限认证杂糅
@@ -45,9 +40,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         queryWrapper.eq("group_id", 2);
         List<UserVo> list = baseMapper.list(queryWrapper);
         List<Map<String, Object>> result = new ArrayList<>();
-        Map<String, Object> map = new HashMap<>();
         //为了前端方便管理，此处不直接返回UserVo
         for(UserVo user : list){
+            Map<String, Object> map = new HashMap<>();
             map.put("uid", user.getUid());
             map.put("username", user.getUsername());
             map.put("groupName", user.getGroupName());
@@ -67,11 +62,15 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         if(currentUser.getGroupId() == 2){
             queryWrapper.eq("fid", uid);
         }
+        //若为助手，不应返回数据
+        if(currentUser.getGroupId() == 3){
+            return null;
+        }
         List<UserVo> list = baseMapper.list(queryWrapper);
         List<Map<String, Object>> result = new ArrayList<>();
-        Map<String, Object> map = new HashMap<>();
         //为了前端方便管理，此处不直接返回UserVo
         for(UserVo user : list){
+            Map<String, Object> map = new HashMap<>();
             map.put("uid", user.getUid());
             map.put("username", user.getUsername());
             map.put("groupName", user.getGroupName());

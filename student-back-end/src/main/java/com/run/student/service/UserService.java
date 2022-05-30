@@ -9,7 +9,6 @@ import java.util.Map;
 
 
 public interface UserService extends IService<User> {
-    List<UserVo> getCounsellors();
     List<Map<String, Object>> getCounsellors(Integer uid);
     List<Map<String, Object>> getAssistant(Integer uid);
     UserVo getUserById(Integer uid);

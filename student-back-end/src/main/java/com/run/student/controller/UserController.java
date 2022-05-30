@@ -29,20 +29,16 @@ public class UserController {
             return Result.fail("该账户已失效");
         }
         Result<Object> result = new Result<>();
-//        Map<String, Object> map = new HashMap<>();
         if(user != null){
-//            map.put("isSuccess",true);
             result.setCode(0);
             result.setMessage("success");
         }
         else {
-//            map.put("isSuccess", false);
             result.setCode(-1);
             result.setMessage("wrong uid or password");
         }
         result.setData(user);
         return result;
-
     }
 
 
@@ -63,11 +59,11 @@ public class UserController {
         return result;
     }
 
-    @GetMapping("/getCounselllor")
+    @GetMapping("/getCounsellors")
     public Result<Object> getCounsellors(@RequestParam Integer uid){
         final List<Map<String, Object>> counsellors = userService.getCounsellors(uid);
         for (Map<String, Object> map : counsellors){
-            final List<String> tableNames = additionalTableService.getTableNameByUid((Integer) map.get("uid"), (String) map.get("groupName"));
+            List<String> tableNames = additionalTableService.getTableNameByUid((Integer) map.get("uid"), (String) map.get("groupName"));
             map.put("tableNames", tableNames);
         }
         Result<Object> result = Result.success();
