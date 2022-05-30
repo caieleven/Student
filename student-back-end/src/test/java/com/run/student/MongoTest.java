@@ -90,4 +90,12 @@ public class MongoTest {
         list.add((long) 19122207);
         mongoService.updateSids("年会101", list);
     }
+
+    @Test
+    void testUpdateOne(){
+        Map<String, Object> map = new HashMap<>();
+        map.put("sid", (long) 19122206);
+        map.put("考核等级","良好");
+        mongoService.updateOne("年会101", map);
+    }
 }

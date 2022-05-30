@@ -14,7 +14,7 @@ public interface MongoService {
     //返回值去除掉了_id&sid
     Map<String, Object> queryBySid(String collectionName, Long sid);
 
-    boolean updateOne(String collectionName, Document document);
+    boolean updateOne(String collectionName, Map<String, Object> infoMap);
     boolean updateBatch(String collectName, List<Document> documents);
 
     /**

@@ -35,4 +35,6 @@ public interface AdditionalTableService extends IService<AdditionalTable> {
      * @return
      */
     List<Map<String, Object>> queryStudents(Integer uid, String tableName, Map<String, Object> queryMap);
+
+    boolean updateOne(Integer uid, String tableName, Map<String, Object> infoMap);
 }

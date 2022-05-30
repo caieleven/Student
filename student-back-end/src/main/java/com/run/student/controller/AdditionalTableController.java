@@ -162,5 +162,20 @@ public class AdditionalTableController {
         return result;
     }
 
+    /**
+     * 更改附加表中的内容
+     * @param uid 用户id
+     * @param tableName 表名
+     * @param additionalInfo 其中，必须包含sid
+     * @return
+     */
+    @PostMapping("/edit/{uid}/{tableName}")
+    public Result<Object> editTable(@PathVariable Integer uid,
+                                    @PathVariable String tableName,
+                                    @RequestBody Map<String, Object> additionalInfo){
+        additionalTableService.updateOne(uid, tableName,additionalInfo);
+        return Result.success();
+    }
+
 }
 

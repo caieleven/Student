@@ -196,4 +196,14 @@ public class AdditionalTableServiceImpl extends ServiceImpl<AdditionalTableMappe
         return result;
     }
 
+    @Override
+    public boolean updateOne(Integer uid, String tableName, Map<String, Object> infoMap) {
+        //获取用户身份，根据身份得到mongo中集合名
+        User user = userService.getById(uid);
+        Integer counsellor_id = user.getGroupId().equals(2) ? uid : user.getFid();
+        mongoService.updateOne(tableName+counsellor_id, infoMap);
+        return false;
+    }
+
+
 }

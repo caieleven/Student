@@ -60,8 +60,15 @@ public class MongoServiceImpl implements MongoService {
 
 
     @Override
-    public boolean updateOne(String collectionName, Document document) {
-        return false;
+    public boolean updateOne(String collectionName, Map<String, Object> infoMap) {
+        Query query = new Query();
+        query.addCriteria(Criteria.where("sid").is((Long)infoMap.get("sid")));
+        Update update = new Update();
+        for(Map.Entry<String, Object> entry : infoMap.entrySet()){
+            update.set(entry.getKey(), entry.getValue());
+        }
+        mongoTemplate.updateFirst(query, update, collectionName);
+        return true;
     }
 
     @Override
