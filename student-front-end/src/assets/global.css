@@ -2,10 +2,26 @@
     margin-left: 5px;
 }
 
+.ml-x {
+    margin-left: 195px;
+}
+
 .mr-5 {
     margin-right: 5px;
 }
 
+.mg-10 {
+    margin: 10px 0;
+}
+
+.mg-10-10 {
+    margin: 10px 10px;
+}
+
 .pd-10 {
     padding: 10px 0;
+}
+
+.pd-10-10 {
+    padding: 10px 10px;
 }

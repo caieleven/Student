@@ -12,24 +12,24 @@
 <!--</template>-->
 <template>
   <el-affix>
-    <el-scrollbar style="margin-top: 0; height: 100%">
-      <el-menu style="height: 100%" class="layout-container-demo" router>
-        <template v-for="(item, index) in $router.options.routes">
-          <el-menu-item v-if="item.children==null && item.meta.show" :index="item.path">{{item.name}}</el-menu-item>
-          <el-sub-menu v-else-if="item.meta.roles.indexOf(role) > -1" :index="item.path">
-            <template #title><span>{{item.name}}</span></template>
-            <template v-if="item.children">
-            <template v-for="(subitem, subindex) in item.children">
-              <el-menu-item v-if="subitem.meta.roles.indexOf(role) > -1" :index="subitem.path">
-                {{subitem.name}}
-              </el-menu-item>
-            </template>
-            </template>
-          </el-sub-menu>
-        </template>
-      </el-menu>
-    </el-scrollbar>
-  </el-affix>
+      <el-scrollbar style="margin-top: 0; height: 100%">
+        <el-menu style="height: 100%" class="layout-container-demo" router>
+          <template v-for="(item, index) in $router.options.routes">
+            <el-menu-item v-if="item.children==null && item.meta.show" :index="item.path">{{item.name}}</el-menu-item>
+            <el-sub-menu v-else-if="item.meta.roles.indexOf(role) > -1" :index="item.path">
+              <template #title><span>{{item.name}}</span></template>
+              <template v-if="item.children">
+              <template v-for="(subitem, subindex) in item.children">
+                <el-menu-item v-if="subitem.meta.roles.indexOf(role) > -1" :index="subitem.path">
+                  {{subitem.name}}
+                </el-menu-item>
+              </template>
+              </template>
+            </el-sub-menu>
+          </template>
+        </el-menu>
+      </el-scrollbar>
+    </el-affix>
 </template>
 
 <script>
@@ -62,5 +62,8 @@ export default {
 }
 .layout-container-demo .el-main {
   padding: 0;
+}
+.round {
+  border-radius: 10px;
 }
 </style>

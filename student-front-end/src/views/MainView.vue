@@ -1,9 +1,11 @@
 <template>
-  <div style="height: 100%">
+  <div style="height: 100%" class="body">
     <el-container class="layout-container-demo" style="height: 100%">
-      <el-aside width="200px" style="margin-top: 0; height: 100%">
-        <Aside></Aside>
-      </el-aside>
+      <el-card class="round mg-10-10" style="height: 100vm">
+        <el-aside width="200px">
+          <Aside></Aside>
+        </el-aside>
+      </el-card>
       <el-container>
         <el-header >
           <Header></Header>
@@ -58,5 +60,12 @@ export default {
   justify-content: center;
   height: 100%;
   right: 20px;
+}
+.round {
+  border-radius: 10px;
+}
+.body {
+  background-color: #f1f2f6;
+  overflow-x: hidden;
 }
 </style>

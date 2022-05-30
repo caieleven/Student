@@ -1,148 +1,154 @@
 <template>
-  <div>
-        <el-main>
+  <div class="body">
+        <el-main class="main">
+          <div align="center">
 <!--          搜索功能-->
-          <div style="padding: 10px 0">
+          <div class="mg-10">
+            <el-card class="round cardStandard">
             <el-input style="width: 200px" placeholder="请输入姓名" v-model="studentName"></el-input>
             <el-input style="width: 200px" placeholder="请输入学生来源" class="ml-5" v-model="background"></el-input>
-            <el-input style="width: 200px" placeholder="请输入生源地" v-model="originPlace"></el-input>
-            <el-input style="width: 200px" placeholder="请输入宿舍楼" v-model="dormitory"></el-input>
-            <el-button class="ml-5" type="primary" @click="search" round>搜索</el-button>
-            <el-button class="ml-5" type="warning" @click="reset" round>重置</el-button>
+            <el-input style="width: 200px" placeholder="请输入生源地" class="ml-5" v-model="originPlace"></el-input>
+            <el-input style="width: 200px" placeholder="请输入宿舍楼" class="ml-5" v-model="dormitory"></el-input>
+            <el-button class="round" style="margin-left: 15px" type="primary" @click="search">搜索</el-button>
+            <el-button class="ml-5 round" type="warning" @click="reset">重置</el-button>
+            </el-card>
           </div>
+          <div>
+            <el-card style="display: flex" class="round cardStandard mg-10">
 <!--          选择器-->
-          <div class="pd-10">
-            <el-select v-model="cid" multiple clearable filterable placeholder="选择班级" style="width: 200px" @change="loadStudents">
-              <el-option
-                  v-for="item in classes"
-                  :label="item.name"
-                  :value="item.cid"
-              />
-            </el-select>
-            <el-select v-model="status" multiple filterable placeholder="选择政治面貌" class="ml-5" style="width: 200px" @change="loadStudents">
-              <el-option
-                  v-for="item in statuses"
-                  :label="item"
-                  :value="item"
-              />
-            </el-select>
-            <el-select v-model="sex" multiple placeholder="性别" style="width: 90px" @change="loadStudents">
-              <el-option :label="'男'" :value="'男'" />
-              <el-option :label="'女'" :value="'女'" />
-            </el-select>
-          </div>
-<!--          新增 删除-->
-          <div style="margin: 10px 0">
-            <el-button type="primary" @click="handleAdd">新增
-              <el-icon>
-                <Plus/>
-              </el-icon>
-            </el-button>
-            <el-popconfirm
-                confirm-button-text="是的"
-                cancel-button-text="取消"
-                icon="InfoFilled"
-                icon-color="#626AEF"
-                title="确定要删除选中的对象吗?"
-                @confirm="delBatch"
-            >
-              <template #reference>
-                <el-button type="danger">删除<el-icon><Minus/></el-icon></el-button>
-              </template>
-            </el-popconfirm>
-          </div>
-          <el-scrollbar>
-            <!--          固定首行和首列-->
-            <el-table :data="tableData" ref="multipleTable" style="width: 100%" border stripe :row-key="getRowKeys" @selection-change="handleSelectionChange" @expand-change="showStudentDetail">
-              <el-table-column type="selection" :reserve-selection=true ></el-table-column>
-              <el-table-column type="expand">
-                <template v-slot="props">
-                  <el-form label-position="left" inline style="margin-left: 20px">
-                    <el-form-item label="姓名："  class="item">
-                      <span>{{ props.row.name }}</span>
-                    </el-form-item>
-                    <el-form-item label="学号：" class="item">
-                      <span>{{ props.row.sid }}</span>
-                    </el-form-item>
-                    <el-form-item label="性别：">
-                      <span>{{ props.row.sex }}</span>
-                    </el-form-item>
-                    <el-form-item label="班级：">
-                      <span>{{ props.row.className }}</span>
-                    </el-form-item>
-                    <br />
-                    <el-form-item label="政治面貌：">
-                      <span>{{ props.row.status }}</span>
-                    </el-form-item>
-                    <el-form-item label="电话号码：">
-                      <span>{{ props.row.tel }}</span>
-                    </el-form-item>
-                    <el-form-item label="邮箱：">
-                      <span>{{ props.row.email }}</span>
-                    </el-form-item>
-                    <br />
-                    <el-form-item label="宿舍楼号："  class="item">
-                      <span>{{ props.row.dormitory }}</span>
-                    </el-form-item>
-                    <el-form-item label="室号：">
-                      <span>{{ props.row.bedroom }}</span>
-                    </el-form-item>
-                    <el-form-item label="床号：">
-                      <span>{{ props.row.bed }}</span>
-                    </el-form-item>
-                    <br />
-                    <el-form-item label="入学日期：">
-                      <span>{{ props.row.admissionDate }}</span>
-                    </el-form-item>
-                    <el-form-item label="出生日期：">
-                      <span>{{ props.row.birth }}</span>
-                    </el-form-item>
-                    <el-form-item label="来源：">
-                      <span>{{ props.row.background }}</span>
-                    </el-form-item>
-                  </el-form>
+              <el-select v-model="cid" multiple clearable filterable placeholder="选择班级" style="width: 200px" @change="loadStudents">
+                <el-option
+                    v-for="item in classes"
+                    :label="item.name"
+                    :value="item.cid"
+                />
+              </el-select>
+              <el-select v-model="status" multiple filterable placeholder="选择政治面貌" class="ml-5" style="width: 200px" @change="loadStudents">
+                <el-option
+                    v-for="item in statuses"
+                    :label="item"
+                    :value="item"
+                />
+              </el-select>
+              <el-select v-model="sex" multiple placeholder="性别" class="ml-5" style="width: 200px" @change="loadStudents">
+                <el-option :label="'男'" :value="'男'" />
+                <el-option :label="'女'" :value="'女'" />
+              </el-select>
+  <!--          新增 删除-->
+              <el-button type="primary" class="ml-x" @click="handleAdd">新增
+                <el-icon>
+                  <Plus/>
+                </el-icon>
+              </el-button>
+              <el-popconfirm
+                  confirm-button-text="是的"
+                  cancel-button-text="取消"
+                  icon="InfoFilled"
+                  icon-color="#626AEF"
+                  title="确定要删除选中的对象吗?"
+                  @confirm="delBatch"
+              >
+                <template #reference>
+                  <el-button type="danger">删除<el-icon><Minus/></el-icon></el-button>
                 </template>
-              </el-table-column>
-              <el-table-column prop="name" label="姓名" width="120"/>
-              <el-table-column prop="sid" label="学号" width="120"/>
-              <el-table-column prop="sex" label="性别" width="50"/>
-              <el-table-column prop="className" label="班级" width="200"/>
-              <el-table-column prop="major" label="专业" width="200"/>
-              <el-table-column prop="tel" label="电话号码" width="200"/>
-              <el-table-column prop="email" label="邮箱" width="200"/>
-              <el-table-column v-if="user.groupName != 'assistant'" label="操作" width="200" align="center">
-<!--                操作权限，辅导员可编辑，助手无操作权限-->
-                <template v-slot="scope">
-                  <el-button v-if="['admin', 'counsellor'].indexOf(user.groupName) > -1 " type="info" @click="handleEdit(scope.row)">编辑<el-icon><EditPen/></el-icon></el-button>
-<!--                  有错误，待解决-->
-<!--                  <el-popconfirm-->
-<!--                      confirm-button-text="是的"-->
-<!--                      cancel-button-text="取消"-->
-<!--                      icon="InfoFilled"-->
-<!--                      icon-color="#626AEF"-->
-<!--                      title="确定要删除吗?"-->
-<!--                      @confirm="del(scope.row.sid)"-->
-<!--                  >-->
-<!--                    <template #reference>-->
-<!--                    </template>-->
-<!--                  </el-popconfirm>-->
-                  <el-button v-if="user.groupName=='admin'" type="danger" slot="reference">删除<el-icon><Delete/></el-icon></el-button>
-                </template>
-              </el-table-column>
-            </el-table>
+              </el-popconfirm>
+            </el-card>
+          </div>
+<!--          Table-->
+            <el-card style="width: fit-content" class="round">
+              <el-table :data="tableData" ref="multipleTable" style="width: fit-content" border stripe :row-key="getRowKeys" @selection-change="handleSelectionChange" @expand-change="showStudentDetail">
+                <el-table-column type="selection" :reserve-selection=true ></el-table-column>
+                <el-table-column type="expand">
+                  <template v-slot="props">
+                    <el-card class="mg-10-10">
+                    <el-form label-position="left" inline style="margin-left: 20px">
+                      <el-form-item label="姓名："  class="item">
+                        <span>{{ props.row.name }}</span>
+                      </el-form-item>
+                      <el-form-item label="学号：" class="item">
+                        <span>{{ props.row.sid }}</span>
+                      </el-form-item>
+                      <el-form-item label="性别：">
+                        <span>{{ props.row.sex }}</span>
+                      </el-form-item>
+                      <el-form-item label="班级：">
+                        <span>{{ props.row.className }}</span>
+                      </el-form-item>
+                      <br />
+                      <el-form-item label="政治面貌：">
+                        <span>{{ props.row.status }}</span>
+                      </el-form-item>
+                      <el-form-item label="电话号码：">
+                        <span>{{ props.row.tel }}</span>
+                      </el-form-item>
+                      <el-form-item label="邮箱：">
+                        <span>{{ props.row.email }}</span>
+                      </el-form-item>
+                      <br />
+                      <el-form-item label="宿舍楼号："  class="item">
+                        <span>{{ props.row.dormitory }}</span>
+                      </el-form-item>
+                      <el-form-item label="室号：">
+                        <span>{{ props.row.bedroom }}</span>
+                      </el-form-item>
+                      <el-form-item label="床号：">
+                        <span>{{ props.row.bed }}</span>
+                      </el-form-item>
+                      <br />
+                      <el-form-item label="入学日期：">
+                        <span>{{ props.row.admissionDate }}</span>
+                      </el-form-item>
+                      <el-form-item label="出生日期：">
+                        <span>{{ props.row.birth }}</span>
+                      </el-form-item>
+                      <el-form-item label="来源：">
+                        <span>{{ props.row.background }}</span>
+                      </el-form-item>
+                    </el-form>
+                    </el-card>
+                  </template>
+                </el-table-column>
+                <el-table-column prop="name" label="姓名" width="120"/>
+                <el-table-column prop="sid" label="学号" width="120"/>
+                <el-table-column prop="sex" label="性别" width="50"/>
+                <el-table-column prop="className" label="班级" width="200"/>
+                <el-table-column prop="major" label="专业" width="200"/>
+                <el-table-column v-if="user.groupName != 'assistant'" label="操作" width="200" align="center">
+  <!--                操作权限，辅导员可编辑，助手无操作权限-->
+                  <template v-slot="scope">
+                    <el-button v-if="['admin', 'counsellor'].indexOf(user.groupName) > -1 " type="info" @click="handleEdit(scope.row)">编辑<el-icon><EditPen/></el-icon></el-button>
+  <!--                  有错误，待解决-->
+                    <el-popconfirm
+                        confirm-button-text="是的"
+                        cancel-button-text="取消"
+                        icon="InfoFilled"
+                        icon-color="#626AEF"
+                        title="确定要删除吗?"
+                        @confirm="del(scope.row.sid)"
+                    >
+                      <template #reference>
+                        <el-button v-if="user.groupName=='admin'" type="danger" slot="reference">删除<el-icon><Delete/></el-icon></el-button>
+                      </template>
+                    </el-popconfirm>
+
+                  </template>
+                </el-table-column>
+              </el-table>
+            </el-card>
             <div class="pd-10">
-              <el-pagination
-                  v-model:currentPage="pageNum"
-                  v-model:page-size="pageSize"
-                  :page-sizes="[5, 10, 20, 50]"
-                  layout="total, sizes, prev, pager, next, jumper"
-                  :total="totalNum"
-                  @size-change="handleSizeChange"
-                  @current-change="handleCurrentChange"
-                  :hide-on-single-page=true
-              />
+              <el-card class="cardStandard round">
+                <el-pagination
+                    v-model:currentPage="pageNum"
+                    v-model:page-size="pageSize"
+                    :page-sizes="[5, 10, 20, 50]"
+                    layout="total, sizes, prev, pager, next, jumper"
+                    :total="totalNum"
+                    @size-change="handleSizeChange"
+                    @current-change="handleCurrentChange"
+                    :hide-on-single-page=true
+                />
+              </el-card>
             </div>
-          </el-scrollbar>
 
 <!--          新增对话框-->
           <el-dialog title="用户信息" v-model="dialogAddFormVisible" width="20%">
@@ -259,7 +265,7 @@
               <el-button type="primary" @click="edit">确 定</el-button>
             </div>
           </el-dialog>
-
+          </div>
         </el-main>
   </div>
 </template>
@@ -500,41 +506,77 @@ export default {
 
 </script>
 
-<style>
-.layout-container-demo .el-header {
-  position: relative;
-  background-color: var(--el-color-primary-light-7);
-  color: var(--el-text-color-primary);
-}
+<style lang="css" scoped>
+/*.layout-container-demo .el-header {*/
+/*  position: relative;*/
+/*  background-color: var(--el-color-primary-light-7);*/
+/*  color: var(--el-text-color-primary);*/
+/*}*/
 
-.layout-container-demo .el-aside {
-  color: var(--el-text-color-primary);
-  background: var(--el-color-primary-light-8);
-}
+/*.layout-container-demo .el-aside {*/
+/*  color: var(--el-text-color-primary);*/
+/*  background: var(--el-color-primary-light-8);*/
+/*}*/
 
-.layout-container-demo .el-menu {
-  border-right: none;
-}
+/*.layout-container-demo .el-menu {*/
+/*  border-right: none;*/
+/*}*/
 
-.layout-container-demo .el-main {
-  padding: 0;
-}
+/*.layout-container-demo .el-main {*/
+/*  padding: 0;*/
+/*}*/
 
-.layout-container-demo .toolbar {
-  display: inline-flex;
-  align-items: center;
+/*.layout-container-demo .toolbar {*/
+/*  display: inline-flex;*/
+/*  align-items: center;*/
+/*  justify-content: center;*/
+/*  height: 100%;*/
+/*  right: 20px;*/
+/*}*/
+/*/deep/ .el-table--enable-row-transition .el-table__body td {*/
+/*  cursor: pointer;*/
+/*}*/
+/*/deep/ .el-checkbox__input.is-disabled.is-checked .el-checkbox__inner:after{*/
+/*  border-color: #fff;*/
+/*}*/
+/*/deep/ .el-checkbox__input.is-disabled.is-checked .el-checkbox__inner{*/
+/*  background-color: #409eff;*/
+/*}*/
+
+.main {
+  width: calc(100vw - 15.5rem);
   justify-content: center;
-  height: 100%;
-  right: 20px;
 }
-/deep/ .el-table--enable-row-transition .el-table__body td {
-  cursor: pointer;
+
+.header {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  min-width: 48.5rem;
+  height: 6rem;
 }
-/deep/ .el-checkbox__input.is-disabled.is-checked .el-checkbox__inner:after{
-  border-color: #fff;
+
+/** {*/
+/*  !* CSS初始化 *!*/
+/*  box-sizing: border-box;*/
+/*  padding: 0;*/
+/*  margin: 0;*/
+/*  font-family: PingFang SC, Microsoft Yahei, sans-serif;*/
+/*  user-select: none;*/
+/*}*/
+
+.body {
+  background-color: #f1f2f6;
+  overflow-x: hidden;
 }
-/deep/ .el-checkbox__input.is-disabled.is-checked .el-checkbox__inner{
-  background-color: #409eff;
+
+.round {
+  border-radius: 10px;
 }
+
+.cardStandard{
+  width: 1026px;
+}
+
 
 </style>
