@@ -9,10 +9,20 @@ public interface MongoService {
     boolean createCollection(String collectionName);
     boolean dropCollection(String collectionName);
     List<Long> allSidInCollection(String collectionName);
-    List<Document> listBySid(String collectionName, List<Integer> sid);
+    List<Document> listBySids(String collectionName, List<Long> sids);
+
+    //返回值去除掉了_id&sid
+    Map<String, Object> queryBySid(String collectionName, Long sid);
+
     boolean updateOne(String collectionName, Document document);
     boolean updateBatch(String collectName, List<Document> documents);
 
+    /**
+     * 返回附加表的所有信息
+     * @param tableName 附加表表名，其中表名已加上uid
+     * @return
+     */
+    Map<String, Object> getAllInfoInTableInfo(String tableName);
     /**
      * 更新表中的sid，不减少已添加的sid
      * @param tableName 附加表表名（集合名）

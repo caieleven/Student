@@ -141,5 +141,26 @@ public class AdditionalTableController {
         additionalTableService.addStudentToTable(map);
         return null;
     }
+
+
+    /**
+     * 从基本表和附加表中取数据，暂时不支持分页查询
+     * 其中没有判断是否存在该用户，存在该表，前端需返回正确
+     * 如果当前用户为admin，注意uid需填写为表的管理者，即辅导员的id
+     * @param uid 请求用户的id
+     * @param tableName 附加表表名
+     * @param queryMap 查询条件
+     * @return
+     */
+    @PostMapping("/getStudentsFromTable/{uid}/{tableName}")
+    public Result<Object> getStudentsFromTable(@PathVariable Integer uid,
+                                               @PathVariable String tableName,
+                                               @RequestBody Map<String, Object> queryMap){
+        final List<Map<String, Object>> maps = additionalTableService.queryStudents(uid, tableName, queryMap);
+        Result<Object> result = Result.success();
+        result.setData(maps);
+        return result;
+    }
+
 }
 

@@ -44,8 +44,18 @@ public class MongoServiceImpl implements MongoService {
     }
 
     @Override
-    public List<Document> listBySid(String collectionName, List<Integer> sid) {
+    public List<Document> listBySids(String collectionName, List<Long> sids) {
         return null;
+    }
+
+    @Override
+    public Map<String, Object> queryBySid(String collectionName, Long sid) {
+        Query query = new Query();
+        query.addCriteria(Criteria.where("sid").is(sid));
+        HashMap<String, Object> one = mongoTemplate.findOne(query, HashMap.class, collectionName);
+        one.remove("_id");
+        one.remove("sid");
+        return one;
     }
 
 
@@ -57,6 +67,13 @@ public class MongoServiceImpl implements MongoService {
     @Override
     public boolean updateBatch(String collectName, List<Document> documents) {
         return false;
+    }
+
+    @Override
+    public Map<String, Object> getAllInfoInTableInfo(String tableName) {
+        Query query = new Query();
+        query.addCriteria(Criteria.where("tableName").is(tableName));
+        return mongoTemplate.findOne(query, HashMap.class, "TableInfo");
     }
 
     @Override

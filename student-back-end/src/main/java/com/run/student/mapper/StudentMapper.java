@@ -10,6 +10,7 @@ import com.run.student.vo.StudentVo;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -25,6 +26,8 @@ public interface StudentMapper extends BaseMapper<Student> {
      * 返回的total为0，原因未知
      */
 //    IPage<StudentVo> list(@Param("page") Page<StudentVo> page, @Param("ew") Wrapper<StudentVo> queryWrapper);
+
+    List<Map<String, Object>> queryStudent(@Param(Constants.WRAPPER) Wrapper<StudentVo> queryWrapper);
 
 }
 

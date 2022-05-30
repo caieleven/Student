@@ -36,4 +36,39 @@
             ${ew.customSqlSegment}
     </select>
 
+    <!--List<Map<String, Object>> queryStudent(@Param(Constants.WRAPPER) Wrapper<StudentVo> queryWrapper);-->
+
+    <select id="queryStudent" resultType="java.util.Map">
+        select sid,
+               name,
+               class_name,
+               major,
+               department,
+               counsellor,
+               sex,
+               tel,
+               email,
+               origin,
+               status,
+               nation,
+               dormitory,
+               bedroom,
+               bed,
+               admission_date,
+               birth,
+               background
+        from student as s
+                 inner join(
+            select cid,
+                   class.name      as class_name,
+                   major.name      as major,
+                   department.name as department,
+                   `user`.username as counsellor
+            from class
+                     inner join major on class.major_id = major.mid
+                     inner join department on major.department_id = department.did
+                     inner join `user` on class.counsellor_id = `user`.uid
+        ) cmdu on s.class_id = cmdu.cid
+            ${ew.customSqlSegment}
+    </select>
 </mapper>

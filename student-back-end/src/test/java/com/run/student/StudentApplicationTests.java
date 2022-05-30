@@ -2,10 +2,12 @@ package com.run.student;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.github.pagehelper.PageHelper;
+import com.run.student.entity.Student;
 import com.run.student.entity.User;
 import com.run.student.mapper.StudentMapper;
 import com.run.student.mapper.StudentVoMapper;
 import com.run.student.mapper.UserMapper;
+import com.run.student.service.StudentService;
 import com.run.student.service.UserService;
 import com.run.student.vo.StudentVo;
 import org.junit.jupiter.api.Test;
@@ -17,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import static java.util.stream.Collectors.summarizingDouble;
 import static java.util.stream.Collectors.toSet;
 
 @SpringBootTest
@@ -33,6 +36,9 @@ class StudentApplicationTests {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    StudentService studentService;
 
     @Test
     void contextLoads() {
@@ -77,13 +83,19 @@ class StudentApplicationTests {
 
     @Test
     void testListWrapper(){
-        QueryWrapper<StudentVo> studentVoQueryWrapper = new QueryWrapper<>();
-        List<Integer> cid = new ArrayList<>();
-        cid.add(1000);
-        studentVoQueryWrapper.in("cid", cid);
-        final List<StudentVo> list = studentMapper.list(studentVoQueryWrapper);
-        Set<Long> sid = list.stream().map(StudentVo::getSid).collect(toSet());
-        sid.forEach(System.out::println);
+       List<String> columns = new ArrayList<>();
+       columns.add("sid");
+       columns.add("name");
+       List<Long> sids = new ArrayList<>();
+       sids.add((long) 19122206);
+       sids.add((long) 19122207);
+//       List<Map<String, Object>> maps = studentService.queryStudent(columns, sids);
+        QueryWrapper<Student> queryWrapper = new QueryWrapper<>();
+        queryWrapper.in("sid", sids);
+        queryWrapper.select("sid", "name");
+        final List<Student> students = studentMapper.selectList(queryWrapper);
+        students.forEach(System.out::println);
+
     }
 
     @Test

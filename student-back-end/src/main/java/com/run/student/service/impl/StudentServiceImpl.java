@@ -1,5 +1,6 @@
 package com.run.student.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.Query;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.run.student.entity.Student;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Map;
 
 
 @Service
@@ -102,6 +104,17 @@ public class StudentServiceImpl implements StudentService {
         if(!ObjectUtils.isEmpty(sid))
             wrapper.in("sid", sid);
         return studentMapper.list(wrapper);
+    }
+
+    //无法生效
+    @Override
+    public List<Map<String, Object>> queryStudent(List<String> columns, List<Long> sids) {
+        QueryWrapper<StudentVo> wrapper = new QueryWrapper<>();
+        for(String column : columns){
+            wrapper.select(column);
+        }
+        wrapper.in("sid", sids);
+        return studentMapper.queryStudent(wrapper);
     }
 
 //    @Autowired

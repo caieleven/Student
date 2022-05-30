@@ -26,4 +26,13 @@ public interface AdditionalTableService extends IService<AdditionalTable> {
     List<String> getTableNameByUid(Integer uid, String groupName);
 
     boolean addStudentToTable(Map<String, Object> map);
+
+    /**
+     * 从基本表和附加表中取数据，暂时不支持分页查询
+     * @param uid 请求用户的id
+     * @param tableName 附加表表名
+     * @param queryMap 查询条件
+     * @return
+     */
+    List<Map<String, Object>> queryStudents(Integer uid, String tableName, Map<String, Object> queryMap);
 }

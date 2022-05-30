@@ -87,7 +87,7 @@ public class MongoTest {
     void testAddSids(){
         List<Long> list = new ArrayList<>();
         list.add((long) 19122206);
-        list.add((long) 19122208);
-        mongoService.updateSids("test1101", list);
+        list.add((long) 19122207);
+        mongoService.updateSids("年会101", list);
     }
 }

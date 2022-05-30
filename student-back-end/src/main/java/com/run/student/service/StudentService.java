@@ -8,6 +8,7 @@ import com.run.student.vo.StudentVo;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
+import java.util.Map;
 
 public interface StudentService {
     public List<StudentVo> list();
@@ -37,8 +38,16 @@ public interface StudentService {
      * @param studentQuery 自定义query
      * @return
      */
-    public List<StudentVo> queryPage(StudentQuery studentQuery);
+    List<StudentVo> queryPage(StudentQuery studentQuery);
 
-//    public List<StudentVo> testMongo(StudentQuery studentQuery);
+    /**
+     * 无法返回指定字段
+     * 根据学号，返回指定字段内容
+     * @param columns 返回的字段
+     * @param sids 学号数组
+     * @return map的数组，其中，map的键为数据库中的字段命名
+     */
+    List<Map<String, Object>> queryStudent(List<String> columns, List<Long> sids);
+
 
 }

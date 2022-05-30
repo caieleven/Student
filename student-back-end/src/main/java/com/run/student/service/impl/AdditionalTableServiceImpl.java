@@ -3,16 +3,22 @@ package com.run.student.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.run.student.entity.AdditionalTable;
+import com.run.student.entity.User;
 import com.run.student.mapper.AdditionalTableMapper;
 import com.run.student.service.AdditionalTableService;
 import com.run.student.service.MongoService;
+import com.run.student.service.StudentService;
+import com.run.student.service.UserService;
+import com.run.student.utils.StudentQuery;
 import com.run.student.vo.AdditionalTableVo;
+import com.run.student.vo.StudentVo;
 import org.apache.commons.lang3.ObjectUtils;
 import org.bson.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -31,6 +37,12 @@ public class AdditionalTableServiceImpl extends ServiceImpl<AdditionalTableMappe
 
     @Autowired
     MongoService mongoService;
+
+    @Autowired
+    StudentService studentService;
+
+    @Autowired
+    UserService userService;
 
 
     /**
@@ -146,6 +158,42 @@ public class AdditionalTableServiceImpl extends ServiceImpl<AdditionalTableMappe
             return false;
         }
         return mongoService.updateSids(tableName+uid, sids);
+    }
+
+    /**
+     * 从基本表和附加表中取数据，暂时不支持分页查询
+     * @param uid 请求用户的id
+     * @param tableName 附加表表名
+     * @param queryMap 查询条件
+     * @return
+     */
+    @Override
+    public List<Map<String, Object>> queryStudents(Integer uid, String tableName, Map<String, Object> queryMap) {
+        //获取用户身份，根据身份得到mongo中集合名
+        User user = userService.getById(uid);
+        Integer counsellor_id = user.getGroupId().equals(2) ? uid : user.getFid();
+        //从mongo中获取表的信息，包括baseColumns, additionalColumns, sids
+        final Map<String, Object> tableInfo = mongoService.getAllInfoInTableInfo(tableName + counsellor_id);
+        List<String> baseColumns = (List<String>) tableInfo.get("baseColumns");
+        List<String> additionalColumns = (List<String>) tableInfo.get("additionalColumns");
+        List<Long> sids = (List<Long>) tableInfo.get("sids");
+
+        List<Map<String, Object>> result = new ArrayList<>();
+
+        //查询基本表中的内容
+        final List<Map<String, Object>> maps = studentService.queryStudent(baseColumns, sids);
+        for(Map<String, Object> map : maps){
+            Map<String, Object> student = new HashMap<>();
+            for(String column : baseColumns){
+                student.put(column, map.get(column));
+            }
+            //查询附加表中的内容
+            Map<String, Object> addInfo = mongoService.queryBySid(tableName + counsellor_id, (Long) map.get("sid"));
+            student.put("additionalInfo", addInfo);
+            //添加到结果列表中
+            result.add(student);
+        }
+        return result;
     }
 
 }
