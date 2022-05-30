@@ -88,10 +88,8 @@ class StudentApplicationTests {
 
     @Test
     void testGetManagedUsers(){
-        final List<Map<String, Object>> counsellors = userService.getCounsellors(100);
-        for(Map<String, Object> map : counsellors){
-            System.out.println(map.toString());
-        }
+        final User byId = userService.getById(100);
+        System.out.println(byId.toString());
     }
 
 }

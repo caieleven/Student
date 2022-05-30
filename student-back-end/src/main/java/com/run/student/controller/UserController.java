@@ -6,6 +6,7 @@ import com.run.student.service.AdditionalTableService;
 import com.run.student.service.UserService;
 import com.run.student.utils.Result;
 import com.run.student.vo.UserVo;
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -85,8 +86,66 @@ public class UserController {
         }
     }
 
+    /**
+     * 添加用户
+     * @param newUser User类型，包括username，password，group_id与fid
+     *                其中，fid为当前发出请求用户的uid，如果fid为2，group_id只能为3
+     * @return
+     */
+    @PostMapping("/addUser")
+    public Result<Object> addUser(@RequestBody User newUser){
+        User currentUser = userService.getById(newUser.getFid());
+        if(ObjectUtils.isEmpty(newUser.getGroupId()))
+            return Result.fail("没有划定权限组");
+        if(ObjectUtils.isEmpty(newUser.getFid()))
+            return Result.fail("没有包含父级用户");
+        if(currentUser.getGroupId() >= newUser.getGroupId())
+            return Result.fail("当前用户没有创建此类用户的权限");
+        userService.save(newUser);
+        UserVo userById = userService.getUserById(newUser.getUid());
+        Result<Object> result = Result.success();
+        result.setData(userById);
+        return result;
+    }
 
     //需增添修改密码的方法
+
+    /**
+     * 更新user，更改用户名、密码、permission，无法更新uid、fid，以及用户组
+     * @param user
+     * @return
+     */
+    @PutMapping("updateUser")
+    public Result<Object> updateUser(@RequestBody User user){
+        final Integer uid = user.getUid();
+        final String username = user.getUsername();
+        final String password = user.getPassword();
+        final Integer permission = user.getPermission();
+        if(ObjectUtils.isEmpty(uid)){
+            return Result.fail("没有包含uid，无法更新");
+        }
+        User byId = userService.getById(uid);
+        if(ObjectUtils.isNotEmpty(username))
+            byId.setUsername(username);
+        if(ObjectUtils.isNotEmpty(password))
+            byId.setPassword(password);
+        if(ObjectUtils.isNotEmpty(permission))
+            byId.setPermission(permission);
+        if(userService.updateById(byId))
+            return Result.success();
+        return Result.fail("修改失败");
+    }
+
+
+    /**
+     * 该方法为完全删除用户，此方法暂时暂时不实现，现在删除用户使用updateUser，将permission置为0
+     * @param user
+     * @return
+     */
+    @DeleteMapping("deleteUser")
+    public Result<Object> deleteUser(@RequestBody User user){
+        return null;
+    }
 
 }
 
