@@ -58,4 +58,29 @@ export default {
   height: 100%;
   right: 20px;
 }
+.main {
+  justify-content: center;
+}
+
+.header {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  min-width: 48.5rem;
+  height: 6rem;
+}
+
+.body {
+  background-color: #f1f2f6;
+  overflow-x: hidden;
+}
+
+.round {
+  border-radius: 10px;
+}
+
+.cardStandard{
+  width: 1026px;
+}
+
 </style>
