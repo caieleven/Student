@@ -107,8 +107,7 @@ public class UserController {
         result.setData(userById);
         return result;
     }
-
-    //需增添修改密码的方法
+    
 
     /**
      * 更新user，更改用户名、密码、permission，无法更新uid、fid，以及用户组

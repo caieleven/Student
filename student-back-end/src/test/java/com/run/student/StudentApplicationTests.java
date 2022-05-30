@@ -88,8 +88,9 @@ class StudentApplicationTests {
 
     @Test
     void testGetManagedUsers(){
-        final User byId = userService.getById(100);
-        System.out.println(byId.toString());
+        String str = "";
+        if(str.isEmpty())
+            System.out.println("hello");
     }
 
 }

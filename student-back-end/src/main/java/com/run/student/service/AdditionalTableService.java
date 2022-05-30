@@ -24,4 +24,6 @@ public interface AdditionalTableService extends IService<AdditionalTable> {
     boolean save(Map<String, Object> map);
 
     List<String> getTableNameByUid(Integer uid, String groupName);
+
+    boolean addStudentToTable(Map<String, Object> map);
 }

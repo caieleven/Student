@@ -1,22 +1,20 @@
 package com.run.student.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.run.student.entity.AdditionalTable;
 import com.run.student.mapper.AdditionalTableMapper;
 import com.run.student.service.AdditionalTableService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.run.student.service.MongoService;
 import com.run.student.vo.AdditionalTableVo;
 import org.apache.commons.lang3.ObjectUtils;
+import org.bson.Document;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.aggregation.ArithmeticOperators;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -34,16 +32,26 @@ public class AdditionalTableServiceImpl extends ServiceImpl<AdditionalTableMappe
     @Autowired
     MongoService mongoService;
 
+
+    /**
+     * 根据条件，查找表
+     * @param additionalTable
+     * @return
+     */
     @Override
     public List<AdditionalTableVo> list(AdditionalTable additionalTable) {
         QueryWrapper<AdditionalTable> wrapper = new QueryWrapper<>();
         final Integer assistantId = additionalTable.getAssistantId();
         final Integer counsellorId = additionalTable.getCounsellorId();
+        final String tableName = additionalTable.getTableName();
         if (!ObjectUtils.isEmpty(assistantId)) {
             wrapper.eq("assistant_id", assistantId);
         }
         if (!ObjectUtils.isEmpty(counsellorId)) {
             wrapper.eq("counsellor_id", counsellorId);
+        }
+        if (!ObjectUtils.isEmpty(tableName)){
+            wrapper.like("table_name", tableName);
         }
         final List<AdditionalTableVo> list = baseMapper.list(wrapper);
         return list;
@@ -75,6 +83,8 @@ public class AdditionalTableServiceImpl extends ServiceImpl<AdditionalTableMappe
         return true;
     }
 
+
+    // 添加新表，map中包含的内容参考Controller层
     @Override
     public boolean save(Map<String, Object> map) {
         String tableName = (String)map.get("tableName");
@@ -98,8 +108,8 @@ public class AdditionalTableServiceImpl extends ServiceImpl<AdditionalTableMappe
         //在map中也需要更改
         map.replace("tableName", tableName+counsellorId);
         //此时map中剩下tableName, baseColumns, additionalColumns;
-        //添加sid字段
-        map.put("sid", new ArrayList<Long>());
+        //添加sids字段
+        map.put("sids", new ArrayList<Long>());
         mongoService.insertOne("TableInfo", map);
         return true;
     }
@@ -114,6 +124,28 @@ public class AdditionalTableServiceImpl extends ServiceImpl<AdditionalTableMappe
             queryWrapper.eq("assistant_id", uid);
         }
         return baseMapper.getTableName(queryWrapper);
+    }
+
+
+    /**
+     * 添加学生到附加表中
+     * @param map 需保证包含sids:[]，uid，tableName
+     * @return
+     */
+    @Override
+    public boolean addStudentToTable(Map<String, Object> map) {
+        //先判断当前用户是否拥有此表
+        Integer uid = (Integer) map.get("uid");
+        String tableName = (String) map.get("tableName");
+        List<Long> sids = (List<Long>) map.get("sids");
+        QueryWrapper<AdditionalTable> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("counsellor_id", uid);
+        queryWrapper.eq("table_name", tableName);
+        // 没有该表
+        if(count(queryWrapper) == 0){
+            return false;
+        }
+        return mongoService.updateSids(tableName+uid, sids);
     }
 
 }

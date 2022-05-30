@@ -75,8 +75,8 @@ public class AdditionalTableController {
 
     /**
      * 根据uid和tablename查询所管理的表，返回map型
-     * @param uid  用户id
-     * @param tableName 不为必须，表名关键词
+     * @param uid  发出请求的用户id
+     * @param tableName 不为必须，表名关键词，用以模糊查询
      * @return
      */
     @GetMapping("/getTable")
@@ -92,9 +92,11 @@ public class AdditionalTableController {
         }
         // 若为admin，查询所有表格
         else {
-            table.setAssistantId(null);
+//            table.setAssistantId(null);
         }
-        table.setTableName(tableName);
+        //模糊查询
+        if(!tableName.isEmpty())
+            table.setTableName(tableName);
         Result<Object> result = Result.success();
         List<AdditionalTableVo> list =  additionalTableService.list(table);
         Map<String, List<AdditionalTableVo>> collect = list.stream().collect(Collectors.groupingBy(AdditionalTableVo::getTableName));
@@ -103,7 +105,7 @@ public class AdditionalTableController {
     }
 
     /**
-     * 未表添加助手，即给助手分配权限
+     * 为表添加助手，即给助手分配权限
      * @param map 其中需包含tableName，counsellorId，以及assistantId数组
      * @return
      */
@@ -117,6 +119,27 @@ public class AdditionalTableController {
             return Result.fail("没有待分配表权限的用户");
         additionalTableService.addAsistantToTable(map);
         return Result.success();
+    }
+
+    /**
+     * 将某些学生添加到附加表中,其中需包括 sids:[]，tableName，uid（管理表的辅导员）
+     * 实际上是将sid添加到mongo中
+     * @param map
+     * @return
+     */
+    @PostMapping("/addStudentsToTable")
+    public Result<Object> addStudentToTable(@RequestBody Map<String, Object> map){
+        if(!map.containsKey("sids")){
+            return Result.fail("没有待添加的学生");
+        }
+        if(!map.containsKey("tableName")){
+            return Result.fail("没有包含表名");
+        }
+        if(!map.containsKey("uid")){
+            return Result.fail("没有包含表的管理者");
+        }
+        additionalTableService.addStudentToTable(map);
+        return null;
     }
 }
 
