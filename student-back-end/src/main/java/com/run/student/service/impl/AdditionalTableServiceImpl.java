@@ -168,7 +168,7 @@ public class AdditionalTableServiceImpl extends ServiceImpl<AdditionalTableMappe
      * @return
      */
     @Override
-    public List<Map<String, Object>> queryStudents(Integer uid, String tableName, Map<String, Object> queryMap) {
+    public Map<String, Object> queryStudents(Integer uid, String tableName, Map<String, Object> queryMap) {
         //获取用户身份，根据身份得到mongo中集合名
         User user = userService.getById(uid);
         Integer counsellor_id = user.getGroupId().equals(2) ? uid : user.getFid();
@@ -176,23 +176,33 @@ public class AdditionalTableServiceImpl extends ServiceImpl<AdditionalTableMappe
         final Map<String, Object> tableInfo = mongoService.getAllInfoInTableInfo(tableName + counsellor_id);
         List<String> baseColumns = (List<String>) tableInfo.get("baseColumns");
         List<String> additionalColumns = (List<String>) tableInfo.get("additionalColumns");
+
+
+        Map<String, Object> result = new HashMap<>();
         List<Long> sids = (List<Long>) tableInfo.get("sids");
+        List<Map<String, Object>> studentInfo = new ArrayList<>();
 
-        List<Map<String, Object>> result = new ArrayList<>();
-
-        //查询基本表中的内容
-        final List<Map<String, Object>> maps = studentService.queryStudent(baseColumns, sids);
-        for(Map<String, Object> map : maps){
-            Map<String, Object> student = new HashMap<>();
-            for(String column : baseColumns){
-                student.put(column, map.get(column));
+        if(ObjectUtils.isNotEmpty(sids)){
+            //查询基本表中的内容
+            List<Map<String, Object>> maps = studentService.queryStudent(baseColumns, sids);
+            for(Map<String, Object> map : maps){
+                Map<String, Object> student = new HashMap<>();
+                for(String column : baseColumns){
+                    student.put(column, map.get(column));
+                }
+                //查询附加表中的内容
+                Map<String, Object> addInfo = mongoService.queryBySid(tableName + counsellor_id, (Long) map.get("sid"));
+                student.put("additionalInfo", addInfo);
+                //添加到结果列表中
+                studentInfo.add(student);
             }
-            //查询附加表中的内容
-            Map<String, Object> addInfo = mongoService.queryBySid(tableName + counsellor_id, (Long) map.get("sid"));
-            student.put("additionalInfo", addInfo);
-            //添加到结果列表中
-            result.add(student);
         }
+
+        //整理返回值
+        result.put("students", studentInfo);
+        result.put("baseColumns", baseColumns);
+        result.put("additionalColumns", additionalColumns);
+        result.put("tableName", tableName);
         return result;
     }
 

@@ -59,18 +59,26 @@ public class AdditionalTableController {
     }
 
     /**
-     * 更新表名,暂时弃用
+     * 更新附加表
      * @param table 其中，需包括aid，counsellorId，assistantId
      * @return
      */
-    @PostMapping("/updateTable")
-    public Result<Object> updateTable(@RequestBody AdditionalTable table){
-        //注意此方法通过主键完成
-        boolean update = additionalTableService.saveOrUpdate(table);
-        if(update){
-            return Result.success();
-        }
-        return Result.fail("更新失败");
+//    @PostMapping("/updateTable")
+//    public Result<Object> updateTable(@RequestBody AdditionalTable table){
+//        //注意此方法通过主键完成
+//        boolean update = additionalTableService.saveOrUpdate(table);
+//        if(update){
+//            return Result.success();
+//        }
+//        return Result.fail("更新失败");
+//    }
+
+    @PostMapping("/updateTable/{uid}/{tableName}")
+    public Result<Object> updateTable(@PathVariable Integer uid,
+                                      @PathVariable String tableName,
+                                      @RequestBody Map<String, Object> infoMap){
+        additionalTableService.updateOne(uid, tableName, infoMap);
+        return Result.success();
     }
 
     /**
@@ -156,7 +164,7 @@ public class AdditionalTableController {
     public Result<Object> getStudentsFromTable(@PathVariable Integer uid,
                                                @PathVariable String tableName,
                                                @RequestBody Map<String, Object> queryMap){
-        final List<Map<String, Object>> maps = additionalTableService.queryStudents(uid, tableName, queryMap);
+        final Map<String, Object> maps = additionalTableService.queryStudents(uid, tableName, queryMap);
         Result<Object> result = Result.success();
         result.setData(maps);
         return result;

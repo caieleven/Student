@@ -15,7 +15,7 @@
           :data="additionalTables"
           highlight-current-row
           style="width: 100%"
-          @current-change="handleCurrentChangeOfATable"
+          @row-click="handleCurrentChangeOfATable"
       >
         <el-table-column type="index" width="50" />
         <el-table-column property="tableName" label="表名" width="120" />
@@ -65,9 +65,44 @@
       </el-dialog>
 
 <!--      表格详情-->
-      <el-dialog title="" v-model="dialogATableInfo" width="50%" center>
+      <el-dialog :title="dialogATableInfo.tableName" v-model="dialogATableInfo" width="80%" fullscreen center>
+        <el-table :data="selectedATAbleInfo.studentsInfo" stripe style="width: 100%">
+          <el-table-column label="基本表字段">
+            <template #default="scope">
+              <el-table-column v-for="item in selectedATAbleInfo.baseColumns" :label="baseprobs[item]" :prop="item" />
+            </template>
+          </el-table-column>
+          <el-table-column label="附加表字段">
+            <template #default="scope">
+              <el-table-column v-for="item in selectedATAbleInfo.additionalColumns" :label="item" :prop="item" />
+            </template>
 
+          </el-table-column>
+
+          <el-table-column label="操作">
+            <template #default="scope">
+              <el-row class="mb-4">
+                <el-button type="warning" @click="handleStudentEdit(scope.row)" >编辑<el-icon><EditPen/></el-icon></el-button>
+                <el-button v-if="['admin', 'counsellor'].indexOf(user.groupName) > -1 " type="danger">删除<el-icon><Delete/></el-icon></el-button>
+              </el-row>
+            </template>
+          </el-table-column>
+        </el-table>
       </el-dialog>
+
+<!--      编辑表格-->
+      <el-dialog :title="selectedStudent.name+'编辑'" v-model="dialogEditATableInfo" width="80%" center>
+        <el-form-item v-for="item in selectedATAbleInfo.baseColumns" :label="baseprobs[item]">
+          <div>{{selectedStudent[item]}}</div>
+        </el-form-item>
+        <el-form-item v-for="item in selectedATAbleInfo.additionalColumns" :label="item">
+          <input v-model="selectedStudent[item]" style="width: auto" />
+        </el-form-item>
+        <div slot="footer" class="dialog-footer" style="text-align: center">
+          <el-button type="primary" @click="submitStudentEdit">提交</el-button>
+        </div>
+      </el-dialog>
+
     </div>
 
 
@@ -83,6 +118,7 @@ export default {
   data(){
     // this.user = JSON.parse(localStorage.getItem("user"));
     return {
+      user: {},
       newForm: {
         tableName: '',
         baseColumns: ['sid', 'name'],
@@ -91,7 +127,8 @@ export default {
       }, //新增表单
       dialogAddFormVisible: false, //新增对话框显示,
       dialogATableInfo: false,  //表格详情对话框显示
-
+      dialogEditATableInfo:false, //表格编辑对话框
+      selectedStudent: {},
       //附加表数据
       additionalTables: [
         // {
@@ -102,8 +139,11 @@ export default {
         // }
       ],
       selectedAdditionalTable: {
-
       },
+      //选中的附加表详情
+      selectedATAbleInfo: {
+
+      }
     }
   },
   setup(){
@@ -185,6 +225,10 @@ export default {
     // 附加表表格单选
     handleCurrentChangeOfATable(val){
       this.selectedAdditionalTable["tableName"] = val["tableName"];
+      this.selectedAdditionalTable["counsellorId"] = val["counsellorId"];
+      this.getStudentsInfoFromTable();
+      this.dialogATableInfo = true;
+
     },
     getAdditionalTables(){
       request.get("additionalTable/getTable", {
@@ -217,7 +261,41 @@ export default {
       // console.log(this.additionalTables);
     },
     getStudentsInfoFromTable(){
-      this.selectedAdditionalTable["uid"] = this.user.uid;
+      let queryMap = {};
+      request.post(`additionalTable/getStudentsFromTable/${this.selectedAdditionalTable.counsellorId}/${this.selectedAdditionalTable.tableName}`, queryMap).then(res=>{
+        this.selectedATAbleInfo.baseColumns = res.data["baseColumns"];
+        this.selectedATAbleInfo.additionalColumns = res.data["additionalColumns"];
+        this.selectedATAbleInfo.tableName = res.data["tableName"];
+        this.selectedATAbleInfo.studentsInfo = [];
+        let studentInfo = {};
+        let baseInfo = {}, additionalInfo = {};
+        for (let value of res.data["students"].values()){
+          additionalInfo = value["additionalInfo"];
+          delete value["additionalInfo"];
+          baseInfo = value;
+          // studentInfo["baseInfo"] = baseInfo;
+          // studentInfo["additionalInfo"] = additionalInfo;
+          this.selectedATAbleInfo.studentsInfo.push(Object.assign(baseInfo, additionalInfo));
+        }
+        console.log(this.selectedATAbleInfo.studentsInfo);
+      })
+    },
+    //编辑按钮
+    handleStudentEdit(row){
+      this.selectedStudent = JSON.parse(JSON.stringify(row));
+      this.dialogEditATableInfo = true;
+    },
+    submitStudentEdit(){
+      let data = {};
+      data["sid"] = this.selectedStudent["sid"];
+      for(let value of this.selectedATAbleInfo.additionalColumns.values()){
+        data[value] = this.selectedStudent[value];
+      }
+      console.log(data);
+      request.post(`additionalTable/updateTable/${this.user.uid}/${this.selectedATAbleInfo.tableName}`,data).then(res=>{
+        this.$message.success("success");
+        this.dialogEditATableInfo=false;
+      })
     }
   }
 }

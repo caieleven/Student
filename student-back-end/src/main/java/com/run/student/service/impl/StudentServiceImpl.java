@@ -15,6 +15,7 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -112,6 +113,9 @@ public class StudentServiceImpl implements StudentService {
         QueryWrapper<StudentVo> wrapper = new QueryWrapper<>();
         for(String column : columns){
             wrapper.select(column);
+        }
+        if(ObjectUtils.isEmpty(sids)){
+            return null;
         }
         wrapper.in("sid", sids);
         return studentMapper.queryStudent(wrapper);
