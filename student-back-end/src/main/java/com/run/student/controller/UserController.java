@@ -72,7 +72,7 @@ public class UserController {
         return result;
     }
 
-    @PostMapping("/getUser")
+    @GetMapping("/getUser")
     public Result getUserById(@RequestParam Integer uid){
         UserVo user = userService.getUserById(uid);
         if(user == null)

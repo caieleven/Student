@@ -4,7 +4,7 @@
           <div align="center">
 <!--          搜索功能-->
           <div class="mg-10">
-            <el-card class="round cardStandard">
+            <el-card class="round cardStandard" style="text-align: left">
             <el-input style="width: 200px" placeholder="请输入姓名" v-model="studentName"></el-input>
             <el-input style="width: 200px" placeholder="请输入学生来源" class="ml-5" v-model="background"></el-input>
             <el-input style="width: 200px" placeholder="请输入生源地" class="ml-5" v-model="originPlace"></el-input>
@@ -117,8 +117,7 @@
                 <el-table-column v-if="user.groupName != 'assistant'" label="操作" width="200" align="center">
   <!--                操作权限，辅导员可编辑，助手无操作权限-->
                   <template v-slot="scope">
-                    <el-button v-if="['admin', 'counsellor'].indexOf(user.groupName) > -1 " type="info" @click="handleEdit(scope.row)">编辑<el-icon><EditPen/></el-icon></el-button>
-  <!--                  有错误，待解决-->
+                    <el-button v-if="['admin', 'counsellor'].indexOf(user.groupName) > -1 " type="warning" @click="handleEdit(scope.row)">编辑<el-icon><EditPen/></el-icon></el-button>
                     <el-popconfirm
                         confirm-button-text="是的"
                         cancel-button-text="取消"
@@ -444,7 +443,7 @@ export default {
       request.put("student", this.form).then(res => {
         if (res) {
           this.$message.success("更新成功");
-          this.dialogFormVisible = false;
+          this.dialogEditFormVisible = false;
           this.loadStudents();
         } else {
           this.$message.error("更新失败");
@@ -591,44 +590,8 @@ export default {
 </script>
 
 <style lang="css" scoped>
-/*.layout-container-demo .el-header {*/
-/*  position: relative;*/
-/*  background-color: var(--el-color-primary-light-7);*/
-/*  color: var(--el-text-color-primary);*/
-/*}*/
-
-/*.layout-container-demo .el-aside {*/
-/*  color: var(--el-text-color-primary);*/
-/*  background: var(--el-color-primary-light-8);*/
-/*}*/
-
-/*.layout-container-demo .el-menu {*/
-/*  border-right: none;*/
-/*}*/
-
-/*.layout-container-demo .el-main {*/
-/*  padding: 0;*/
-/*}*/
-
-/*.layout-container-demo .toolbar {*/
-/*  display: inline-flex;*/
-/*  align-items: center;*/
-/*  justify-content: center;*/
-/*  height: 100%;*/
-/*  right: 20px;*/
-/*}*/
-/*/deep/ .el-table--enable-row-transition .el-table__body td {*/
-/*  cursor: pointer;*/
-/*}*/
-/*/deep/ .el-checkbox__input.is-disabled.is-checked .el-checkbox__inner:after{*/
-/*  border-color: #fff;*/
-/*}*/
-/*/deep/ .el-checkbox__input.is-disabled.is-checked .el-checkbox__inner{*/
-/*  background-color: #409eff;*/
-/*}*/
 
 .main {
-  width: calc(100vw - 15.5rem);
   justify-content: center;
 }
 
@@ -640,18 +603,8 @@ export default {
   height: 6rem;
 }
 
-/** {*/
-/*  !* CSS初始化 *!*/
-/*  box-sizing: border-box;*/
-/*  padding: 0;*/
-/*  margin: 0;*/
-/*  font-family: PingFang SC, Microsoft Yahei, sans-serif;*/
-/*  user-select: none;*/
-/*}*/
-
 .body {
   background-color: #f1f2f6;
-  overflow-x: hidden;
 }
 
 .round {
