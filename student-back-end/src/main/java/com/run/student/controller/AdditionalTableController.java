@@ -139,7 +139,7 @@ public class AdditionalTableController {
             return Result.fail("没有包含表的管理者");
         }
         additionalTableService.addStudentToTable(map);
-        return null;
+        return Result.success();
     }
 
 

@@ -35,12 +35,12 @@
                 <el-option :label="'女'" :value="'女'" />
               </el-select>
   <!--          新增 删除-->
-              <el-button type="primary" class="ml-x" @click="handleAdd">新增
+              <el-button v-if="user.groupName=='admin'" type="primary" class="ml-x" @click="handleAdd">新增
                 <el-icon>
                   <Plus/>
                 </el-icon>
               </el-button>
-              <el-popconfirm
+              <el-popconfirm v-if="user.groupName=='admin'"
                   confirm-button-text="是的"
                   cancel-button-text="取消"
                   icon="InfoFilled"
@@ -52,6 +52,7 @@
                   <el-button type="danger">删除<el-icon><Minus/></el-icon></el-button>
                 </template>
               </el-popconfirm>
+              <el-button v-if="user.groupName!='assistant'" type="primary" class="ml-x" @click="handleAddToATable">添加至附加表</el-button>
             </el-card>
           </div>
 <!--          Table-->
@@ -265,6 +266,25 @@
               <el-button type="primary" @click="edit">确 定</el-button>
             </div>
           </el-dialog>
+
+<!--          向附加表中添加学生  -->
+            <el-dialog title="请选择表" v-model="dialogAddToAdditionalTable" width="40%">
+              <el-table
+                  ref="additionalTablesInDialog"
+                  :data="additionalTables"
+                  highlight-current-row
+                  style="width: 100%"
+                  @current-change="handleCurrentChangeOfATable"
+              >
+                <el-table-column type="index" width="50" />
+                <el-table-column property="tableName" label="表名" width="120" />
+                <el-table-column property="counsellorName" label="教师名" width="120" />
+                <el-table-column property="assistantName" label="助手名" />
+              </el-table>
+              <div style="margin-top: 20px">
+                <el-button @click="addSidsIntoATable" type="success">确认添加</el-button>
+              </div>
+            </el-dialog>
           </div>
         </el-main>
   </div>
@@ -287,6 +307,17 @@ export default {
   data() {
     return {
       tableData: [],
+      additionalTables: [
+        // {
+        //   tableName:"",
+        //   counsellorName: "",
+        //   counsellorId: null,
+        //   assistantsName: ""
+        // }
+      ],
+      addToAtableObject: {
+
+      },
       arr: [], //sid
       totalNum: 0,  //数据总数
       pageSize: 10,
@@ -300,6 +331,7 @@ export default {
       multipleSelection: [], //选择的数据
       dialogAddFormVisible: false, //新增对话框显示
       dialogEditFormVisible: false, //编辑对话框显示
+      dialogAddToAdditionalTable: false,
       form: {}, //新增表单
       //以下信息用以查询中的body
       studentName: "", //学生姓名
@@ -330,9 +362,12 @@ export default {
 //   },
 
   created() {
+
+    this.user=JSON.parse(localStorage.getItem("user"));
     this.loadStudents();
     this.loadClasses();
-    this.user=JSON.parse(localStorage.getItem("user"));
+    this.getAdditionalTables();
+
   },
   methods: {
     loadStudents() {
@@ -382,7 +417,6 @@ export default {
         this.tableData = res.data;
         this.totalNum = res.count;
       })
-
     },
     reset() {
       this.studentName = "";
@@ -476,6 +510,56 @@ export default {
     showStudentDetail() {
 
     },
+    handleAddToATable() {
+      this.dialogAddToAdditionalTable = true;
+    },
+    handleCurrentChangeOfATable(val){
+      this.addToAtableObject["tableName"] = val["tableName"];
+      this.addToAtableObject["uid"] = val["counsellorId"];
+    },
+    getAdditionalTables(){
+      request.get("additionalTable/getTable", {
+        params: {
+          uid: this.user.uid,
+        }
+      }).then(res=>{
+          let tableNames = Object.keys(res.data);
+          tableNames.forEach(key=>{
+            let array = res.data[key];
+            let assistantsName = [];
+            let counsellorName = "";
+            let counsellorId = null;
+            for(let value of array.values()){
+                if(value["assistantName"]!=null)
+                  assistantsName.push(value["assistantName"]);
+                counsellorName = value["counsellorName"];
+                counsellorId = value["counsellorId"];
+            }
+            let assistantName = assistantsName.join();
+            let item = {
+              tableName:key,
+              counsellorName: counsellorName,
+              counsellorId: counsellorId,
+              assistantName: assistantName
+            };
+            this.additionalTables.push(item);
+          })
+      });
+      // console.log(this.additionalTables);
+    },
+    addSidsIntoATable(){
+      this.addToAtableObject["sids"] = this.multipleSelection;
+      request.post("additionalTable/addStudentsToTable",this.addToAtableObject).then(res=>{
+        if(res.code==0){
+          this.$message.success(res.message);
+        }
+        else{
+          this.$message.error(res.message);
+        }
+        this.dialogAddToAdditionalTable = false;          ffffffef
+      })
+    }
+
     //行选则时的处理逻辑
     // handleRowClick(val) {
     //   const { multipleSelection } = this

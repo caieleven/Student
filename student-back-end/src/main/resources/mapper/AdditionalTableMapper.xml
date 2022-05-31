@@ -4,7 +4,7 @@
 
     <!--List<AdditionalTableVo> list(@Param("ew") Wrapper<AdditionalTable> queryWrapper);-->
     <select id="list" resultType="com.run.student.vo.AdditionalTableVo">
-        select A.aid, A.table_name, X.username as counsellor_name, Y.username as assistant_name
+        select A.aid, A.table_name, X.username as counsellor_name, Y.username as assistant_name, A.counsellor_id
         from additional_table A
                  left join `user` X on A.counsellor_id = X.uid
                  LEFT JOIN `user` Y on A.assistant_id = Y.uid

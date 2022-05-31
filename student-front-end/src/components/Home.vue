@@ -1,15 +1,19 @@
 <template>
   <div style="height: 100%">
     <el-container class="layout-container-demo" style="height: 100%">
-      <el-aside width="200px" style="margin-top: 0; height: 100%">
-        <Aside></Aside>
-      </el-aside>
+      <el-card class="round mg-10-10" style="height:100vm">
+        <el-aside width="200px" style="margin-top: 0; height: 100%">
+          <Aside></Aside>
+        </el-aside>
+      </el-card>
+
       <el-container>
         <el-header >
           <Header></Header>
         </el-header>
         <el-main>
-          <p>主页</p>
+            <p style="text-align: center; font-size: 80px">{{username}}{{role}}你好!</p>
+          <p style="text-align: center; font-size: 80px" >欢迎使用学生管理系统!</p>
         </el-main>
       </el-container>
     </el-container>
@@ -25,8 +29,26 @@ export default {
   name: "Home",
   components: {
     Aside,
-    Header,
-    Student
+    Header
+  },
+  data(){
+    let user=JSON.parse(localStorage.getItem("user"));
+    let username = user.username;
+    let role=user.groupName;
+    if(user.groupName=="admin"){
+      role="管理员";
+      username="";
+    }
+    else if(user.groupName=="counsellor"){
+      role="老师";
+    }
+    else{
+      role="助手";
+    }
+    return{
+      username,
+      role
+    }
   }
 }
 </script>

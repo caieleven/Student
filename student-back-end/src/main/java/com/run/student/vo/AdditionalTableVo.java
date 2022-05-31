@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 public class AdditionalTableVo {
     private Integer aid;
     private String tableName;
+    private Integer counsellorId;
     private String counsellorName;
     private String assistantName;
 }

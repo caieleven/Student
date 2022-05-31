@@ -2,7 +2,7 @@
   <div style="height: 100%" class="body">
     <el-container class="layout-container-demo" style="height: 100%">
       <el-card class="round mg-10-10" style="height: 100vm">
-        <el-aside width="200px">
+        <el-aside width="200px" style="height: 100%">
           <Aside></Aside>
         </el-aside>
       </el-card>
