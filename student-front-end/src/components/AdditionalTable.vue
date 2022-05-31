@@ -1,6 +1,5 @@
 <template>
   <div>
-    <p>表操作</p>
     <div style="margin: 10px 0">
       <el-button type="primary" @click="handleAdd">新增
         <el-icon>
@@ -8,7 +7,29 @@
         </el-icon>
       </el-button>
     </div>
+
+<!--    新增表展示-->
     <div>
+      <el-table
+          ref="additionalTablesInDialog"
+          :data="additionalTables"
+          highlight-current-row
+          style="width: 100%"
+          @current-change="handleCurrentChangeOfATable"
+      >
+        <el-table-column type="index" width="50" />
+        <el-table-column property="tableName" label="表名" width="120" />
+        <el-table-column property="counsellorName" label="教师名" width="120" />
+        <el-table-column property="assistantName" label="助手名" width="240" />
+      </el-table>
+    </div>
+
+
+
+
+
+    <div>
+<!--      新增表对话框-->
       <el-dialog title="新增表" v-model="dialogAddFormVisible" width="50%" center>
           <el-form :model="newForm" label-width="120px">
             <div>
@@ -43,6 +64,10 @@
 
       </el-dialog>
 
+<!--      表格详情-->
+      <el-dialog title="" v-model="dialogATableInfo" width="50%" center>
+
+      </el-dialog>
     </div>
 
 
@@ -65,7 +90,20 @@ export default {
         ] //为对象数组，包含两个字段，一个key，一个name，key为自动生成，name为新增字段名
       }, //新增表单
       dialogAddFormVisible: false, //新增对话框显示,
+      dialogATableInfo: false,  //表格详情对话框显示
 
+      //附加表数据
+      additionalTables: [
+        // {
+        //   tableName:"",
+        //   counsellorName: "",
+        //   counsellorId: null,
+        //   assistantsName: ""
+        // }
+      ],
+      selectedAdditionalTable: {
+
+      },
     }
   },
   setup(){
@@ -78,6 +116,7 @@ export default {
   },
   created() {
     this.user = JSON.parse(localStorage.getItem("user"));
+    this.getAdditionalTables();
   },
   mounted() {
     window.vue = this;
@@ -142,6 +181,43 @@ export default {
         additionalColumns: [
         ]
       }
+    },
+    // 附加表表格单选
+    handleCurrentChangeOfATable(val){
+      this.selectedAdditionalTable["tableName"] = val["tableName"];
+    },
+    getAdditionalTables(){
+      request.get("additionalTable/getTable", {
+        params: {
+          uid: this.user.uid,
+        }
+      }).then(res=>{
+        let tableNames = Object.keys(res.data);
+        tableNames.forEach(key=>{
+          let array = res.data[key];
+          let assistantsName = [];
+          let counsellorName = "";
+          let counsellorId = null;
+          for(let value of array.values()){
+            if(value["assistantName"]!=null)
+              assistantsName.push(value["assistantName"]);
+            counsellorName = value["counsellorName"];
+            counsellorId = value["counsellorId"];
+          }
+          let assistantName = assistantsName.join();
+          let item = {
+            tableName:key,
+            counsellorName: counsellorName,
+            counsellorId: counsellorId,
+            assistantName: assistantName
+          };
+          this.additionalTables.push(item);
+        })
+      });
+      // console.log(this.additionalTables);
+    },
+    getStudentsInfoFromTable(){
+      this.selectedAdditionalTable["uid"] = this.user.uid;
     }
   }
 }

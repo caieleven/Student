@@ -555,7 +555,7 @@ export default {
         else{
           this.$message.error(res.message);
         }
-        this.dialogAddToAdditionalTable = false;          ffffffef
+        this.dialogAddToAdditionalTable = false;
       })
     }
 
