@@ -30,5 +30,7 @@ public class Class {
      */
     private Integer counsellorId;
 
+    private Integer total;
+
 
 }

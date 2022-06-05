@@ -1,12 +1,12 @@
 <template>
   <div class="loginbody">
-    <div class="mylogin">
+    <div class="mylogin round">
       <div style="margin: 20px 0; text-align: center; font-size: 24px"><b>登 录</b></div>
       <el-input size="default" style="margin: 10px 0" prefix-icon="UserFilled" v-model="uid"><el-icon><UserFilled /></el-icon></el-input>
       <el-input size="default" style="margin: 10px 0" prefix-icon="Key" show-password v-model="password"><el-icon><Key /></el-icon></el-input>
 
       <div style="margin: 50px 0; text-align: center">
-          <el-button color="#792EE6" size="large" round @click="login">登录</el-button>
+          <el-button color="#DBD4B4" size="large" round @click="login" style="font-family: 'ZCOOL XiaoWei', serif">登录</el-button>
       </div>
     </div>
   </div>
@@ -58,7 +58,9 @@ p {
   background-size: contain;
   height: 100vh;
   width: 100%;
-  background-image: linear-gradient(to bottom right, #FC4668, #3F5EFB);
+  background: #CC95C0;  /* fallback for old browsers */
+  background: -webkit-linear-gradient(to top, #7AA1D2, #DBD4B4, #CC95C0);  /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to top, #7AA1D2, #DBD4B4, #CC95C0); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
   overflow: auto;
   border: 0;
   position: fixed;
@@ -68,22 +70,6 @@ p {
   /*overflow-y: hidden;*/
   /*overflow-x: hidden;*/
 
-}
-
-.login {
-  width: 100vw;
-  padding: 0;
-  margin: 0;
-  height: 100vh;
-  font-size: 16px;
-  background-position: left top;
-  background-color: #242645;
-  color: #fff;
-  font-family: "Source Sans Pro";
-  position: relative;
-  background-image: linear-gradient(to bottom right, #FC4668, #3F5EFB);
-  background-repeat: no-repeat;
-  background-size: 100% 100%;
 }
 
 .mylogin {
@@ -96,13 +82,10 @@ p {
   bottom: 0;
   margin: auto;
   padding: 50px 40px 40px 40px;
-  box-shadow: -15px 15px 15px rgba(6, 17, 47, 0.7);
+  box-shadow: 0 0 30px rgba(6, 17, 47, 0.3);
   opacity: 1;
-  background: linear-gradient(
-      230deg,
-      rgba(53, 57, 74, 0) 0%,
-      rgb(0, 0, 0) 100%
-  );
+  background-color: #f1f2f6;
+  border-color: #e4e7ed;
 }
 
 .inps input {
@@ -116,5 +99,9 @@ p {
   background-color: transparent;
   color: #39f;
   width: 200px;
+}
+
+.round {
+  border-radius: 10px;
 }
 </style>

@@ -49,5 +49,5 @@ public interface StudentService {
      */
     List<Map<String, Object>> queryStudent(List<String> columns, List<Long> sids);
 
-
+//    public void saveBatch(List<StudentVo> list);
 }

@@ -35,24 +35,30 @@
                 <el-option :label="'女'" :value="'女'" />
               </el-select>
   <!--          新增 删除-->
-              <el-button v-if="user.groupName=='admin'" type="primary" class="ml-x" @click="handleAdd">新增
-                <el-icon>
-                  <Plus/>
-                </el-icon>
-              </el-button>
-              <el-popconfirm v-if="user.groupName=='admin'"
-                  confirm-button-text="是的"
-                  cancel-button-text="取消"
-                  icon="InfoFilled"
-                  icon-color="#626AEF"
-                  title="确定要删除选中的对象吗?"
-                  @confirm="delBatch"
-              >
-                <template #reference>
-                  <el-button type="danger">删除<el-icon><Minus/></el-icon></el-button>
-                </template>
-              </el-popconfirm>
-              <el-button v-if="user.groupName!='assistant'" type="primary" class="ml-x" @click="handleAddToATable">添加至附加表</el-button>
+              <div style="text-align: left; margin-top: 18px">
+                <el-button v-if="user.groupName!='assistant'" type="primary" @click="handleAddToATable">添加至附加表</el-button>
+                <el-upload action="http://localhost:8181/student/import" :show-file-list="false" accept="'xlsx'" :on-success="handleImport" style="display: inline-block; margin: 0 10px">
+                  <el-button v-if="user.groupName!='assistant'" type="primary">导入</el-button>
+                </el-upload>
+                <el-button v-if="user.groupName!='assistant'" type="primary" @click="handleExport">导出</el-button>
+                <el-button v-if="user.groupName=='admin'" type="primary" @click="handleAdd">新增
+                  <el-icon>
+                    <Plus/>
+                  </el-icon>
+                </el-button>
+                <el-popconfirm v-if="user.groupName=='admin'"
+                    confirm-button-text="是的"
+                    cancel-button-text="取消"
+                    icon="InfoFilled"
+                    icon-color="#626AEF"
+                    title="确定要删除选中的对象吗?"
+                    @confirm="delBatch"
+                >
+                  <template #reference>
+                    <el-button type="danger">删除<el-icon><Minus/></el-icon></el-button>
+                  </template>
+                </el-popconfirm>
+              </div>
             </el-card>
           </div>
 <!--          Table-->
@@ -555,8 +561,15 @@ export default {
         else{
           this.$message.error(res.message);
         }
-        this.dialogAddToAdditionalTable = false;          ffffffef
+        this.dialogAddToAdditionalTable = false;
       })
+    },
+    handleImport() {
+      this.$message.success("导入成功");
+      this.loadStudents();
+    },
+    handleExport() {
+      window.open("http://localhost:8181/student/export");
     }
 
     //行选则时的处理逻辑
@@ -614,6 +627,5 @@ export default {
 .cardStandard{
   width: 1026px;
 }
-
 
 </style>

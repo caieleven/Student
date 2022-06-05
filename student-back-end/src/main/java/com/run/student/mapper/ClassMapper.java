@@ -12,5 +12,5 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @since 2022-05-15
  */
 public interface ClassMapper extends BaseMapper<Class> {
-
+    Integer selectCidByCname(String className);
 }

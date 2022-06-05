@@ -177,20 +177,19 @@ export default {
       })
     },
     search() {
-      // this.tableData = [];
-      // if (!this.uid) {
-      //   this.$message.warning("uid不能为空");
-      //   return
-      // } else {
-      //   request.get("user/getUser", {
-      //     params: {
-      //       uid: this.uid
-      //     }
-      //   }).then(res => {
-      //     if (res.data.group)
-      //     this.tableData.push(res.data);
-      //   })
-      // }
+      this.tableData = [];
+      if (!this.uid) {
+        this.$message.warning("uid不能为空");
+        return
+      } else {
+        request.get("user/getCounsellor", {
+          params: {
+            uid: this.uid
+          }
+        }).then(res => {
+          this.tableData.push(res.data);
+        })
+      }
     },
     reset() {
       this.uid = "";
@@ -226,18 +225,18 @@ export default {
       })
     },
     delBatch() {
-    //   if (!this.multipleSelection.length) {
-    //     this.$message.warning("请选择数据！");
-    //     return
-    //   } else {
-    //     for(item in this.multipleSelection) {
-    //       this.form.uid = item;
-    //       this.form.permission = 0;
-    //       this.edit();
-    //     }
-    //     this.loadCounsellor();
-    //     })
-    //   }
+      // if (!this.multipleSelection.length) {
+      //   this.$message.warning("请选择数据！");
+      //   return
+      // } else {
+      //   for(item in this.multipleSelection) {
+      //     this.form.uid = item;
+      //     this.form.permission = 0;
+      //     this.edit();
+      //   }
+      //   this.loadCounsellor();
+      //   })
+      // }
     },
     getRowKeys(row) {
       return row.uid;

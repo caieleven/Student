@@ -9,7 +9,7 @@
       <el-container>
         <el-header>
           <el-card style="height: 50px" class="round mg-10-10">
-          <Header></Header>
+            <Header></Header>
           </el-card>
         </el-header>
         <el-main>
@@ -22,7 +22,6 @@
 
 <script>
 import Aside from "@/components/Aside";
-import Student from "@/components/Student";
 import Header from "@/components/Header";
 
 export default {
@@ -30,7 +29,6 @@ export default {
   components: {
     Aside,
     Header,
-    Student
   }
 }
 </script>
@@ -69,7 +67,7 @@ export default {
   background-color: #f1f2f6;
   overflow-x: hidden;
 }
-.cardStandard{
-  width: 1026px;
-}
+/*.cardStandard{*/
+/*  width: 1026px;*/
+/*}*/
 </style>

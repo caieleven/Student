@@ -12,5 +12,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @since 2022-05-15
  */
 public interface ClassService extends IService<Class> {
-
+    public Integer selectCidByCname(String className);
 }

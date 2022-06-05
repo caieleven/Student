@@ -39,8 +39,13 @@ public class ClassController {
 //        classService.
     }
 
-
-
+    @GetMapping("/getCidAndTotal")
+    public List<Class> getCSTotal() {
+        QueryWrapper<Class> queryWrapper = new QueryWrapper<>();
+        queryWrapper.select("cid", "total");
+        List<Class> list = classService.list(queryWrapper);
+        return list;
+    }
 
 }
 

@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.Query;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.run.student.entity.Student;
+import com.run.student.mapper.ClassMapper;
 import com.run.student.mapper.StudentMapper;
 import com.run.student.mapper.StudentVoMapper;
 import com.run.student.service.StudentService;

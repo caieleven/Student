@@ -1,19 +1,26 @@
 <template>
-  <div style="height: 100%">
+  <div style="height: 100vh" class="body">
     <el-container class="layout-container-demo" style="height: 100%">
       <el-card class="round mg-10-10" style="height:100vm">
-        <el-aside width="200px" style="margin-top: 0; height: 100%">
+        <el-aside width="200px" style="height: 100%">
           <Aside></Aside>
         </el-aside>
       </el-card>
-
       <el-container>
         <el-header >
-          <Header></Header>
+          <el-card style="height: 50px" class="round mg-10-10">
+           <Header></Header>
+          </el-card>
         </el-header>
-        <el-main>
-            <p style="text-align: center; font-size: 80px">{{username}}{{role}}你好!</p>
-          <p style="text-align: center; font-size: 80px" >欢迎使用学生管理系统!</p>
+        <el-main style="display: flex; justify-content: center">
+          <el-card class="round boxSize" style="height: 80%; width: 20%">
+            <p class="fontStyle">{{username}}{{role}}你好!</p>
+            <p class="fontStyle">欢迎使用学生管理系统!</p>
+          </el-card>
+          <el-card class="round boxSize" style="height: 80%; width: 80%">
+            <div id="main" style="width: 100%; height: 500px">
+            </div>
+          </el-card>
         </el-main>
       </el-container>
     </el-container>
@@ -22,8 +29,9 @@
 
 <script>
 import Aside from "@/components/Aside";
-import Student from "@/components/Student";
 import Header from "@/components/Header";
+import * as echarts from 'echarts';
+import request from "@/utils/request";
 
 export default {
   name: "Home",
@@ -47,62 +55,75 @@ export default {
     }
     return{
       username,
-      role
+      role,
+      cid: [],
+      total: [],
+      t: []
+    }
+  },
+  mounted() {
+    this.getCSTotal();
+  },
+  methods: {
+    getBar() {
+      let option = {
+        xAxis: {
+          type: 'category',
+          data: []
+        },
+        yAxis: {
+          type: 'value'
+        },
+        series: [
+          {
+            data: [],
+            type: 'bar'
+          }
+        ]
+      };
+      let chartDom = document.getElementById('main');
+      let myChart = echarts.init(chartDom);
+      console.log(this.cid)
+      option.xAxis.data = this.cid;
+      console.log(option.xAxis.data);
+      option.series[0].data = this.total;
+      console.log(option.series[0].data);
+      myChart.setOption(option);
+    },
+    getCSTotal() {
+      request.get("class/getCidAndTotal").then( res => {
+        for (let i in res) {
+          this.cid.push(res[i].cid);
+          this.total.push(res[i].total);
+        }
+        console.log(this.cid)
+        this.getBar();
+      })
     }
   }
 }
 </script>
 
 <style scoped>
-.layout-container-demo .el-header {
-  position: relative;
-  background-color: var(--el-color-primary-light-7);
-  color: var(--el-text-color-primary);
+.round {
+  border-radius: 10px;
 }
-
-.layout-container-demo .el-aside {
-  color: var(--el-text-color-primary);
-  background: var(--el-color-primary-light-8);
-}
-
-.layout-container-demo .el-menu {
-  border-right: none;
-}
-
-.layout-container-demo .el-main {
-  padding: 0;
-}
-
-.layout-container-demo .toolbar {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-  right: 20px;
-}
-.main {
-  justify-content: center;
-}
-
-.header {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  min-width: 48.5rem;
-  height: 6rem;
-}
-
 .body {
   background-color: #f1f2f6;
   overflow-x: hidden;
 }
-
-.round {
-  border-radius: 10px;
+/*.cardStandard{*/
+/*  width: 1026px;*/
+/*}*/
+.fontStyle {
+  color: var(--Gray-8);
+  font-size: 15px;
+  line-height: 1rem;
+  font-weight: 700;
 }
-
-.cardStandard{
-  width: 1026px;
+.boxSize {
+  margin: 10px 35px;
+  /*height: 50%;*/
+  /*width: 40%;*/
 }
-
 </style>
