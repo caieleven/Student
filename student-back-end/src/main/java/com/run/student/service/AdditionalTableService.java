@@ -34,7 +34,7 @@ public interface AdditionalTableService extends IService<AdditionalTable> {
      * @param queryMap 查询条件
      * @return
      */
-    List<Map<String, Object>> queryStudents(Integer uid, String tableName, Map<String, Object> queryMap);
+    Map<String, Object> queryStudents(Integer uid, String tableName, Map<String, Object> queryMap);
 
     boolean updateOne(Integer uid, String tableName, Map<String, Object> infoMap);
 }

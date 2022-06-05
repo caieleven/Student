@@ -53,8 +53,10 @@ public class MongoServiceImpl implements MongoService {
         Query query = new Query();
         query.addCriteria(Criteria.where("sid").is(sid));
         HashMap<String, Object> one = mongoTemplate.findOne(query, HashMap.class, collectionName);
-        one.remove("_id");
-        one.remove("sid");
+        if(ObjectUtils.isNotEmpty(one)){
+            one.remove("_id");
+            one.remove("sid");
+        }
         return one;
     }
 
@@ -67,7 +69,7 @@ public class MongoServiceImpl implements MongoService {
         for(Map.Entry<String, Object> entry : infoMap.entrySet()){
             update.set(entry.getKey(), entry.getValue());
         }
-        mongoTemplate.updateFirst(query, update, collectionName);
+        mongoTemplate.upsert(query, update, collectionName);
         return true;
     }
 
