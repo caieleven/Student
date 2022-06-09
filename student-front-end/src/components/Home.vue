@@ -15,7 +15,14 @@
         <el-main style="display: flex; justify-content: center">
           <el-card class="round boxSize" style="height: 80%; width: 20%">
             <p class="fontStyle">{{username}}{{role}}你好!</p>
-            <p class="fontStyle">欢迎使用学生管理系统!</p>
+            <p class="fontStyle">欢迎使用学生与活动管理系统!</p>
+            <br>
+            <div v-if="user.groupName=='admin'">
+              <p class="fontStyle">当前用户人数：</p>
+              <p class="fontStyle" style="text-indent: 1em">管理员：{{adminNum}}</p>
+              <p class="fontStyle" style="text-indent: 1em">教师：{{counsellorNum}}</p>
+              <p class="fontStyle" style="text-indent: 1em">助手：{{assistantNum}}</p>
+            </div>
           </el-card>
           <el-card class="round boxSize" style="height: 80%; width: 80%">
             <div id="main" style="width: 100%; height: 500px">
@@ -58,10 +65,16 @@ export default {
       role,
       cid: [],
       total: [],
-      t: []
+      adminNum: 0,
+      counsellorNum: 0,
+      assistantNum: 0
     }
   },
+  created() {
+    this.user=JSON.parse(localStorage.getItem("user"));
+  },
   mounted() {
+    this.getUserTotalByGroup();
     this.getCSTotal();
   },
   methods: {
@@ -83,11 +96,8 @@ export default {
       };
       let chartDom = document.getElementById('main');
       let myChart = echarts.init(chartDom);
-      console.log(this.cid)
       option.xAxis.data = this.cid;
-      console.log(option.xAxis.data);
       option.series[0].data = this.total;
-      console.log(option.series[0].data);
       myChart.setOption(option);
     },
     getCSTotal() {
@@ -96,8 +106,14 @@ export default {
           this.cid.push(res[i].cid);
           this.total.push(res[i].total);
         }
-        console.log(this.cid)
         this.getBar();
+      })
+    },
+    getUserTotalByGroup() {
+      request.get("user/getUserTotalByGroup").then( res => {
+        this.adminNum = res.data.adminNum;
+        this.counsellorNum = res.data.counsellorNum;
+        this.assistantNum = res.data.assistantNum;
       })
     }
   }

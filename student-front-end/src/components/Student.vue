@@ -5,43 +5,43 @@
 <!--          搜索功能-->
           <div class="mg-10">
             <el-card class="round cardStandard" style="text-align: left">
-            <el-input style="width: 200px" placeholder="请输入姓名" v-model="studentName"></el-input>
-            <el-input style="width: 200px" placeholder="请输入学生来源" class="ml-5" v-model="background"></el-input>
-            <el-input style="width: 200px" placeholder="请输入生源地" class="ml-5" v-model="originPlace"></el-input>
-            <el-input style="width: 200px" placeholder="请输入宿舍楼" class="ml-5" v-model="dormitory"></el-input>
-            <el-button class="round" style="margin-left: 15px" type="primary" @click="search">搜索</el-button>
-            <el-button class="ml-5 round" type="warning" @click="reset">重置</el-button>
+            <el-input class="fontFamily" style="width: 200px" placeholder="请输入姓名" v-model="studentName"></el-input>
+            <el-input style="width: 200px" placeholder="请输入学生来源" class="ml-5 fontFamily" v-model="background"></el-input>
+            <el-input style="width: 200px" placeholder="请输入生源地" class="ml-5 fontFamily" v-model="originPlace"></el-input>
+            <el-input style="width: 200px" placeholder="请输入宿舍楼" class="ml-5 fontFamily" v-model="dormitory"></el-input>
+            <el-button class="round fontFamily" style="margin-left: 15px" type="primary" @click="search">搜索</el-button>
+            <el-button class="ml-5 round fontFamily" type="warning" @click="reset">重置</el-button>
             </el-card>
           </div>
           <div>
             <el-card style="display: flex" class="round cardStandard mg-10">
 <!--          选择器-->
-              <el-select v-model="cid" multiple clearable filterable placeholder="选择班级" style="width: 200px" @change="loadStudents">
+              <el-select class="fontFamily" v-model="cid" multiple clearable filterable placeholder="选择班级" style="width: 200px" @change="loadStudents">
                 <el-option
                     v-for="item in classes"
                     :label="item.name"
                     :value="item.cid"
                 />
               </el-select>
-              <el-select v-model="status" multiple filterable placeholder="选择政治面貌" class="ml-5" style="width: 200px" @change="loadStudents">
+              <el-select v-model="status" multiple filterable placeholder="选择政治面貌" class="ml-5 fontFamily" style="width: 200px" @change="loadStudents">
                 <el-option
                     v-for="item in statuses"
                     :label="item"
                     :value="item"
                 />
               </el-select>
-              <el-select v-model="sex" multiple placeholder="性别" class="ml-5" style="width: 200px" @change="loadStudents">
+              <el-select v-model="sex" multiple placeholder="请选择性别" class="ml-5 fontFamily" style="width: 200px" @change="loadStudents">
                 <el-option :label="'男'" :value="'男'" />
                 <el-option :label="'女'" :value="'女'" />
               </el-select>
   <!--          新增 删除-->
               <div style="text-align: left; margin-top: 18px">
-                <el-button v-if="user.groupName!='assistant'" type="primary" @click="handleAddToATable">添加至附加表</el-button>
+                <el-button v-if="user.groupName!='assistant'" type="primary" class="round fontFamily" @click="handleAddToATable">添加至附加表</el-button>
                 <el-upload action="http://localhost:8181/student/import" :show-file-list="false" accept="'xlsx'" :on-success="handleImport" style="display: inline-block; margin: 0 10px">
-                  <el-button v-if="user.groupName!='assistant'" type="primary">导入</el-button>
+                  <el-button v-if="user.groupName!='assistant'" type="primary" class="round fontFamily">导入</el-button>
                 </el-upload>
-                <el-button v-if="user.groupName!='assistant'" type="primary" @click="handleExport">导出</el-button>
-                <el-button v-if="user.groupName=='admin'" type="primary" @click="handleAdd">新增
+                <el-button v-if="user.groupName!='assistant'" type="primary" class="round fontFamily" @click="handleExport">导出</el-button>
+                <el-button v-if="user.groupName=='admin'" type="primary" class="round fontFamily" @click="handleAdd">新增
                   <el-icon>
                     <Plus/>
                   </el-icon>
@@ -55,7 +55,7 @@
                     @confirm="delBatch"
                 >
                   <template #reference>
-                    <el-button type="danger">删除<el-icon><Minus/></el-icon></el-button>
+                    <el-button type="danger" class="round fontFamily">删除<el-icon><Minus/></el-icon></el-button>
                   </template>
                 </el-popconfirm>
               </div>
@@ -123,7 +123,7 @@
                 <el-table-column v-if="user.groupName != 'assistant'" label="操作" width="200" align="center">
   <!--                操作权限，辅导员可编辑，助手无操作权限-->
                   <template v-slot="scope">
-                    <el-button v-if="['admin', 'counsellor'].indexOf(user.groupName) > -1 " type="warning" @click="handleEdit(scope.row)">编辑<el-icon><EditPen/></el-icon></el-button>
+                    <el-button v-if="['admin', 'counsellor'].indexOf(user.groupName) > -1 " type="warning" class="round fontFamily" @click="handleEdit(scope.row)">编辑<el-icon><EditPen/></el-icon></el-button>
                     <el-popconfirm
                         confirm-button-text="是的"
                         cancel-button-text="取消"
@@ -133,7 +133,7 @@
                         @confirm="del(scope.row.sid)"
                     >
                       <template #reference>
-                        <el-button v-if="user.groupName=='admin'" type="danger" slot="reference">删除<el-icon><Delete/></el-icon></el-button>
+                        <el-button v-if="user.groupName=='admin'" type="danger" class="round fontFamily" slot="reference">删除<el-icon><Delete/></el-icon></el-button>
                       </template>
                     </el-popconfirm>
 
@@ -152,13 +152,14 @@
                     @size-change="handleSizeChange"
                     @current-change="handleCurrentChange"
                     :hide-on-single-page=true
+                    class="round fontFamily"
                 />
               </el-card>
             </div>
 
 <!--          新增对话框-->
-          <el-dialog title="用户信息" v-model="dialogAddFormVisible" width="20%">
-            <el-form label-width="80px" style="text-align: center">
+          <el-dialog title="用户信息" v-model="dialogAddFormVisible" width="50%" class="round fontFamily">
+            <el-form label-width="80px" style="text-align: center" :inline="true">
               <el-form-item label="姓名">
                 <el-input v-model="form.name" autocomplete="off" style="width: auto"></el-input>
               </el-form-item>
@@ -166,9 +167,15 @@
                 <el-input v-model="form.sid" autocomplete="off" style="width: auto"></el-input>
               </el-form-item>
               <el-form-item label="班级">
-                <el-input v-model="form.classId" autocomplete="off" style="width: auto"></el-input>
+                <el-select class="fontFamily" v-model="form.classId" clearable filterable placeholder="选择班级" style="width: 200px">
+                  <el-option
+                      v-for="item in classes"
+                      :label="item.name"
+                      :value="item.cid"
+                  />
+                </el-select>
               </el-form-item>
-              <el-form-item label="性别">
+              <el-form-item label="性别" style="margin-left: 90px">
                 <el-radio-group v-model="form.sex">
                   <el-radio label="男" />
                   <el-radio label="女" />
@@ -180,43 +187,59 @@
               <el-form-item label="邮箱">
                 <el-input v-model="form.email" autocomplete="off" style="width: auto"></el-input>
               </el-form-item>
-<!--              <el-form-item label="生源地">-->
-<!--                <el-input v-model="form.name" autocomplete="off"></el-input>-->
-<!--              </el-form-item>-->
-<!--              <el-form-item label="政治面貌">-->
-<!--                <el-input v-model="form.sid" autocomplete="off"></el-input>-->
-<!--              </el-form-item>-->
-<!--              <el-form-item label="民族">-->
-<!--                <el-input v-model="form.sid" autocomplete="off"></el-input>-->
-<!--              </el-form-item>-->
-<!--              <el-form-item label="宿舍楼号">-->
-<!--                <el-input v-model="form.name" autocomplete="off"></el-input>-->
-<!--              </el-form-item>-->
-<!--              <el-form-item label="室号">-->
-<!--                <el-input v-model="form.name" autocomplete="off"></el-input>-->
-<!--              </el-form-item>-->
-<!--              <el-form-item label="床号">-->
-<!--                <el-input v-model="form.name" autocomplete="off"></el-input>-->
-<!--              </el-form-item>-->
-<!--              <el-form-item label="入学日期">-->
-<!--                <el-input v-model="form.name" autocomplete="off"></el-input>-->
-<!--              </el-form-item>-->
-<!--              <el-form-item label="出生日期">-->
-<!--                <el-input v-model="form.name" autocomplete="off"></el-input>-->
-<!--              </el-form-item>-->
+              <el-form-item label="生源地">
+                <el-input v-model="form.origin" autocomplete="off"></el-input>
+              </el-form-item>
+              <el-form-item label="政治面貌">
+                <el-select v-model="form.status" filterable placeholder="选择政治面貌" class="ml-5 fontFamily" style="width: 200px">
+                  <el-option
+                      v-for="item in statuses"
+                      :label="item"
+                      :value="item"
+                  />
+                </el-select>
+              </el-form-item>
+              <el-form-item label="民族">
+                <el-input v-model="form.nation" autocomplete="off"></el-input>
+              </el-form-item>
+              <el-form-item label="宿舍楼号">
+                <el-input v-model="form.dormitory" autocomplete="off"></el-input>
+              </el-form-item>
+              <el-form-item label="室号">
+                <el-input v-model="form.bedroom" autocomplete="off"></el-input>
+              </el-form-item>
+              <el-form-item label="床号">
+                <el-input v-model="form.bed" autocomplete="off"></el-input>
+              </el-form-item>
+              <el-form-item label="入学日期">
+                <el-date-picker
+                    v-model="form.admissionDate"
+                    type="date"
+                    placeholder="请选择入学日期"
+                    :default-value="new Date(2019, 9, 1)"
+                />
+              </el-form-item>
+              <el-form-item label="出生日期">
+                <el-date-picker
+                    v-model="form.birth"
+                    type="date"
+                    placeholder="请选择出生日期"
+                    :default-value="new Date(2000, 1, 1)"
+                />
+              </el-form-item>
               <el-form-item label="来源">
                 <el-input v-model="form.background" autocomplete="off" style="width: auto"></el-input>
               </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer" style="text-align: center">
-              <el-button @click="dialogAddFormVisible = false">取 消</el-button>
-              <el-button type="primary" @click="add">确 定</el-button>
+              <el-button class="round fontFamily" @click="dialogAddFormVisible = false">取 消</el-button>
+              <el-button type="primary" class="round fontFamily" @click="add">确 定</el-button>
             </div>
           </el-dialog>
 
 <!--          编辑对话框-->
-          <el-dialog title="用户信息" v-model="dialogEditFormVisible" width="20%">
-            <el-form label-width="80px" style="text-align: center">
+          <el-dialog title="用户信息" v-model="dialogEditFormVisible" width="50%">
+            <el-form label-width="80px" style="text-align: center" :inline="true">
               <el-form-item label="姓名">
                 <el-input v-model="form.name" autocomplete="off" style="width: auto"></el-input>
               </el-form-item>
@@ -224,9 +247,15 @@
                 <el-input v-model="form.sid" autocomplete="off" style="width: auto"></el-input>
               </el-form-item>
               <el-form-item label="班级">
-                <el-input v-model="form.classId" autocomplete="off" style="width: auto"></el-input>
+                <el-select class="fontFamily" v-model="form.classId" clearable filterable placeholder="选择班级" style="width: 200px">
+                  <el-option
+                      v-for="item in classes"
+                      :label="item.name"
+                      :value="item.cid"
+                  />
+                </el-select>
               </el-form-item>
-              <el-form-item label="性别">
+              <el-form-item label="性别" style="margin-left: 90px">
                 <el-radio-group v-model="form.sex">
                   <el-radio label="男" />
                   <el-radio label="女" />
@@ -238,37 +267,53 @@
               <el-form-item label="邮箱">
                 <el-input v-model="form.email" autocomplete="off" style="width: auto"></el-input>
               </el-form-item>
-              <!--              <el-form-item label="生源地">-->
-              <!--                <el-input v-model="form.name" autocomplete="off"></el-input>-->
-              <!--              </el-form-item>-->
-              <!--              <el-form-item label="政治面貌">-->
-              <!--                <el-input v-model="form.sid" autocomplete="off"></el-input>-->
-              <!--              </el-form-item>-->
-              <!--              <el-form-item label="民族">-->
-              <!--                <el-input v-model="form.sid" autocomplete="off"></el-input>-->
-              <!--              </el-form-item>-->
-              <!--              <el-form-item label="宿舍楼号">-->
-              <!--                <el-input v-model="form.name" autocomplete="off"></el-input>-->
-              <!--              </el-form-item>-->
-              <!--              <el-form-item label="室号">-->
-              <!--                <el-input v-model="form.name" autocomplete="off"></el-input>-->
-              <!--              </el-form-item>-->
-              <!--              <el-form-item label="床号">-->
-              <!--                <el-input v-model="form.name" autocomplete="off"></el-input>-->
-              <!--              </el-form-item>-->
-              <!--              <el-form-item label="入学日期">-->
-              <!--                <el-input v-model="form.name" autocomplete="off"></el-input>-->
-              <!--              </el-form-item>-->
-              <!--              <el-form-item label="出生日期">-->
-              <!--                <el-input v-model="form.name" autocomplete="off"></el-input>-->
-              <!--              </el-form-item>-->
+              <el-form-item label="生源地">
+                <el-input v-model="form.origin" autocomplete="off"></el-input>
+              </el-form-item>
+              <el-form-item label="政治面貌">
+                <el-select v-model="form.status" filterable placeholder="选择政治面貌" class="ml-5 fontFamily" style="width: 200px">
+                  <el-option
+                      v-for="item in statuses"
+                      :label="item"
+                      :value="item"
+                  />
+                </el-select>
+              </el-form-item>
+              <el-form-item label="民族">
+                <el-input v-model="form.nation" autocomplete="off"></el-input>
+              </el-form-item>
+              <el-form-item label="宿舍楼号">
+                <el-input v-model="form.dormitory" autocomplete="off"></el-input>
+              </el-form-item>
+              <el-form-item label="室号">
+                <el-input v-model="form.bedroom" autocomplete="off"></el-input>
+              </el-form-item>
+              <el-form-item label="床号">
+                <el-input v-model="form.bed" autocomplete="off"></el-input>
+              </el-form-item>
+              <el-form-item label="入学日期">
+                <el-date-picker
+                    v-model="form.admissionDate"
+                    type="date"
+                    placeholder="请选择入学日期"
+                    :default-value="new Date(2019, 9, 1)"
+                />
+              </el-form-item>
+              <el-form-item label="出生日期">
+                <el-date-picker
+                    v-model="form.birth"
+                    type="date"
+                    placeholder="请选择出生日期"
+                    :default-value="new Date(2000, 1, 1)"
+                />
+              </el-form-item>
               <el-form-item label="来源">
                 <el-input v-model="form.background" autocomplete="off" style="width: auto"></el-input>
               </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer" style="text-align: center">
-              <el-button @click="dialogEditFormVisible = false">取 消</el-button>
-              <el-button type="primary" @click="edit">确 定</el-button>
+              <el-button class="round fontFamily" @click="dialogEditFormVisible = false">取 消</el-button>
+              <el-button type="primary" class="round fontFamily" @click="edit">确 定</el-button>
             </div>
           </el-dialog>
 
@@ -439,6 +484,7 @@ export default {
           this.$message.success("新增成功");
           this.dialogFormVisible = false;
           this.loadStudents();
+          this.loadClasses();
         } else {
           this.$message.error("新增失败");
         }
@@ -451,6 +497,7 @@ export default {
           this.$message.success("更新成功");
           this.dialogEditFormVisible = false;
           this.loadStudents();
+          this.loadClasses();
         } else {
           this.$message.error("更新失败");
         }
@@ -571,6 +618,32 @@ export default {
     handleExport() {
       window.open("http://localhost:8181/student/export");
     }
+
+    //行选则时的处理逻辑
+    // handleRowClick(val) {
+    //   const { multipleSelection } = this
+    //   const { sid } = val
+    //   const state = multipleSelection.findIndex(item => item.sid=== sid) >= 0
+    //
+    //   this.checkChooseState(sid)
+    //   this.$refs.multipleTable.toggleRowSelection(val, !state)
+    // },
+    // //此处关键，由于直接点击checkbox无法直接获取当前行的数据
+    // //于是我禁用checkbox选择，采用点击checkbox所在行来获取当前行数据
+    // checkSelectable() {
+    //   return false
+    // },
+    // //此处关键 判断变化的选项是否存在于changList中
+    // //存在则修改状态为false
+    // //无需在这里添加，我们有计算属性帮我们处理
+    // checkChooseState(id) {
+    //   changeList.map((item) => {
+    //     const { sid } = item
+    //     if (id === sid) {
+    //       item.state = false
+    //     }
+    //   })
+    // }
   }
 }
 
@@ -596,6 +669,20 @@ export default {
 
 .round {
   border-radius: 10px;
+}
+.round /deep/ .el-dialog__header {
+  border-radius: 10px;
+}
+.round /deep/ .el-dialog__body {
+  border-radius: 10px;
+}
+
+.fontFamily {
+  font-family: 'ZCOOL XiaoWei', serif;
+}
+
+.fontFamily /deep/ .el-input__inner{
+  font-family: 'ZCOOL XiaoWei', serif;
 }
 
 .cardStandard{

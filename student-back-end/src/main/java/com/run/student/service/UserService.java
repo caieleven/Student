@@ -13,4 +13,5 @@ public interface UserService extends IService<User> {
     List<Map<String, Object>> getAssistant(Integer uid);
     UserVo getUserById(Integer uid);
     UserVo checkLogin(Integer uid, String password);
+    void getUserTotalByGroup(Map<String, Integer> map);
 }

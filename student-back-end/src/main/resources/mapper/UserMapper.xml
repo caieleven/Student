@@ -8,4 +8,5 @@
                     left join (select A.uid, A.username from `user` A) Y on X.fid = Y.uid
             ${ew.customSqlSegment}
     </select>
+
 </mapper>

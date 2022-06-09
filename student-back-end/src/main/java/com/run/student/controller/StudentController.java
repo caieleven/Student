@@ -127,11 +127,11 @@ public class StudentController {
         return result;
     }
 
-    @GetMapping("export")
-    public void export(HttpServletResponse response) throws Exception {
+    @GetMapping("/export")
+        public void export(HttpServletResponse response) throws Exception {
         List<StudentVo> list= studentService.list();
         //用工具类创建writer，写出到浏览器
-        ExcelWriter writer = ExcelUtil.getWriter(true);
+            ExcelWriter writer = ExcelUtil.getWriter(true);
         //自定义标题名
         writer.addHeaderAlias("sid","学号");
         writer.addHeaderAlias("name","姓名");
@@ -166,7 +166,7 @@ public class StudentController {
 
     }
 
-    @PostMapping("import")
+    @PostMapping("/import")
     public Boolean imp(MultipartFile file) throws Exception {
         InputStream inputStream = file.getInputStream();
         ExcelReader reader = ExcelUtil.getReader(inputStream);
@@ -189,7 +189,6 @@ public class StudentController {
         reader.addHeaderAlias("出生日期","birth");
         reader.addHeaderAlias("来源","background");
         List<StudentVo> list = reader.readAll(StudentVo.class);
-        System.out.println(list);
         for(int i=0; i<list.size(); i++) {
             Student student = new Student();
             student.setSid(list.get(i).getSid());

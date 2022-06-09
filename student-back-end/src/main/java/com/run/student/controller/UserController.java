@@ -10,6 +10,7 @@ import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -144,6 +145,18 @@ public class UserController {
     @DeleteMapping("deleteUser")
     public Result<Object> deleteUser(@RequestBody User user){
         return null;
+    }
+
+    @GetMapping("getUserTotalByGroup")
+    public Result<Object> getUserTotalByGroup() {
+        Map<String, Integer> map = new HashMap<>();
+        map.put("adminNum", null);
+        map.put("counsellorNum", null);
+        map.put("assistantNum", null);
+        userService.getUserTotalByGroup(map);
+        Result<Object> result = Result.success();
+        result.setData(map);
+        return result;
     }
 
 }

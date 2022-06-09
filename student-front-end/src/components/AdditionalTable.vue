@@ -1,7 +1,7 @@
 <template>
   <div>
     <div style="margin: 10px 0">
-      <el-button type="primary" @click="handleAdd">新增
+      <el-button type="primary" class="round fontFamily" @click="handleAdd">新增
         <el-icon>
           <Plus/>
         </el-icon>
@@ -82,8 +82,8 @@
           <el-table-column label="操作">
             <template #default="scope">
               <el-row class="mb-4">
-                <el-button type="warning" @click="handleStudentEdit(scope.row)" >编辑<el-icon><EditPen/></el-icon></el-button>
-                <el-button v-if="['admin', 'counsellor'].indexOf(user.groupName) > -1 " type="danger">删除<el-icon><Delete/></el-icon></el-button>
+                <el-button type="warning" class="round fontFamily" @click="handleStudentEdit(scope.row)" >编辑<el-icon><EditPen/></el-icon></el-button>
+                <el-button v-if="['admin', 'counsellor'].indexOf(user.groupName) > -1 " type="danger" class="round fontFamily">删除<el-icon><Delete/></el-icon></el-button>
               </el-row>
             </template>
           </el-table-column>
@@ -211,7 +211,7 @@ export default {
         }
 
       })
-      console.log(this.newForm)
+      this.getAdditionalTables()
     },
     // 表单复原操作
     resetForm(){
@@ -301,5 +301,17 @@ export default {
 </script>
 
 <style scoped>
+
+.round {
+  border-radius: 10px;
+}
+
+.fontFamily {
+  font-family: 'ZCOOL XiaoWei', serif;
+}
+
+.fontFamily /deep/ .el-input__inner{
+  font-family: 'ZCOOL XiaoWei', serif;
+}
 
 </style>

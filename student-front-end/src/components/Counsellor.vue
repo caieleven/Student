@@ -5,24 +5,24 @@
         <!--          搜索功能-->
         <div class="mg-10">
           <el-card class="round cardStandard" style="text-align: left">
-            <el-input style="width: 200px" placeholder="请输入uid" v-model="uid"></el-input>
+            <el-input class="fontFamily" style="width: 200px" placeholder="请输入uid" v-model="uid"></el-input>
 <!--            <el-input style="width: 200px" placeholder="请输入姓名" class="ml-5" v-model="counsellorName"></el-input>-->
 <!--            <el-input style="width: 200px" placeholder="请输入密码" class="ml-5" v-model="password"></el-input>-->
-            <el-button class="round" style="margin-left: 15px" type="primary" @click="search">搜索</el-button>
-            <el-button class="ml-5 round" type="warning" @click="reset">重置</el-button>
-            <el-button type="primary" style="margin-left: 20px" @click="handleAdd">新增<el-icon><Plus/></el-icon></el-button>
-            <el-popconfirm
-                confirm-button-text="是的"
-                cancel-button-text="取消"
-                icon="InfoFilled"
-                icon-color="#626AEF"
-                title="确定要删除选中的对象吗?"
-                @confirm="delBatch"
-            >
-              <template #reference>
-                <el-button type="danger">删除<el-icon><Minus/></el-icon></el-button>
-              </template>
-            </el-popconfirm>
+            <el-button class="round fontFamily" style="margin-left: 15px" type="primary" @click="search">搜索</el-button>
+            <el-button class="ml-5 round fontFamily" type="warning" @click="reset">重置</el-button>
+            <el-button class="ml-5 round fontFamily" type="primary" @click="handleAdd">新增<el-icon><Plus/></el-icon></el-button>
+<!--            <el-popconfirm-->
+<!--                confirm-button-text="是的"-->
+<!--                cancel-button-text="取消"-->
+<!--                icon="InfoFilled"-->
+<!--                icon-color="#626AEF"-->
+<!--                title="确定要删除选中的对象吗?"-->
+<!--                @confirm="delBatch"-->
+<!--            >-->
+<!--              <template #reference>-->
+<!--                <el-button type="danger">删除<el-icon><Minus/></el-icon></el-button>-->
+<!--              </template>-->
+<!--            </el-popconfirm>-->
           </el-card>
         </div>
         <!--          Table-->
@@ -31,12 +31,13 @@
             <el-table-column type="selection" :reserve-selection=true ></el-table-column>
             <el-table-column prop="uid" label="uid" width="120"/>
             <el-table-column prop="username" label="姓名" width="120"/>
-            <el-table-column prop="password" label="密码" width="120"/>
-            <el-table-column prop="permission" label="permission" width="150"/>
-            <el-table-column prop="fName" label="fName" width="150"/>
+<!--            <el-table-column prop="password" label="密码" width="120"/>-->
+            <el-table-column prop="permission" label="权限码" width="40"/>
+            <el-table-column prop="fName" label="所属管理员" width="150"/>
+            <el-table-column prop="tableNames" label="活动表" width="200"/>
             <el-table-column label="操作" width="200" align="center">
               <template v-slot="scope">
-                <el-button type="warning" @click="handleEdit(scope.row)">编辑<el-icon><EditPen/></el-icon></el-button>
+                <el-button class="round fontFamily" type="warning" @click="handleEdit(scope.row)">编辑<el-icon><EditPen/></el-icon></el-button>
                 <el-popconfirm
                     confirm-button-text="是的"
                     cancel-button-text="取消"
@@ -46,7 +47,7 @@
                     @confirm="del(scope.row)"
                 >
                   <template #reference>
-                   <el-button type="danger" slot="reference">删除<el-icon><EditPen/></el-icon></el-button>
+                   <el-button class="round fontFamily" type="danger" slot="reference">删除<el-icon><EditPen/></el-icon></el-button>
                   </template>
                 </el-popconfirm>
               </template>
@@ -182,12 +183,13 @@ export default {
         this.$message.warning("uid不能为空");
         return
       } else {
-        request.get("user/getCounsellor", {
+        request.get("user/getUser", {
           params: {
             uid: this.uid
           }
         }).then(res => {
-          this.tableData.push(res.data);
+          if (res.data.groupName === "counsellor")
+            this.tableData.push(res.data);
         })
       }
     },
@@ -283,6 +285,14 @@ export default {
 
 .round {
   border-radius: 10px;
+}
+
+.fontFamily {
+  font-family: 'ZCOOL XiaoWei', serif;
+}
+
+.fontFamily /deep/ .el-input__inner{
+  font-family: 'ZCOOL XiaoWei', serif;
 }
 
 .cardStandard{

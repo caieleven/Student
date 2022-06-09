@@ -29,4 +29,14 @@
                  where user.uid = #{uid} and user.password = #{password}) user
                  left join user_group u on user.group_id = u.gid;
     </select>
+
+    <select id="getUserTotalByGroup" statementType="CALLABLE">
+        {
+            call userNum(
+                #{adminNum, mode = OUT, jdbcType = INTEGER},
+                #{counsellorNum, mode = OUT, jdbcType = INTEGER},
+                #{assistantNum, mode = OUT, jdbcType = INTEGER}
+            )
+        }
+    </select>
 </mapper>

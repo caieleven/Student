@@ -86,10 +86,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         return userVoMapper.getUserById(uid);
     }
 
-
-
     @Override
     public UserVo checkLogin(Integer uid, String password) {
         return userVoMapper.checkLogin(uid, password);
+    }
+
+    @Override
+    public void getUserTotalByGroup(Map<String, Integer> map) {
+        userVoMapper.getUserTotalByGroup(map);
     }
 }
