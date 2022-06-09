@@ -571,32 +571,6 @@ export default {
     handleExport() {
       window.open("http://localhost:8181/student/export");
     }
-
-    //行选则时的处理逻辑
-    // handleRowClick(val) {
-    //   const { multipleSelection } = this
-    //   const { sid } = val
-    //   const state = multipleSelection.findIndex(item => item.sid=== sid) >= 0
-    //
-    //   this.checkChooseState(sid)
-    //   this.$refs.multipleTable.toggleRowSelection(val, !state)
-    // },
-    // //此处关键，由于直接点击checkbox无法直接获取当前行的数据
-    // //于是我禁用checkbox选择，采用点击checkbox所在行来获取当前行数据
-    // checkSelectable() {
-    //   return false
-    // },
-    // //此处关键 判断变化的选项是否存在于changList中
-    // //存在则修改状态为false
-    // //无需在这里添加，我们有计算属性帮我们处理
-    // checkChooseState(id) {
-    //   changeList.map((item) => {
-    //     const { sid } = item
-    //     if (id === sid) {
-    //       item.state = false
-    //     }
-    //   })
-    // }
   }
 }
 

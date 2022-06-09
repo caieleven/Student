@@ -258,7 +258,6 @@ export default {
           this.additionalTables.push(item);
         })
       });
-      // console.log(this.additionalTables);
     },
     getStudentsInfoFromTable(){
       let queryMap = {};

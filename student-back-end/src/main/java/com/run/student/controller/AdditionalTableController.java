@@ -58,25 +58,12 @@ public class AdditionalTableController {
         return Result.fail("表名重复");
     }
 
-    /**
-     * 更新附加表
-     * @param table 其中，需包括aid，counsellorId，assistantId
-     * @return
-     */
-//    @PostMapping("/updateTable")
-//    public Result<Object> updateTable(@RequestBody AdditionalTable table){
-//        //注意此方法通过主键完成
-//        boolean update = additionalTableService.saveOrUpdate(table);
-//        if(update){
-//            return Result.success();
-//        }
-//        return Result.fail("更新失败");
-//    }
 
     @PostMapping("/updateTable/{uid}/{tableName}")
     public Result<Object> updateTable(@PathVariable Integer uid,
                                       @PathVariable String tableName,
                                       @RequestBody Map<String, Object> infoMap){
+        System.out.println(tableName);
         additionalTableService.updateOne(uid, tableName, infoMap);
         return Result.success();
     }
@@ -117,7 +104,7 @@ public class AdditionalTableController {
      * @param map 其中需包含tableName，counsellorId，以及assistantId数组
      * @return
      */
-    @PutMapping("/addAssistantToTable")
+    @PostMapping("/addAssistantToTable")
     public Result<Object> addAssistantToTable(@RequestBody Map<String, Object> map){
         if(!map.containsKey("counsellorId"))
             return Result.fail("没有当前用户id");
