@@ -253,6 +253,7 @@ export default {
     // 以下三个方法用于给助手分配活动表
     handleAddToATable() {
       //获取表数据
+      this.additionalTables = [];
       request.get("additionalTable/getTable", {
         params: {
           uid: this.user.uid,

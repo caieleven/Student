@@ -37,4 +37,6 @@ public interface AdditionalTableService extends IService<AdditionalTable> {
     Map<String, Object> queryStudents(Integer uid, String tableName, Map<String, Object> queryMap);
 
     boolean updateOne(Integer uid, String tableName, Map<String, Object> infoMap);
+
+    boolean deleteOne(Integer uid, String tableName, Long sid);
 }

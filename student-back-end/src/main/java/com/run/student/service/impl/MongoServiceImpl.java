@@ -64,12 +64,41 @@ public class MongoServiceImpl implements MongoService {
     @Override
     public boolean updateOne(String collectionName, Map<String, Object> infoMap) {
         Query query = new Query();
-        query.addCriteria(Criteria.where("sid").is((Long)infoMap.get("sid")));
+        query.addCriteria(Criteria.where("sid").is(Long.parseLong(infoMap.get("sid").toString())));
         Update update = new Update();
         for(Map.Entry<String, Object> entry : infoMap.entrySet()){
             update.set(entry.getKey(), entry.getValue());
         }
         mongoTemplate.upsert(query, update, collectionName);
+        return true;
+    }
+
+    /**
+     * 集合中删除某一文档，有bug，sids中似乎是integer对象
+     * @param collectionName 集合名
+     * @param sid 删除的学号
+     * @return
+     */
+    @Override
+    public boolean deleteOne(String collectionName, Long sid) {
+        List<Long> sids = this.allSidInCollection(collectionName);
+        Iterator iterator = sids.iterator();
+        while (iterator.hasNext()){
+            Long cur = Long.parseLong(iterator.next().toString());
+            if(cur.longValue() == sid.longValue()){
+                iterator.remove();
+                System.out.println("相等");
+            }
+        }
+        System.out.println(sid.toString());
+        System.out.println(sids.toString());
+        // TableInfo集合删除
+        Query query = new Query(Criteria.where("tableName").is(collectionName));
+        Update update = new Update().set("sids", sids);
+        mongoTemplate.updateFirst(query, update, "TableInfo");
+        // 集合中删除文档
+        Query newQuery = new Query(Criteria.where("sid").is(sid));
+        mongoTemplate.findAllAndRemove(newQuery, collectionName);
         return true;
     }
 

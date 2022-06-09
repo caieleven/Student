@@ -63,7 +63,6 @@ public class AdditionalTableController {
     public Result<Object> updateTable(@PathVariable Integer uid,
                                       @PathVariable String tableName,
                                       @RequestBody Map<String, Object> infoMap){
-        System.out.println(tableName);
         additionalTableService.updateOne(uid, tableName, infoMap);
         return Result.success();
     }
@@ -170,6 +169,16 @@ public class AdditionalTableController {
                                     @RequestBody Map<String, Object> additionalInfo){
         additionalTableService.updateOne(uid, tableName,additionalInfo);
         return Result.success();
+    }
+
+    @DeleteMapping("/deleteStudentFromTable/{uid}/{tableName}/{sid}")
+    public Result<Object> deleteStudentFromTable(@PathVariable Integer uid,
+                                                 @PathVariable String tableName,
+                                                 @PathVariable Long sid){
+        final boolean b = additionalTableService.deleteOne(uid, tableName, sid);
+        if(b)
+            return Result.success();
+        return Result.fail("删除失败");
     }
 
 }

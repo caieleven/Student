@@ -15,6 +15,9 @@ public interface MongoService {
     Map<String, Object> queryBySid(String collectionName, Long sid);
 
     boolean updateOne(String collectionName, Map<String, Object> infoMap);
+
+    // 集合中删除
+    boolean deleteOne(String collectionName, Long sid);
     boolean updateBatch(String collectName, List<Document> documents);
 
     /**

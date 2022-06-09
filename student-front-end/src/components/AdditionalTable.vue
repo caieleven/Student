@@ -83,7 +83,7 @@
             <template #default="scope">
               <el-row class="mb-4">
                 <el-button type="warning" class="round fontFamily" @click="handleStudentEdit(scope.row)" >编辑<el-icon><EditPen/></el-icon></el-button>
-                <el-button v-if="['admin', 'counsellor'].indexOf(user.groupName) > -1 " type="danger" class="round fontFamily">删除<el-icon><Delete/></el-icon></el-button>
+                <el-button v-if="['admin', 'counsellor'].indexOf(user.groupName) > -1 " type="danger" class="round fontFamily" @click="handleStudentDelete(scope.row)">删除<el-icon><Delete/></el-icon></el-button>
               </el-row>
             </template>
           </el-table-column>
@@ -231,6 +231,7 @@ export default {
 
     },
     getAdditionalTables(){
+      this.additionalTables = [];
       request.get("additionalTable/getTable", {
         params: {
           uid: this.user.uid,
@@ -284,6 +285,25 @@ export default {
       this.selectedStudent = JSON.parse(JSON.stringify(row));
       this.dialogEditATableInfo = true;
     },
+    //从活动表中删除学生
+    handleStudentDelete(row){
+      request.delete(`additionalTable/deleteStudentFromTable/${this.user.uid}/${this.selectedATAbleInfo.tableName}/${row.sid}`).then(res=>{
+        if(res.code==0){
+          this.$message.success(res.message);
+          //避免重新请求，本地删除该学生
+          let studentsInfo = this.selectedATAbleInfo.studentsInfo;
+          studentsInfo.map((val, i) => {
+            if(val.sid == row.sid){
+              studentsInfo.splice(i, 1);
+            }
+          });
+          this.selectedATAbleInfo.studentsInfo = studentsInfo;
+        }
+        else {
+          this.$message.error(res.message);
+        }
+      })
+    },
     submitStudentEdit(){
       let data = {};
       data["sid"] = this.selectedStudent["sid"];
@@ -294,7 +314,8 @@ export default {
       request.post(`additionalTable/updateTable/${this.user.uid}/${this.selectedATAbleInfo.tableName}`,data).then(res=>{
         this.$message.success("success");
         this.dialogEditATableInfo=false;
-      })
+      });
+      this.getStudentsInfoFromTable();
     }
   }
 }

@@ -215,5 +215,20 @@ public class AdditionalTableServiceImpl extends ServiceImpl<AdditionalTableMappe
         return false;
     }
 
+    /**
+     * 从活动表（附加表）中删除某个学生的记录
+     * @param uid 请求用户的uid（教师或学生）
+     * @param tableName 活动表名
+     * @param sid 删除的学生
+     * @return
+     */
+    @Override
+    public boolean deleteOne(Integer uid, String tableName, Long sid) {
+        User user = userService.getById(uid);
+        Integer counsellor_id = user.getGroupId().equals(2) ? uid : user.getFid();
+        mongoService.deleteOne(tableName+ counsellor_id, sid);
+        return true;
+    }
+
 
 }
