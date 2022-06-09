@@ -46,7 +46,7 @@
                     @confirm="del(scope.row)"
                 >
                   <template #reference>
-                    <el-button class="round fontFamily" type="danger" slot="reference">删除<el-icon><EditPen/></el-icon></el-button>
+                    <el-button class="round fontFamily" type="danger" slot="reference">删除<el-icon><Delete/></el-icon></el-button>
                   </template>
                 </el-popconfirm>
               </template>

@@ -230,5 +230,20 @@ public class AdditionalTableServiceImpl extends ServiceImpl<AdditionalTableMappe
         return true;
     }
 
+    /**
+     * 删除附加表
+     * @param uid 教师id
+     * @param tableName 表名
+     * @return
+     */
+    @Override
+    public boolean deleteTable(Integer uid, String tableName) {
+        QueryWrapper<AdditionalTable> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("counsellor_id", uid)
+                .eq("table_name", tableName);
+        baseMapper.delete(queryWrapper);
+        return true;
+    }
+
 
 }

@@ -13,14 +13,29 @@
       <el-table
           ref="additionalTablesInDialog"
           :data="additionalTables"
-          highlight-current-row
           style="width: 100%"
-          @row-click="handleCurrentChangeOfATable"
       >
         <el-table-column type="index" width="50" />
         <el-table-column property="tableName" label="表名" width="120" />
         <el-table-column property="counsellorName" label="教师名" width="120" />
         <el-table-column property="assistantName" label="助手名" width="240" />
+        <el-table-column label="操作" width="200" align="center">
+          <template v-slot="scope">
+            <el-button class="round fontFamily" type="warning" @click="handleATableEdit(scope.row)">编辑<el-icon><EditPen/></el-icon></el-button>
+            <el-popconfirm
+                confirm-button-text="是的"
+                cancel-button-text="取消"
+                icon="InfoFilled"
+                icon-color="#626AEF"
+                title="确定要删除吗?"
+                @confirm="handleATableDelete(scope.row)"
+            >
+              <template #reference>
+                <el-button class="round fontFamily" type="danger" slot="reference">删除<el-icon><Delete/></el-icon></el-button>
+              </template>
+            </el-popconfirm>
+          </template>
+        </el-table-column>
       </el-table>
     </div>
 
@@ -222,10 +237,10 @@ export default {
         ]
       }
     },
-    // 附加表表格单选
-    handleCurrentChangeOfATable(val){
-      this.selectedAdditionalTable["tableName"] = val["tableName"];
-      this.selectedAdditionalTable["counsellorId"] = val["counsellorId"];
+    // 编辑活动表
+    handleATableEdit(row){
+      this.selectedAdditionalTable["tableName"] = row["tableName"];
+      this.selectedAdditionalTable["counsellorId"] = row["counsellorId"];
       this.getStudentsInfoFromTable();
       this.dialogATableInfo = true;
 
@@ -316,6 +331,26 @@ export default {
         this.dialogEditATableInfo=false;
       });
       this.getStudentsInfoFromTable();
+    },
+    //删除活动表
+    handleATableDelete(row){
+      console.log(row.tableName);
+      request.delete(`additionalTable/deleteTable/${this.user.uid}/${row.tableName}`).then(res=>{
+        if(res.code==0){
+          this.$message.success(res.message);
+          //避免重新请求，本地删除该表
+          let aTables = this.additionalTables;
+          aTables.map((val, i)=>{
+            if(val.tableName == row.tableName){
+              aTables.splice(i, 1);
+            };
+          })
+          this.additionalTables = aTables;
+        }
+        else {
+          this.$message.error(res.message);
+        }
+      })
     }
   }
 }

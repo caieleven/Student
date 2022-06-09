@@ -28,6 +28,10 @@ public class MongoServiceImpl implements MongoService {
 
     @Override
     public boolean dropCollection(String collectionName) {
+        Query query  = new Query(Criteria.where("tableName").is(collectionName));
+        //删除集合信息
+        mongoTemplate.findAllAndRemove(query, "TableInfo");
+        // 删除集合
         mongoTemplate.dropCollection(collectionName);
         return false;
     }

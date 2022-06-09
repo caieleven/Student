@@ -181,5 +181,14 @@ public class AdditionalTableController {
         return Result.fail("删除失败");
     }
 
+    @DeleteMapping("/deleteTable/{uid}/{tableName}")
+    public Result<Object> deleteTable(@PathVariable Integer uid,
+                                      @PathVariable String tableName){
+        final boolean b = additionalTableService.deleteTable(uid, tableName);
+        if(b)
+            return Result.success();
+        return Result.fail("删除失败");
+    }
+
 }
 

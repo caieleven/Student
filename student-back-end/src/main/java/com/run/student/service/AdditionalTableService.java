@@ -38,5 +38,8 @@ public interface AdditionalTableService extends IService<AdditionalTable> {
 
     boolean updateOne(Integer uid, String tableName, Map<String, Object> infoMap);
 
+    // 从表中删除一个学生
     boolean deleteOne(Integer uid, String tableName, Long sid);
+
+    boolean deleteTable(Integer uid, String tableName);
 }
