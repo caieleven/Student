@@ -428,7 +428,7 @@ export default {
       this.originPlace = "";
       this.dormitory = "";
       this.background = "";
-      this.sex = "";
+      this.sex = [];
       this.status = [];
       this.cid = []; //清空
       this.loadStudents();

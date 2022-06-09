@@ -137,7 +137,7 @@
 
 <!--          按钮-->
           <div slot="footer" class="dialog-footer" style="text-align: center">
-            <el-button @click="dialogEditFormVisible = false">取 消</el-button>
+            <el-button @click="dialogAddToAdditionalTable = false">取 消</el-button>
             <el-button type="primary" @click="addSelectedToAdditionalTable">确 定</el-button>
           </div>
         </el-dialog>
