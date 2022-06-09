@@ -21,7 +21,7 @@
 <!--                <el-button type="danger">删除<el-icon><Minus/></el-icon></el-button>-->
 <!--              </template>-->
 <!--            </el-popconfirm>-->
-            <el-button type="success" class="round" @click="handleAddToATable">添加至活动表</el-button>
+            <el-button type="success" class="round fontFamily" @click="handleAddToATable">添加至活动表</el-button>
           </el-card>
         </div>
         <!--          Table-->
@@ -58,24 +58,19 @@
         <el-dialog title="用户信息" v-model="dialogAddFormVisible" width="20%">
           <el-form label-width="80px" style="text-align: center">
             <el-form-item label="uid">
-              <el-input v-model="form.uid" autocomplete="off" style="width: auto" placeholder="请输入uid"></el-input>
+              <el-input v-model="form.uid" autocomplete="off" style="width: auto" class="fontFamily" placeholder="请输入uid"></el-input>
             </el-form-item>
             <el-form-item label="姓名">
-              <el-input v-model="form.username" autocomplete="off" style="width: auto" placeholder="请输入姓名"></el-input>
+              <el-input v-model="form.username" autocomplete="off" style="width: auto" class="fontFamily" placeholder="请输入姓名"></el-input>
             </el-form-item>
             <el-form-item label="密码">
-              <el-input v-model="form.password" autocomplete="off" style="width: auto" placeholder="请输入密码"></el-input>
+              <el-input v-model="form.password" autocomplete="off" style="width: auto" class="fontFamily" placeholder="请输入密码"></el-input>
             </el-form-item>
             <el-form-item label="权限码">
               <el-radio-group v-model="form.permission">
                 <el-radio label="1" />
                 <el-radio label="0" />
               </el-radio-group>
-            </el-form-item>
-            <el-form-item label="用户组">
-              <el-select v-model="form.groupId" style="width: auto" placeholder="请选择用户组">
-                <el-option v-for="i in 3" :value="i"></el-option>
-              </el-select>
             </el-form-item>
           </el-form>
           <div slot="footer" class="dialog-footer" style="text-align: center">
@@ -87,14 +82,8 @@
         <!--        编辑对话框-->
         <el-dialog title="用户信息" v-model="dialogEditFormVisible" width="20%">
           <el-form label-width="80px" style="text-align: center">
-            <el-form-item label="uid">
-              <el-input v-model="form.uid" autocomplete="off" style="width: auto" placeholder="请输入uid"></el-input>
-            </el-form-item>
             <el-form-item label="姓名">
-              <el-input v-model="form.username" autocomplete="off" style="width: auto" placeholder="请输入姓名"></el-input>
-            </el-form-item>
-            <el-form-item label="密码">
-              <el-input v-model="form.password" autocomplete="off" style="width: auto" placeholder="请输入密码"></el-input>
+              <el-input v-model="form.username" autocomplete="off" style="width: auto" class="fontFamily" placeholder="请输入姓名"></el-input>
             </el-form-item>
             <el-form-item label="权限码">
               <el-radio-group v-model="form.permission">
@@ -102,15 +91,10 @@
                 <el-radio label="0" />
               </el-radio-group>
             </el-form-item>
-            <el-form-item label="用户组">
-              <el-select v-model="form.groupId" style="width: auto" placeholder="请选择用户组">
-                <el-option v-for="i in 3" :value="i"></el-option>
-              </el-select>
-            </el-form-item>
           </el-form>
           <div slot="footer" class="dialog-footer" style="text-align: center">
-            <el-button @click="dialogEditFormVisible = false">取 消</el-button>
-            <el-button type="primary" @click="edit">确 定</el-button>
+            <el-button class="round fontFamily" @click="dialogEditFormVisible = false">取 消</el-button>
+            <el-button type="primary" class="round fontFamily" @click="edit">确 定</el-button>
           </div>
         </el-dialog>
 
@@ -217,6 +201,7 @@ export default {
     },
     add() {
       this.form.fid = this.user.uid;
+      this.form.groupId = 3;
       request.post("user/addUser", this.form).then( res => {
         if (res) {
           this.$message.success("新增成功");
