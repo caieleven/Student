@@ -138,13 +138,15 @@ public class UserController {
 
 
     /**
-     * 该方法为完全删除用户，此方法暂时暂时不实现，现在删除用户使用updateUser，将permission置为0
-     * @param user
+     * 删除用户，如果为教师，则判断名下是否有活动表，为助手，直接删除
      * @return
      */
-    @DeleteMapping("deleteUser")
-    public Result<Object> deleteUser(@RequestBody User user){
-        return null;
+    @DeleteMapping("deleteUser/{uid}")
+    public Result<Object> deleteUser(@PathVariable Integer uid){
+        final boolean b = userService.deleteOne(uid);
+        if(b)
+            return Result.success();
+        return Result.fail("删除失败，检查是否还存在活动表");
     }
 
     @GetMapping("getUserTotalByGroup")

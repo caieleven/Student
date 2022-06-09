@@ -14,4 +14,5 @@ public interface UserService extends IService<User> {
     UserVo getUserById(Integer uid);
     UserVo checkLogin(Integer uid, String password);
     void getUserTotalByGroup(Map<String, Integer> map);
+    boolean deleteOne(Integer uid);
 }

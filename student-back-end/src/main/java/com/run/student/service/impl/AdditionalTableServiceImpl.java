@@ -238,9 +238,25 @@ public class AdditionalTableServiceImpl extends ServiceImpl<AdditionalTableMappe
      */
     @Override
     public boolean deleteTable(Integer uid, String tableName) {
+//        final User byId = userService.getById(uid);
         QueryWrapper<AdditionalTable> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("counsellor_id", uid)
                 .eq("table_name", tableName);
+        baseMapper.delete(queryWrapper);
+        // mongoDB delete
+        mongoService.dropCollection(tableName+uid);
+        return true;
+    }
+
+    /**
+     * 删除某个助手的所有表权限
+     * @param uid
+     * @return
+     */
+    @Override
+    public boolean deleteTable(Integer uid) {
+        QueryWrapper<AdditionalTable> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("assistant_id", uid);
         baseMapper.delete(queryWrapper);
         return true;
     }

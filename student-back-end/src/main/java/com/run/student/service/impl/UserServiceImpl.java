@@ -1,9 +1,13 @@
 package com.run.student.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.run.student.entity.AdditionalTable;
+import com.run.student.entity.Student;
 import com.run.student.entity.User;
+import com.run.student.mapper.AdditionalTableMapper;
 import com.run.student.mapper.UserMapper;
 import com.run.student.mapper.UserVoMapper;
+import com.run.student.service.AdditionalTableService;
 import com.run.student.service.UserService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.run.student.vo.UserVo;
@@ -28,6 +32,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Autowired
     UserVoMapper userVoMapper;
+
+    @Autowired
+    AdditionalTableService additionalTableService;
 
     @Override
     public List<Map<String, Object>> getCounsellors(Integer uid) {
@@ -94,5 +101,33 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Override
     public void getUserTotalByGroup(Map<String, Integer> map) {
         userVoMapper.getUserTotalByGroup(map);
+    }
+
+    /**
+     * 根据uid删除，若用户为辅导员，名下有附加表，则不能删除，用户为助手，直接删除
+     * @param uid
+     * @return
+     */
+    @Override
+    public boolean deleteOne(Integer uid) {
+        User user = baseMapper.selectById(uid);
+        if(user.getGroupId().equals(2)){
+            // 查看是否存在附加表
+            QueryWrapper<AdditionalTable> queryWrapper = new QueryWrapper<>();
+            queryWrapper.eq("counsellor_id", uid);
+            final int count = additionalTableService.count(queryWrapper);
+            if(count > 0){
+                return false;
+            }
+            // 删除用户
+            baseMapper.deleteById(uid);
+        }
+        // 为助手
+        else {
+            // 删除所管理的表
+            additionalTableService.deleteTable(uid);
+            baseMapper.deleteById(uid);
+        }
+        return true;
     }
 }

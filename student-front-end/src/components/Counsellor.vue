@@ -72,9 +72,9 @@
 <!--        新增对话框-->
         <el-dialog title="教师信息" v-model="dialogAddFormVisible" width="20%">
           <el-form label-width="80px" style="text-align: center">
-            <el-form-item label="uid">
-              <el-input v-model="form.uid" autocomplete="off" style="width: auto" class="fontFamily" placeholder="请输入uid"></el-input>
-            </el-form-item>
+<!--            <el-form-item label="uid">-->
+<!--              <el-input v-model="form.uid" autocomplete="off" style="width: auto" class="fontFamily" placeholder="请输入uid"></el-input>-->
+<!--            </el-form-item>-->
             <el-form-item label="姓名">
               <el-input v-model="form.username" autocomplete="off" style="width: auto" class="fontFamily" placeholder="请输入姓名"></el-input>
             </el-form-item>
@@ -236,9 +236,16 @@ export default {
       this.dialogEditFormVisible = true;
     },
     del(row) {
-      this.form = JSON.parse(JSON.stringify(row));
-      this.form.permission = 0;
-      this.edit();
+      request.delete(`user/deleteUser/${row.uid}`).then(res=>{
+        if(res.code == 0){
+          this.$message.success(res.message);
+          // 为了方便，直接重新加载，后期需优化
+          this.loadCounsellor();
+        }
+        else{
+          this.$message.error(res.message);
+        }
+      })
     },
     handleSizeChange() {
 

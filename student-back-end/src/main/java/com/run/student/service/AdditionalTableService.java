@@ -42,4 +42,7 @@ public interface AdditionalTableService extends IService<AdditionalTable> {
     boolean deleteOne(Integer uid, String tableName, Long sid);
 
     boolean deleteTable(Integer uid, String tableName);
+
+    // 删除助手所有表的访问权限
+    boolean deleteTable(Integer uid);
 }
