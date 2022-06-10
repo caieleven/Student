@@ -28,7 +28,7 @@ public class CodeGenerator {
 
         /*2. 数据源*/
         DataSourceConfig dsc = new DataSourceConfig();
-        dsc.setUrl("jdbc:mysql://localhost:3306/students?useUnicode=true&characterEncoding=utf-8&useSSL=true&serverTimezone=GMT%2B8&zeroDateTimeBehavior=convertToNull");
+        dsc.setUrl("jdbc:mysql://139.224.62.56:3306/students?useUnicode=true&characterEncoding=utf-8&useSSL=true&serverTimezone=GMT%2B8&zeroDateTimeBehavior=convertToNull");
         dsc.setDriverName("com.mysql.cj.jdbc.Driver");
         dsc.setUsername("root");
         dsc.setPassword("QWEasd123");
@@ -46,7 +46,7 @@ public class CodeGenerator {
 
         /*4. 策略配置*/
         StrategyConfig strategyConfig = new StrategyConfig();
-        strategyConfig.setInclude("additional_table");
+        strategyConfig.setInclude("notice");
         strategyConfig.setNaming(NamingStrategy.underline_to_camel);
         strategyConfig.setColumnNaming(NamingStrategy.underline_to_camel);
         strategyConfig.setEntityLombokModel(true);

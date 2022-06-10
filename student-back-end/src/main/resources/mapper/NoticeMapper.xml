@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.run.student.mapper.NoticeMapper">
+
+    <!--List<Map<String, Object>> queryNotice(@Param(Constants.WRAPPER) Wrapper<Notice> queryWrapper);-->
+    <select id="queryNotice" resultType="java.util.Map">
+        select nid, title, content, time, u.username as publisher
+        from notice
+                 left join user u on u.uid = notice.user_id
+            ${ew.customSqlSegment}
+    </select>
+
+</mapper>

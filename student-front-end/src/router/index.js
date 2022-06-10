@@ -9,6 +9,7 @@ import BaseTable from "@/components/BaseTable";
 import AdditionalTable from "@/components/AdditionalTable";
 import Assistant from "@/components/Assistant";
 import Home from "@/components/Home";
+import NoticeView from "@/views/NoticeView";
 
 const routes = [
     // {
@@ -41,6 +42,15 @@ const routes = [
             roles: ['admin', 'counsellor', 'assistant']
         },
         component: Home
+    },
+    {
+        path: '/notice',
+        name: '公告',
+        meta: {
+            show: true,
+            roles: ['admin', 'counsellor', 'assistant']
+        },
+        component: NoticeView
     },
     {
         path: '/userManager',
