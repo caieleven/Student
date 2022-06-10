@@ -1,5 +1,5 @@
 <template>
-  <div style="height: 100vh" class="body">
+  <div style="height: 100vh" class="body" align="center">
     <el-container class="layout-container-demo" style="height: 100%">
       <el-card class="round mg-10-10" style="height:100vm">
         <el-aside width="200px" style="height: 100%">
@@ -22,7 +22,7 @@
             </el-card>
           </div>
 
-          <el-card class="round boxSize" style="height: 80%">
+          <el-card class="round cardStandard" style="height: 80%">
             <el-collapse accordion v-model="activeNames" v-for="(item, index) in notices">
               <el-collapse-item :name="index + ''">
                 <template #title>
@@ -112,25 +112,25 @@ export default {
 </script>
 
 <style scoped>
-.round {
-  border-radius: 10px;
-}
 .body {
   background-color: #f1f2f6;
   overflow-x: hidden;
 }
-/*.cardStandard{*/
-/*  width: 1026px;*/
-/*}*/
-.fontStyle {
-  color: var(--Gray-8);
-  font-size: 15px;
-  line-height: 1rem;
-  font-weight: 700;
+
+.round {
+  border-radius: 10px;
 }
-.boxSize {
-  margin: 10px 35px;
-  /*height: 50%;*/
-  /*width: 40%;*/
+
+.fontFamily {
+  font-family: 'ZCOOL XiaoWei', serif;
 }
+
+.fontFamily /deep/ .el-input__inner{
+  font-family: 'ZCOOL XiaoWei', serif;
+}
+
+.cardStandard{
+  width: 1026px;
+}
+
 </style>
