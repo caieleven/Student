@@ -107,17 +107,17 @@ const routes = [
         },
         component: MainView,
         children: [
-            {
-                path: '/baseTable',
-                name: '基本表管理',
-                meta: {
-                    roles: ['admin', 'counsellor']
-                },
-                component: BaseTable
-            },
+            // {
+            //     path: '/baseTable',
+            //     name: '基本表管理',
+            //     meta: {
+            //         roles: ['admin', 'counsellor']
+            //     },
+            //     component: BaseTable
+            // },
             {
                 path: '/additionalTable',
-                name: '附加表管理',
+                name: '活动表管理',
                 meta: {
                     roles: ['admin', 'counsellor', 'assistant']
                 },

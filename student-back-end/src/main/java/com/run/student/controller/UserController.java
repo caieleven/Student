@@ -27,11 +27,11 @@ public class UserController {
     @PostMapping("/login")
     public Result<Object> login(@RequestBody User tempUser){
         UserVo user = userService.checkLogin(Integer.valueOf(tempUser.getUid()), tempUser.getPassword());
-        if(user.getPermission() == 0){
-            return Result.fail("该账户已失效");
-        }
         Result<Object> result = new Result<>();
         if(user != null){
+            if(user.getPermission() == 0){
+                return Result.fail("该账户已失效");
+            }
             result.setCode(0);
             result.setMessage("success");
         }
